@@ -153,7 +153,7 @@ function MainTabs() {
           }}
         />
         <Tab.Screen
-          name="Archived Problems"
+          name="News Feed"
           component={NewsFeed}
           options={{
             tabBarIcon: ({ focused }) => (

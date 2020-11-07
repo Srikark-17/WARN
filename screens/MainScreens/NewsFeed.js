@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, List, ListItem, Thumbnail, Text, Left, Body, Right, Button } from 'native-base';
 import {getArticles} from './components/feedNews'
-import { Alert, View, ActivityIndicator} from 'react-native';
+import { Alert, View, ActivityIndicator, StyleSheet} from 'react-native';
 import {DataItem} from './components/dataItemNews'
 import Modal from './components/modal'
 export default class ListThumbnailExample extends Component {
@@ -52,14 +52,14 @@ export default class ListThumbnailExample extends Component {
       <List
           dataArray={this.state.data}
           renderRow={(item) => {
-            return <DataItem  onClose={this.state.handleModalClose} onPress={this.handleItemDataOnPress} data={item}/>
+            return <DataItem  onClose={this.props.navigation.navigate('News Feed')} onPress={this.handleItemDataOnPress} data={item}/>
           }}
       />
     )
 
     return (
       <Container>
-        <Content>
+        <Content style={styles.container}>
           {view}
         </Content>
         <Modal
@@ -71,3 +71,10 @@ export default class ListThumbnailExample extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#000",
+    },
+  });
