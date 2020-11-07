@@ -7,47 +7,192 @@ import {
   LayoutAnimation,
   Button,
 } from "react-native";
-import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import {
+  MaterialCommunityIcons,
+  FontAwesome5,
+  MaterialIcons,
+} from "@expo/vector-icons";
+
+let percent = 80;
+
+let propStyle = (percent, base_degrees) => {
+  const rotateBy = base_degrees + percent * 3.6;
+  return {
+    transform: [{ rotateZ: `${rotateBy}deg` }],
+  };
+};
+
+let renderThirdLayer = (percent) => {
+  if (percent > 50) {
+    return (
+      <View
+        style={[styles.secondProgressLayer, propStyle(percent - 50, 45)]}
+      ></View>
+    );
+  } else {
+    return <View style={styles.offsetLayer}></View>;
+  }
+};
+
 function WelcomeScreen({ navigation }) {
   LayoutAnimation.easeInEaseOut();
+
+  let firstProgressLayerStyle;
+  if (percent > 50) {
+    firstProgressLayerStyle = propStyle(50, -135);
+  } else {
+    firstProgressLayerStyle = propStyle(percent, -135);
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>Welcome to WARN</Text>
-        <Text style={styles.subtext}>Where people get warned about fires</Text>
+        <Text style={styles.title}>Dashboard</Text>
       </View>
       <View style={styles.noteContainer}>
+        <View style={styles.circleContainer1}>
+          <View style={styles.progressLayer1}></View>
+          <View style={styles.offsetLayer1}></View>
+        </View>
+        <Text
+          style={{ color: "white", left: 230, bottom: 33, fontWeight: "800" }}
+        >
+          25%
+        </Text>
+        <Text style={{ left: 220, color: "#798497" }}>Subtext</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
           <Button
             color={"#798497"}
-            title={"hello"}
+            title={""}
             onPress={() => navigation.navigate("Archive")}
           />
+          <MaterialIcons
+            name="location-on"
+            size={20}
+            style={{ color: "#FF5934", bottom: 50, right: 35 }}
+          />
+          <Text
+            style={{ color: "#798497", bottom: 115, fontSize: 20, right: 30 }}
+          >
+            Location
+          </Text>
+          <Text
+            style={{
+              color: "#798497",
+              bottom: 100,
+              fontSize: 25,
+              right: 30,
+              paddingLeft: 20,
+            }}
+          >
+            Los Angeles, CA
+          </Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.circleContainer2}>
+        <View style={styles.progressLayer2}></View>
+        <View style={styles.offsetLayer2}></View>
+      </View>
+      <Text
+        style={{
+          color: "white",
+          left: 88,
+          top: 242,
+          fontWeight: "800",
+          zIndex: 100,
+        }}
+      >
+        47%
+      </Text>
+      <Text
+        style={{
+          color: "#798497",
+          fontSize: 20,
+          fontWeight: "700",
+          top: 120,
+          zIndex: 100,
+          left: 60,
+        }}
+      >
+        Air Quality
+      </Text>
+      <Text
+        style={{
+          color: "#798497",
+          fontSize: 20,
+          fontWeight: "700",
+          top: 140,
+          zIndex: 100,
+          left: 60,
+        }}
+      >
+        33 mmHg
+      </Text>
       <View style={styles.bicardOne}>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
           <Button
             color={"#798497"}
-            title={"hello"}
+            title={""}
             onPress={() => navigation.navigate("Archive")}
           />
         </TouchableOpacity>
       </View>
+      <View style={styles.circleContainer3}>
+        <View
+          style={[styles.firstProgressLayer, firstProgressLayerStyle]}
+        ></View>
+        {renderThirdLayer(percent)}
+      </View>
+      <Text
+        style={{
+          color: "white",
+          left: 283,
+          bottom: 43,
+          fontWeight: "800",
+          zIndex: 100,
+        }}
+      >
+        80%
+      </Text>
+      <Text
+        style={{
+          color: "#798497",
+          fontSize: 20,
+          fontWeight: "700",
+          bottom: 170,
+          left: 240,
+          zIndex: 100,
+        }}
+      >
+        Temperature
+      </Text>
+      <Text
+        style={{
+          color: "#798497",
+          fontSize: 20,
+          fontWeight: "700",
+          bottom: 147,
+          zIndex: 100,
+          left: 270,
+        }}
+      >
+        100°F
+      </Text>
       <View style={styles.bicardTwo}>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
           <Button
             color={"#798497"}
-            title={"hello"}
+            title={""}
             onPress={() => navigation.navigate("Archive")}
           />
         </TouchableOpacity>
       </View>
+      <View style={{ top: 45, zIndex: 100, left: 40 }}>
+        <Text style={{ color: "#798497", fontSize: 25, bottom: 205 }}>
+          Heatmaps
+        </Text>
+      </View>
       <View style={styles.optionsContainer}>
-        <View style={{bottom: 50, paddingBottom: 10}}>
-            <Text style={{color: '#798479'}}>Datapoint Heat</Text>
-        </View>
         <View style={styles.fireContainer}>
           <MaterialCommunityIcons style={styles.fire} name="fire" size={45} />
         </View>
@@ -74,6 +219,145 @@ function WelcomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  circleContainer1: {
+    left: 220,
+    width: 50,
+    height: 50,
+    borderWidth: 5,
+    borderRadius: 100,
+    borderColor: "grey",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  progressLayer1: {
+    width: 50,
+    height: 50,
+    borderWidth: 5,
+    borderRadius: 100,
+    position: "absolute",
+    borderLeftColor: "transparent",
+    borderBottomColor: "transparent",
+    borderRightColor: "#FF5349",
+    borderTopColor: "#FF5349",
+    transform: [{ rotateZ: "-45deg" }],
+  },
+  offsetLayer1: {
+    width: 50,
+    height: 50,
+    borderWidth: 5,
+    borderRadius: 100,
+    borderLeftColor: "transparent",
+    borderBottomColor: "transparent",
+    borderRightColor: "grey",
+    borderTopColor: "grey",
+    transform: [{ rotateZ: "-135deg" }],
+  },
+  circleContainer2: {
+    left: 80,
+    top: 275,
+    width: 50,
+    height: 50,
+    borderWidth: 5,
+    borderRadius: 100,
+    borderColor: "grey",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
+  },
+  progressLayer2: {
+    width: 50,
+    height: 50,
+    borderWidth: 5,
+    borderRadius: 100,
+    position: "absolute",
+    borderLeftColor: "transparent",
+    borderBottomColor: "transparent",
+    borderRightColor: "#FF5349",
+    borderTopColor: "#FF5349",
+    transform: [{ rotateZ: "45deg" }],
+  },
+  offsetLayer2: {
+    width: 50,
+    height: 50,
+    borderWidth: 5,
+    borderRadius: 100,
+    borderLeftColor: "transparent",
+    borderBottomColor: "transparent",
+    borderRightColor: "grey",
+    borderTopColor: "grey",
+    transform: [{ rotateZ: "220deg" }],
+  },
+  circleContainer3: {
+    left: 275,
+    bottom: 10,
+    width: 50,
+    height: 50,
+    borderWidth: 5,
+    borderRadius: 100,
+    borderColor: "grey",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
+  },
+  progressLayer3: {
+    width: 50,
+    height: 50,
+    borderWidth: 5,
+    borderRadius: 100,
+    position: "absolute",
+    borderLeftColor: "transparent",
+    borderBottomColor: "transparent",
+    borderRightColor: "#FF5349",
+    borderTopColor: "#FF5349",
+    transform: [{ rotateZ: "55deg" }],
+  },
+  offsetLayer3: {
+    width: 50,
+    height: 50,
+    borderWidth: 5,
+    borderRadius: 100,
+    borderLeftColor: "transparent",
+    borderBottomColor: "transparent",
+    borderRightColor: "grey",
+    borderTopColor: "grey",
+    transform: [{ rotateZ: "240deg" }],
+  },
+  firstProgressLayer: {
+    width: 50,
+    height: 50,
+    borderWidth: 5,
+    borderRadius: 100,
+    position: "absolute",
+    borderLeftColor: "transparent",
+    borderBottomColor: "transparent",
+    borderRightColor: "#FF5349",
+    borderTopColor: "#FF5349",
+    transform: [{ rotateZ: "-135deg" }],
+  },
+  secondProgressLayer: {
+    width: 50,
+    height: 50,
+    position: "absolute",
+    borderWidth: 5,
+    borderRadius: 100,
+    borderLeftColor: "transparent",
+    borderBottomColor: "transparent",
+    borderRightColor: "#FF5349",
+    borderTopColor: "#FF5349",
+    transform: [{ rotateZ: "45deg" }],
+  },
+  offsetLayer: {
+    width: 50,
+    height: 50,
+    position: "absolute",
+    borderWidth: 5,
+    borderRadius: 100,
+    borderLeftColor: "transparent",
+    borderBottomColor: "transparent",
+    borderRightColor: "black",
+    borderTopColor: "black",
+    transform: [{ rotateZ: "-135deg" }],
+  },
   fireContainer: {
     padding: 10,
     height: 60,
@@ -116,15 +400,15 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 100,
     marginLeft: 20,
-    backgroundColor: "#FF5349",
+    backgroundColor: "#6F7691",
   },
   factory: {
     left: -2,
     bottom: 3,
-    color: "orange",
+    color: "black",
   },
   noteContainer: {
-    top: 140,
+    top: 100,
     marginLeft: 30,
     paddingTop: 10,
     paddingLeft: 50,
@@ -133,9 +417,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     width: 350,
     height: 120,
+    zIndex: 0,
   },
   bicardOne: {
-    top: 180,
+    top: 50,
     marginLeft: 30,
     paddingTop: 10,
     paddingLeft: 50,
@@ -144,9 +429,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     width: 160,
     height: 170,
+    zIndex: 0,
   },
   bicardTwo: {
-    top: 10,
+    bottom: 235,
     marginLeft: 220,
     paddingTop: 10,
     paddingLeft: 50,
@@ -155,9 +441,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     width: 160,
     height: 170,
+    zIndex: 0,
   },
   optionsContainer: {
-    top: 50,
+    bottom: 200,
     marginLeft: 30,
     paddingTop: 10,
     paddingLeft: 50,
@@ -170,30 +457,24 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
+    zIndex: 0,
   },
   circle: {
     borderRadius: 20,
     backgroundColor: "orange",
   },
-  subtext: {
-    color: "white",
-    fontFamily: "Avenir",
-    fontSize: 18,
-    textAlign: "center",
-    top: 60,
-  },
   title: {
     fontFamily: "Avenir",
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: "bold",
     textAlign: "center",
     color: "white",
-    top: 50,
+    top: 75,
   },
   textContainer: {
-    flex: 0.15,
     padding: 10,
     top: 15,
+    zIndex: 100,
   },
   container: {
     flex: 1,

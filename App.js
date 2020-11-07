@@ -6,15 +6,12 @@ import { createMaterialBottomTabNavigator } from "@react-navigation/material-bot
 // import MyNotesAddImageNotesScreen from './screens/MainScreens/MyNotesAddImageNotesScreen'
 import StartLectureScreen from "./screens/MainScreens/StartLecture";
 import {
-  MaterialIcons,
-  Ionicons,
-  Octicons,
   Entypo,
   MaterialCommunityIcons,
   FontAwesome5,
 } from "@expo/vector-icons";
 import SelectLectureScreen from "./screens/MainScreens/SelectLectureScreen";
-import NewsFeed from './screens/MainScreens/NewsFeed'
+import NewsFeed from "./screens/MainScreens/NewsFeed";
 import ExportDetectedTextScreen from "./screens/MainScreens/ExportDetectedTextScreen";
 import MyNotesAddImageScreen from "./screens/MainScreens/MyNotesAddImageNotesScreen";
 import DiscussionsScreen from "./screens/MainScreens/DiscussionsScreen";
@@ -140,12 +137,12 @@ function MainTabs() {
           }}
         />
         <Tab.Screen
-          name="Discussions"
+          name="Notifications"
           component={NotificationsScreen}
           options={{
             tabBarIcon: ({ focused }) => (
-              <Octicons
-                name="comment-discussion"
+              <Entypo
+                name="bell"
                 size={24}
                 color={focused ? tabcolor : inactiveColor}
               />
@@ -157,9 +154,9 @@ function MainTabs() {
           component={NewsFeed}
           options={{
             tabBarIcon: ({ focused }) => (
-              <MaterialIcons
-                name="storage"
-                size={26}
+              <FontAwesome5
+                name="newspaper"
+                size={23}
                 color={focused ? tabcolor : inactiveColor}
               />
             ),
