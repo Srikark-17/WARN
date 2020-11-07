@@ -10,6 +10,7 @@ import {
   MaterialCommunityIcons,
   FontAwesome5,
 } from "@expo/vector-icons";
+import NearbyFiresScreen from './screens/MainScreens/NearbyFires'
 import SelectLectureScreen from "./screens/MainScreens/SelectLectureScreen";
 import NewsFeed from "./screens/MainScreens/NewsFeed";
 import ExportDetectedTextScreen from "./screens/MainScreens/ExportDetectedTextScreen";
@@ -143,6 +144,19 @@ function MainTabs() {
             tabBarIcon: ({ focused }) => (
               <Entypo
                 name="bell"
+                size={24}
+                color={focused ? tabcolor : inactiveColor}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Fires Nearby"
+          component={NearbyFiresScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <Entypo
+                name="fire"
                 size={24}
                 color={focused ? tabcolor : inactiveColor}
               />
