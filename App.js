@@ -14,7 +14,7 @@ import {
   FontAwesome5,
 } from "@expo/vector-icons";
 import SelectLectureScreen from "./screens/MainScreens/SelectLectureScreen";
-
+import NewsFeed from './screens/MainScreens/NewsFeed'
 import ExportDetectedTextScreen from "./screens/MainScreens/ExportDetectedTextScreen";
 import MyNotesAddImageScreen from "./screens/MainScreens/MyNotesAddImageNotesScreen";
 import DiscussionsScreen from "./screens/MainScreens/DiscussionsScreen";
@@ -153,8 +153,8 @@ function MainTabs() {
           }}
         />
         <Tab.Screen
-          name="Archived Problems"
-          component={ArchiveNavigator}
+          name="News Feed"
+          component={NewsFeed}
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialIcons

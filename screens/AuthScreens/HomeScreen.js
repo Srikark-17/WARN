@@ -46,7 +46,7 @@ function WelcomeScreen({ navigation }) {
       </View>
       <View style={styles.optionsContainer}>
         <View style={{bottom: 50, paddingBottom: 10}}>
-            <Text style={{color: '#798479'}}>Datapoint Heatmaps</Text>
+            <Text style={{color: '#798479'}}>Datapoint Heat</Text>
         </View>
         <View style={styles.fireContainer}>
           <MaterialCommunityIcons style={styles.fire} name="fire" size={45} />
@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     top: 50,
     marginLeft: 30,
     paddingTop: 10,
+    paddingLeft: 50,
     paddingRight: 50,
     backgroundColor: "#2B2D2F",
     borderRadius: 12,
@@ -167,6 +168,7 @@ const styles = StyleSheet.create({
     height: 150,
     display: "flex",
     flexDirection: "row",
+    justifyContent: "space-evenly",
     alignItems: "center",
   },
   circle: {
