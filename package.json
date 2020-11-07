@@ -12,7 +12,7 @@
     "@react-navigation/material-bottom-tabs": "^5.2.19",
     "@react-navigation/native": "^5.7.6",
     "@react-navigation/stack": "^5.9.3",
-    "expo": "^39.0.3",
+    "expo": "^39.0.4",
     "expo-camera": "~9.0.0",
     "expo-constants": "~9.2.0",
     "expo-font": "~8.3.0",
@@ -37,11 +37,11 @@
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
+    "react-native-svg": "12.1.0",
     "react-native-unimodules": "~0.11.0",
     "react-native-web": "^0.13.16",
     "react-native-webview": "10.7.0",
-    "start": "^5.1.0",
-    "react-native-svg": "12.1.0"
+    "start": "^5.1.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

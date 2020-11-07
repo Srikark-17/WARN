@@ -24,6 +24,7 @@ import ProblemSolverNavigator from "./screens/MainScreens/OptionsScreen";
 // import MyNotesDetectedTextScreen from "./screens/MainScreens/MyNotesDetectedText";
 import AudioNotesScreen from "./screens/MainScreens/AudioNotesScreen";
 import ImageNotesScreen from "./screens/MainScreens/CameraScreen";
+import HomeScreen2 from './screens/AuthScreens/HomeScreen'
 import SplashScreen from "./screens/AuthScreens/SplashScreen";
 import LoginScreen from "./screens/AuthScreens/TestLoginScreen";
 import RegisterScreen from "./screens/AuthScreens/TestRegisterScreen";
@@ -127,7 +128,7 @@ function MainTabs() {
       >
         <Tab.Screen
           name="Problem Calculator"
-          component={NotificationsScreen}
+          component={HomeScreen2}
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons
@@ -140,7 +141,7 @@ function MainTabs() {
         />
         <Tab.Screen
           name="Discussions"
-          component={DiscussionsScreen}
+          component={NotificationsScreen}
           options={{
             tabBarIcon: ({ focused }) => (
               <Octicons

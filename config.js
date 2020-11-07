@@ -1,10 +1,10 @@
 export default firebasekeys = {
-  apiKey: "AIzaSyAYHnTwOTLQq3oNvOxgMNy3odMhwKX4a7o",
-  authDomain: "master-fb9f0.firebaseapp.com",
-  databaseURL: "https://master-fb9f0.firebaseio.com",
-  projectId: "master-fb9f0",
-  storageBucket: "master-fb9f0.appspot.com",
-  messagingSenderId: "71108029155",
-  appId: "1:71108029155:web:268678082bf91ffae6b3d6",
-  measurementId: "G-8QWNW6PRB9"
+  apiKey: "AIzaSyDfyxWP2A4etB_Mp2gddfqP3H6PbKJ9-1A",
+  authDomain: "warn-9b32b.firebaseapp.com",
+  databaseURL: "https://warn-9b32b.firebaseio.com",
+  projectId: "warn-9b32b",
+  storageBucket: "warn-9b32b.appspot.com",
+  messagingSenderId: "977519428724",
+  appId: "1:977519428724:web:2847b86f3d3791ced5bd21",
+  measurementId: "G-KLYXT6HJZ9"
 }
