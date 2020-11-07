@@ -94,7 +94,7 @@ const ImageNavigator = ({ navigation }) => {
       }}
       initialRouteName="Home Screen"
     >
-      <Image.Screen name="Home Screen" component={HomeScreen2} />
+      <Image.Screen name="Home Screen" component={HomeScreen} />
       <Image.Screen
         name="Option Navigation"
         component={ProblemSolverNavigator}
