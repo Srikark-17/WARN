@@ -188,7 +188,14 @@ function WelcomeScreen({ navigation }) {
         </TouchableOpacity>
       </View>
       <View style={{ top: 45, zIndex: 100, left: 40 }}>
-        <Text style={{ color: "#798497", fontSize: 25, bottom: 205 }}>
+        <Text
+          style={{
+            color: "#798497",
+            fontSize: 25,
+            bottom: 205,
+            fontWeight: "500",
+          }}
+        >
           Heatmaps
         </Text>
       </View>
