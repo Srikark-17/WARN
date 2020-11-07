@@ -116,7 +116,7 @@ function MainTabs() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName="Problem Calculator"
+        initialRouteName="Dashboard"
         sceneAnimationEnabled="true"
         activeColor={tabcolor}
         inactiveColor={inactiveColor}
@@ -124,12 +124,12 @@ function MainTabs() {
         shifting={true}
       >
         <Tab.Screen
-          name="Problem Calculator"
+          name="Dashboard"
           component={HomeScreen2}
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons
-                name="calculator-variant"
+                name="view-dashboard"
                 size={26}
                 color={focused ? tabcolor : inactiveColor}
               />
