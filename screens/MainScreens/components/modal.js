@@ -2,7 +2,7 @@ import React, {Component } from 'react'
 import {View, Text, StyleShee, Dimensions, Modal, Share} from 'react-native'
 import {Container, Header, Content, Body, Left, Icon, Right, Title, Button} from 'native-base'
 import {WebView} from 'react-native-webview'
-
+import ComponentButton from './Button'
 const webViewHeight = Dimensions.get('window').height - 56;
 
 // create a component
@@ -21,7 +21,7 @@ class ModalComponent extends Component {
         );
     }
     handleClose = () => {
-        return this.props.onClose();
+        this.props.navigation.navigate('News Feed')
     }
     render() {
         const { showModal, articleData } = this.props;
@@ -34,19 +34,17 @@ class ModalComponent extends Component {
                 visible={showModal}
                 onRequestClose={this.handleClose}
             >
-                <Container style={{marginBottom:0, backgroundColor:'#fff'}}>
-                    <Header style={{backgroundColor:'#fee11a'}}>
+                <Container style={{marginBottom:0, backgroundColor:'#000'}}>
+                    <Header style={{backgroundColor:'#000'}}>
                         <Left>
-                            <Button onPress={this.handleClose} transparent>
-                                <Icon name="close" style={{color: 'black', fontSize: 35}}/>
-                            </Button>
+                        <ComponentButton/>
                         </Left>
                         <Body>
-                            <Title children={articleData.title} style={{color: 'black'}}/>
+                            <Title children={articleData.title} style={{color: 'white'}}/>
                         </Body>
                         <Right>
                             <Button onPress={this.handleShare} transparent>
-                                <Icon name="share" style={{color: 'black', fontSize: 20}}/>
+                                <Icon name="share" style={{color: '#ff5349', fontSize: 20}}/>
                             </Button>
                         </Right>
                     </Header>
