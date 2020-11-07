@@ -18,7 +18,7 @@ function WelcomeScreen({ navigation }) {
         <Text style={styles.title}>Notifications</Text>
       </View>
       <MaterialCommunityIcons
-        style={{ color: "orange", top: 65, left: 20, zIndex: 100 }}
+        style={{ color: "orange", top: 65, left: 30, zIndex: 100 }}
         name="fire"
         size={50}
       />
@@ -56,7 +56,7 @@ function WelcomeScreen({ navigation }) {
         </TouchableOpacity>
       </View>
       <FontAwesome5
-        style={{ color: "white", zIndex: 100, top: 15, left: 20 }}
+        style={{ color: "white", zIndex: 100, top: -15, left: 30 }}
         name="wind"
         size={40}
       />
@@ -65,12 +65,12 @@ function WelcomeScreen({ navigation }) {
           color: "white",
           fontWeight: "800",
           fontSize: 30,
-          top: -25,
+          top: -55,
           zIndex: 100,
           left: 90,
         }}
       >
-        Air
+        Air Quality
       </Text>
       <Text
         style={{
@@ -78,7 +78,7 @@ function WelcomeScreen({ navigation }) {
           fontWeight: "700",
           fontSize: 20,
           zIndex: 100,
-          top: -15,
+          top: -45,
           left: 90,
         }}
       >
@@ -94,7 +94,7 @@ function WelcomeScreen({ navigation }) {
         </TouchableOpacity>
       </View>
       <MaterialCommunityIcons
-        style={{ color: "#FCC200", zIndex: 100, left: 20, top: -30 }}
+        style={{ color: "#FCC200", zIndex: 100, left: 30, top: -90 }}
         name="flower"
         size={40}
       />
@@ -103,7 +103,7 @@ function WelcomeScreen({ navigation }) {
           color: "white",
           fontWeight: "800",
           fontSize: 30,
-          top: -70,
+          top: -130,
           zIndex: 100,
           left: 90,
         }}
@@ -116,7 +116,7 @@ function WelcomeScreen({ navigation }) {
           fontWeight: "700",
           fontSize: 20,
           zIndex: 100,
-          top: -60,
+          top: -120,
           left: 90,
         }}
       >
@@ -132,7 +132,7 @@ function WelcomeScreen({ navigation }) {
         </TouchableOpacity>
       </View>
       <MaterialCommunityIcons
-        style={{ color: "black", zIndex: 100, top: -85, left: 20 }}
+        style={{ color: "black", zIndex: 100, top: -175, left: 30 }}
         name="factory"
         size={40}
       />
@@ -141,7 +141,7 @@ function WelcomeScreen({ navigation }) {
           color: "white",
           fontWeight: "800",
           fontSize: 30,
-          top: -122,
+          top: -212,
           zIndex: 100,
           left: 90,
         }}
@@ -154,7 +154,7 @@ function WelcomeScreen({ navigation }) {
           fontWeight: "700",
           fontSize: 20,
           zIndex: 100,
-          top: -110,
+          top: -200,
           left: 90,
         }}
       >
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   bicardTwo: {
-    top: -100,
+    top: -130,
     left: 10,
     paddingTop: 10,
     paddingLeft: 50,
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   bicardThree: {
-    top: -150,
+    top: -210,
     left: 10,
     paddingTop: 10,
     paddingLeft: 50,
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   bicardFour: {
-    bottom: 200,
+    bottom: 290,
     left: 10,
     paddingTop: 10,
     paddingLeft: 50,
