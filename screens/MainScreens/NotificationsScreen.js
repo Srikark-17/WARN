@@ -18,7 +18,7 @@ function WelcomeScreen({ navigation }) {
         <Text style={styles.title}>Notifications</Text>
       </View>
       <MaterialCommunityIcons
-        style={{ color: "orange", top: 65, left: 30, zIndex: 100 }}
+        style={{ color: "orange", top: 65, left: 25, zIndex: 100 }}
         name="fire"
         size={50}
       />
@@ -46,15 +46,15 @@ function WelcomeScreen({ navigation }) {
       >
         Lorem ipsum dolor sit amet
       </Text>
-      <View style={styles.bicardOne}>
-        <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
+      
+        <TouchableOpacity style={styles.bicardOne} onPress={() => navigation.navigate("Archive")}>
           <Button
             color={"#798497"}
             title={""}
             onPress={() => navigation.navigate("Archive")}
           />
         </TouchableOpacity>
-      </View>
+      
       <FontAwesome5
         style={{ color: "white", zIndex: 100, top: -15, left: 30 }}
         name="wind"
