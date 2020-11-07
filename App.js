@@ -24,7 +24,7 @@ import ProblemSolverNavigator from "./screens/MainScreens/OptionsScreen";
 // import MyNotesDetectedTextScreen from "./screens/MainScreens/MyNotesDetectedText";
 import AudioNotesScreen from "./screens/MainScreens/AudioNotesScreen";
 import ImageNotesScreen from "./screens/MainScreens/CameraScreen";
-import HomeScreen2 from './screens/AuthScreens/HomeScreen'
+import HomeScreen2 from "./screens/AuthScreens/HomeScreen";
 import SplashScreen from "./screens/AuthScreens/SplashScreen";
 import LoginScreen from "./screens/AuthScreens/TestLoginScreen";
 import RegisterScreen from "./screens/AuthScreens/TestRegisterScreen";
@@ -94,7 +94,7 @@ const ImageNavigator = ({ navigation }) => {
       }}
       initialRouteName="Home Screen"
     >
-      <Image.Screen name="Home Screen" component={HomeScreen} />
+      <Image.Screen name="Home Screen" component={HomeScreen2} />
       <Image.Screen
         name="Option Navigation"
         component={ProblemSolverNavigator}
