@@ -200,26 +200,26 @@ function WelcomeScreen({ navigation }) {
         </Text>
       </View>
       <View style={styles.optionsContainer}>
-        <View style={styles.fireContainer}>
+        <TouchableOpacity style={styles.fireContainer}>
           <MaterialCommunityIcons style={styles.fire} name="fire" size={45} />
-        </View>
-        <View style={styles.windContainer}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.windContainer}>
           <FontAwesome5 style={styles.wind} name="wind" size={40} />
-        </View>
-        <View style={styles.flowerContainer}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flowerContainer}>
           <MaterialCommunityIcons
             style={styles.flower}
             name="flower"
             size={40}
           />
-        </View>
-        <View style={styles.factoryContainer}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.factoryContainer}>
           <MaterialCommunityIcons
             style={styles.factory}
             name="factory"
             size={40}
           />
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );

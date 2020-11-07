@@ -46,15 +46,18 @@ function WelcomeScreen({ navigation }) {
       >
         Lorem ipsum dolor sit amet
       </Text>
-      
-        <TouchableOpacity style={styles.bicardOne} onPress={() => navigation.navigate("Archive")}>
-          <Button
-            color={"#798497"}
-            title={""}
-            onPress={() => navigation.navigate("Archive")}
-          />
-        </TouchableOpacity>
-      
+
+      <TouchableOpacity
+        style={styles.bicardOne}
+        onPress={() => navigation.navigate("Archive")}
+      >
+        <Button
+          color={"#798497"}
+          title={""}
+          onPress={() => navigation.navigate("Archive")}
+        />
+      </TouchableOpacity>
+
       <FontAwesome5
         style={{ color: "white", zIndex: 100, top: -15, left: 30 }}
         name="wind"
@@ -84,15 +87,16 @@ function WelcomeScreen({ navigation }) {
       >
         Lorem ipsum dolor sit amet
       </Text>
-      <View style={styles.bicardTwo}>
-        <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
-          <Button
-            color={"#798497"}
-            title={""}
-            onPress={() => navigation.navigate("Archive")}
-          />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.bicardTwo}
+        onPress={() => navigation.navigate("Archive")}
+      >
+        <Button
+          color={"#798497"}
+          title={""}
+          onPress={() => navigation.navigate("Archive")}
+        />
+      </TouchableOpacity>
       <MaterialCommunityIcons
         style={{ color: "#FCC200", zIndex: 100, left: 30, top: -90 }}
         name="flower"
@@ -122,15 +126,16 @@ function WelcomeScreen({ navigation }) {
       >
         Lorem ipsum dolor sit amet
       </Text>
-      <View style={styles.bicardThree}>
-        <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
-          <Button
-            color={"#798497"}
-            title={""}
-            onPress={() => navigation.navigate("Archive")}
-          />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.bicardThree}
+        onPress={() => navigation.navigate("Archive")}
+      >
+        <Button
+          color={"#798497"}
+          title={""}
+          onPress={() => navigation.navigate("Archive")}
+        />
+      </TouchableOpacity>
       <MaterialCommunityIcons
         style={{ color: "black", zIndex: 100, top: -175, left: 30 }}
         name="factory"
@@ -160,15 +165,16 @@ function WelcomeScreen({ navigation }) {
       >
         Lorem ipsum dolor sit amet
       </Text>
-      <View style={styles.bicardFour}>
-        <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
-          <Button
-            color={"#798497"}
-            title={""}
-            onPress={() => navigation.navigate("Archive")}
-          />
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        style={styles.bicardFour}
+        onPress={() => navigation.navigate("Archive")}
+      >
+        <Button
+          color={"#798497"}
+          title={""}
+          onPress={() => navigation.navigate("Archive")}
+        />
+      </TouchableOpacity>
     </View>
   );
 }
