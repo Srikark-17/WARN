@@ -27,7 +27,10 @@ import SplashScreen from "./screens/AuthScreens/SplashScreen";
 import LoginScreen from "./screens/AuthScreens/TestLoginScreen";
 import RegisterScreen from "./screens/AuthScreens/TestRegisterScreen";
 import OptionsScreen from "./screens/MainScreens/OptionsScreen";
+import PollutionScreen from "./screens/MainScreens/PollutionScreen";
+import PollenScreen from "./screens/MainScreens/PollenScreen";
 import NewQuestionScreen from "./screens/MainScreens/NewQuestionScreen";
+import FiresScreen from "./screens/MainScreens/AirQualityScreen";
 import Firebasekeys from "./config";
 import * as firebase from "firebase";
 
@@ -126,7 +129,7 @@ function MainTabs() {
       >
         <Tab.Screen
           name="Dashboard"
-          component={HomeScreen2}
+          component={FiresScreen}
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons
