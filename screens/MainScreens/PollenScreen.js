@@ -52,23 +52,16 @@ function WelcomeScreen({ navigation }) {
   const [effects, setEffects] = useState();
   const [sources, setSources] = useState();
   const [healthRecommendations, setRecommendations] = useState();
+
+  let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
   useEffect(() => {
     (async () => {
       let { status } = await Permissions.askAsync(Permissions.LOCATION);
       if(status === 'granted'){
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
-        getData();
-      }
-      else{
-        Alert.alert('Location services has not been enabled. Please go to the Settings and enable it.')
-      }
-    })();
-  }, []);
-  let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
-  let getData = () =>{
-    console.log('about to fetch')
-    fetch (`https://api.breezometer.com/air-quality/v2/current-conditions?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`).then((response) => response.json()).then((res) => {
+        console.log('about to fetch')
+      fetch (`https://api.breezometer.com/air-quality/v2/current-conditions?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`).then((response) => response.json()).then((res) => {
       let aqiLevel = res.data.indexes.baqi.aqi
       setAQILevel(aqiLevel)
       setAQICategory(res.data.indexes.baqi.category)
@@ -81,7 +74,13 @@ function WelcomeScreen({ navigation }) {
       let answergeocode = Location.reverseGeocodeAsync(latitude, longitude)
       console.log(answergeocode)
     })
-  }
+      }
+      else{
+        Alert.alert('Location services has not been enabled. Please go to the Settings and enable it.')
+      }
+    })();
+  }, []);
+  
   return (
     <ScrollView style={styles.container}>
       <View style={styles.textContainer}>
