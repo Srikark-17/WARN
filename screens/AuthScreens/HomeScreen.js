@@ -1,18 +1,19 @@
-import React from "react";
+
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
   Text,
   TouchableOpacity,
   LayoutAnimation,
-  Button,
+  Button, ScrollView
 } from "react-native";
 import {
   MaterialCommunityIcons,
   FontAwesome5,
   MaterialIcons,
 } from "@expo/vector-icons";
-
+import * as Location from 'expo-location';
 let percent = 80;
 
 let propStyle = (percent, base_degrees) => {
@@ -36,16 +37,40 @@ let renderThirdLayer = (percent) => {
 
 function WelcomeScreen({ navigation }) {
   LayoutAnimation.easeInEaseOut();
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  
+  
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+      }
 
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      getData()
+    })();
+  }, []);
+  console.log(location.coords)
+  const longitude = location.coords.longitude
+  const latitude = location.coords.latitude
+  const apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
+  const getData = () =>{
+    console.log('about to fetch')
+    fetch (`https://api.breezometer.com/air-quality/v2/current-conditions?lat=${latitude}&lon=${longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`).then((response) => response.json()).then((res) => {
+      console.log(res)
+    })
+  }
   let firstProgressLayerStyle;
   if (percent > 50) {
     firstProgressLayerStyle = propStyle(50, -135);
   } else {
     firstProgressLayerStyle = propStyle(percent, -135);
   }
-
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.textContainer}>
         <Text style={styles.title}>Dashboard</Text>
       </View>
@@ -196,9 +221,36 @@ function WelcomeScreen({ navigation }) {
             fontWeight: "500",
           }}
         >
+          AQ Details
+        </Text>
+      </View>
+
+      <View style={styles.optionsContainer}>
+        <View>
+
+        <Text style={{color: '#798497'}}>General Category</Text>
+        <Text style={{color: '#798497'}}>Main Pollutant: Nitrogen dioxide</Text>
+        <Text style={{color: '#798497'}}>Effects: Exposure may cause...</Text>
+        <Text style={{color: '#798497'}}>Sources of Pollution: Axhaust.....</Text>
+        <Text style={{color: '#798497'}}>Various Pollutants: </Text>
+        <Text style={{color: '#798497'}}>Pollutant Concentration: </Text>
+        <Text style={{color: '#798497'}}>Health Reccomendations: Children....</Text>
+        <Text style={{color: '#798497'}}>Sources of Pollution: Axhaust.....</Text>
+        </View>
+      </View>
+      <View style={{ top: 45, zIndex: 100, left: 40 }}>
+        <Text
+          style={{
+            color: "#798497",
+            fontSize: 25,
+            bottom: 205,
+            fontWeight: "500",
+          }}
+        >
           Heatmaps
         </Text>
       </View>
+      
       <View style={styles.optionsContainer}>
         <TouchableOpacity style={styles.fireContainer}>
           <MaterialCommunityIcons style={styles.fire} name="fire" size={45} />
@@ -221,7 +273,8 @@ function WelcomeScreen({ navigation }) {
           />
         </TouchableOpacity>
       </View>
-    </View>
+     
+    </ScrollView>
   );
 }
 
