@@ -30,7 +30,7 @@ import OptionsScreen from "./screens/MainScreens/OptionsScreen";
 import PollutionScreen from "./screens/MainScreens/PollutionScreen";
 import PollenScreen from "./screens/MainScreens/PollenScreen";
 import NewQuestionScreen from "./screens/MainScreens/NewQuestionScreen";
-import FiresScreen from "./screens/MainScreens/AirQualityScreen";
+import AirQualityScreen from "./screens/MainScreens/AirQualityScreen";
 import Firebasekeys from "./config";
 import * as firebase from "firebase";
 
@@ -129,7 +129,7 @@ function MainTabs() {
       >
         <Tab.Screen
           name="Dashboard"
-          component={FiresScreen}
+          component={AirQualityScreen}
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons
