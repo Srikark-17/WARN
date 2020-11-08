@@ -40,6 +40,10 @@ let renderThirdLayer = (percent) => {
 
 function WelcomeScreen({ navigation }) {
   LayoutAnimation.easeInEaseOut();
+
+  console.disableYellowBox = true;
+  let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
+  
   const [location, setLocation] = useState();
   const [errorMsg, setErrorMsg] = useState();
   const [temperature, setTemperature] = useState();
@@ -53,19 +57,7 @@ function WelcomeScreen({ navigation }) {
       if(status === 'granted'){
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
-        getData();
-        getWeather();
-        reverseGeocode()
-      }
-      else{
-        <ActivityIndicator/>
-      }
-    })();
-  }, []);
-  console.disableYellowBox = true;
-  let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
-  let getData = () =>{
-    console.log('about to fetch')
+        console.log('about to fetch')
     fetch (`https://api.breezometer.com/air-quality/v2/current-conditions?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`).then((response) => response.json()).then((res) => {
       let aqiLevel = res.data.indexes.baqi.aqi
       setAQILevel(aqiLevel)
@@ -73,15 +65,11 @@ function WelcomeScreen({ navigation }) {
       setAQIColor(res.data.indexes.baqi.color)
       percent2 = aqiLevel
     })
-  }
-  let getWeather = () => {
     fetch (`https://api.breezometer.com/weather/v1/current-conditions?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=${apiKey}`).then((response) => response.json()).then((res) => {
       var temperature = C2F(res.data.feels_like_temperature.value)
       setTemperature(temperature)
       percent = temperature
     })
-  }
-  let reverseGeocode = () => {
     fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en`).then((response) => response.json()).then((res) => {
       
       let resultsTitle = `${res.city}, ${res.principalSubdivisionCode}`
@@ -89,7 +77,12 @@ function WelcomeScreen({ navigation }) {
       console.log(res)
       setResultsTitle(resultsTitle)
     } )
-  }
+      }
+      else{
+        <ActivityIndicator/>
+      }
+    })();
+  }, []);
   let C2F = (Celcius) => {
     let F = (Celcius * 9/5) + 32
     let multiple = F * 10

@@ -10,7 +10,7 @@ import {
 import Screen from "../../components/Screen";
 import { Form, FormField, SubmitButton } from "../../components/forms";
 import AppText from "../../components/Text";
-
+console.disableYellowBox = true;
 import * as firebase from "firebase";
 import { SvgXml } from "react-native-svg";
 
