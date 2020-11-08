@@ -22,6 +22,9 @@ import {
   Left,
   Body,
 } from "native-base";
+
+import * as Location from "expo-location";
+import * as Permissions from 'expo-permissions'
 import { AntDesign, Fontisto, Feather } from "@expo/vector-icons";
 import * as firebase from "firebase";
 const Face = ({ icon, title, color, full }) => {
@@ -39,7 +42,43 @@ const Face = ({ icon, title, color, full }) => {
     </View>
   );
 };
-
+const ExampleArray = [{
+  "metadata": null,
+  "data": {
+      "datetime": "2020-11-08T09:00:00Z",
+      "data_available": true,
+      "fires": [
+          {
+              "update_time": "2020-11-08T00:39:13Z",
+              "source": "Local Authority",
+              "confidence": null,
+              "position": {
+                  "lat": 37.958683,
+                  "lon": -122.19745,
+                  "distance": {
+                      "value": 16.35,
+                      "units": "mi"
+                  },
+                  "direction": 44
+              },
+              "details": {
+                  "fire_name": "CREEK",
+                  "status": "Active",
+                  "time_discovered": "2020-11-07T20:33:17Z",
+                  "fire_behavior": null,
+                  "fire_type": "Wildfire",
+                  "fire_cause": "Unknown",
+                  "percent_contained": null,
+                  "size": {
+                      "value": null,
+                      "units": "ac"
+                  }
+              }
+          }
+      ]
+  },
+  "error": null
+}]
 const Rating = ({ rating }) => {
   return (
     <View style={styles.rating}>
@@ -71,7 +110,7 @@ export const CardHome = ({ title, info, noHeader, noFooter, book }) => {
             style={styles.cardAvatar}
             source={{
               uri:
-                "https://images.theconversation.com/files/304957/original/file-20191203-66986-im7o5.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+                "https://www.americangeosciences.org/sites/default/files/styles/ci__650_x_430_/public/CI_267_WildfireThomasFire_USFS_190124_1200x800px.jpg",
             }}
           />
           <View style={styles.cardLeftSide}>
@@ -83,57 +122,49 @@ export const CardHome = ({ title, info, noHeader, noFooter, book }) => {
             {info.rating && <Rating rating={info.rating} />}
           </View>
         </View>
-        {!noFooter && <View style={styles.margin} />}
-
-        {!noFooter && (
-          <View style={styles.cardBodyBottom}>
-            <TouchableOpacity
-              style={styles.cardGroupIcon}
-              onPress={() => Linking.openURL("tel:" + `123-345-3421`)}
-            >
-              <Feather
-                name="phone-call"
-                size={24}
-                style={{ color: "#87838B" }}
-              />
-              <Text style={styles.cardBottomTitle}>Call</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.cardGroupIcon}
-              onPress={() => Linking.openURL("sms:" + `123-345-3421`)}
-            >
-              <Fontisto name="email" size={24} style={{ color: "#87838B" }} />
-              <Text style={styles.cardBottomTitle}>Message</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cardGroupIcon}>
-              <Fontisto
-                name="email"
-                size={24}
-                style={{ color: "#87838B" }}
-                onPress={() =>
-                  Linking.openURL(
-                    `mailto:TDhar@gmail.com?subject=Skin Disease Diagnosis`
-                  )
-                }
-              />
-              <Text style={styles.cardBottomTitle}>Email</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cardGroupIcon}>
-              <AntDesign
-                name="calendar"
-                size={24}
-                style={{ color: "#87838B" }}
-              />
-              <Text style={styles.cardBottomTitle}>Consult</Text>
-            </TouchableOpacity>
-          </View>
-        )}
       </View>
     </View>
   );
 };
 
-const HomeScreen = () => {
+let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
+  
+function HomeScreen (){
+  const [location, setLocation] = useState();
+  const [fires, setFires] = useState()
+  const[locationState, setGeocodedLocation] = useState()
+  useEffect(() => {
+    (async () => {
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if(status === 'granted'){
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        console.log('about to fetch')
+      fetch (`https://api.breezometer.com/fires/v1/current-conditions?lat=37.788472&lon=-122.405711&key=f0aaf130ca6e4d849bda5e9780058332&units=imperial`).then((response) => response.json()).then((res) => {
+      setFires(res.data.fires)
+      reverseGeocode()
+      console.log(res.data.fires)
+    })
+      }
+      else{
+        <ActivityIndicator/>
+      }
+    })();
+  }, []);
+  let reverseGeocode = () => {
+    
+    let arrayLocations = []
+    for (let i = 0; i < fires.length; i++){
+    fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${fires[i].position.lat}&longitude=${fires[i].lon}&localityLanguage=en`).then((response) => response.json()).then((res) => {
+      
+      let resultsTitle = `${res.city}, ${res.principalSubdivisionCode}`
+      console.log(resultsTitle)
+      console.log(res)
+      arrayLocations.push(resultsTitle)
+    } )
+    setGeocodedLocation(arrayLocations)
+  }
+  }
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -141,26 +172,25 @@ const HomeScreen = () => {
           <Text style={styles.heading}>Fires Nearby</Text>
           <Text style={styles.desc}>View nearby fires</Text>
         </View>
-        <CardHome
+        <FlatList
+      data={fires}
+      renderItem = {({item}) => (
+        
+          <CardHome
           title=""
           info={{
-            name: "Dr T Pay Dhar",
-            time: "Pinnacle Dermitology",
-            address: "Dermatologists",
-            rating: 4,
-            detail: "Flint, MI 90293",
+            name: `Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States`,
+            time: "Distance away: 16.35 miles",
+            address: "Fire-Type: Wildfire",
+            tag: 'Update-time: 2020-11-08T00:39:13Z',
+            detail: `Source: Local Authority${"\n"}Status: Active${"\n"}Fire-Cause: Unknown${"\n"}Percentage Contained: N/a`,
           }}
         />
-        <CardHome
-          title=""
-          info={{
-            name: "Dr Ayon Das",
-            time: "Popular Pharma Limited",
-            address: "Dermatologists",
-            detail: "Bloomfield Hills, MI 48302",
-            rating: 4,
-          }}
-        />
+        
+      )
+    }
+      
+      />
       </ScrollView>
     </View>
   );

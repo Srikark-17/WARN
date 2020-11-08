@@ -1,18 +1,19 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
   View,
   StyleSheet,
   Text,
   TouchableOpacity,
   LayoutAnimation,
-  Button,
+  Button, ScrollView
 } from "react-native";
 import {
   MaterialCommunityIcons,
   FontAwesome5,
-  MaterialIcons,
+  MaterialIcons,Fontisto, AntDesign
 } from "@expo/vector-icons";
-
+import * as Location from "expo-location";
+import * as Permissions from 'expo-permissions'
 let percent = 80;
 
 let propStyle = (percent, base_degrees) => {
@@ -43,11 +44,48 @@ function WelcomeScreen({ navigation }) {
   } else {
     firstProgressLayerStyle = propStyle(percent, -135);
   }
-
+  const [location, setLocation] = useState();
+  const [aqicolor, setAQIColor] = useState();
+  const [aqiLevel, setAQILevel] = useState();
+  const [aqiCategory, setAQICategory] = useState();
+  const [mainPollutant, setMainPollutant] = useState();
+  const [effects, setEffects] = useState();
+  const [sources, setSources] = useState();
+  const [healthRecommendations, setRecommendations] = useState();
+  useEffect(() => {
+    (async () => {
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if(status === 'granted'){
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        getData();
+      }
+      else{
+        Alert.alert('Location services has not been enabled. Please go to the Settings and enable it.')
+      }
+    })();
+  }, []);
+  let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
+  let getData = () =>{
+    console.log('about to fetch')
+    fetch (`https://api.breezometer.com/air-quality/v2/current-conditions?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`).then((response) => response.json()).then((res) => {
+      let aqiLevel = res.data.indexes.baqi.aqi
+      setAQILevel(aqiLevel)
+      setAQICategory(res.data.indexes.baqi.category)
+      setAQIColor(res.data.indexes.baqi.color)
+      setMainPollutant(res.data.indexes.baqi.dominant_pollutant)
+      setEffects(res.data.pollutants.pm25.sources_and_effects.effects)
+      setRecommendations(res.data.health_recommendations.general_population)
+      setSources(res.data.pollutants.pm25.sources_and_effects.sources)
+      percent2 = aqiLevel
+      let answergeocode = Location.reverseGeocodeAsync(latitude, longitude)
+      console.log(answergeocode)
+    })
+  }
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.textContainer}>
-        <Text style={styles.title}>Pollen</Text>
+        <Text style={styles.title}>AQI Details</Text>
       </View>
       <View style={styles.noteContainer}>
         <View style={styles.circleContainer1}>
@@ -57,9 +95,9 @@ function WelcomeScreen({ navigation }) {
         <Text
           style={{ color: "white", left: 230, bottom: 33, fontWeight: "800" }}
         >
-          25%
+          5%
         </Text>
-        <Text style={{ left: 220, color: "#798497" }}>Subtext</Text>
+        <Text style={{ left: 220, color: "#798497" }}>Concerns</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
           <Button
             color={"#798497"}
@@ -67,14 +105,14 @@ function WelcomeScreen({ navigation }) {
             onPress={() => navigation.navigate("Archive")}
           />
           <MaterialIcons
-            name="location-on"
+            name="subtitles"
             size={20}
             style={{ color: "#FF5934", bottom: 50, right: 35 }}
           />
           <Text
             style={{ color: "#798497", bottom: 115, fontSize: 20, right: 30 }}
           >
-            Location
+            Category
           </Text>
           <Text
             style={{
@@ -85,7 +123,7 @@ function WelcomeScreen({ navigation }) {
               paddingLeft: 20,
             }}
           >
-            Los Angeles, CA
+            {aqiCategory}
           </Text>
         </TouchableOpacity>
       </View>
@@ -97,24 +135,24 @@ function WelcomeScreen({ navigation }) {
         <Text
           style={{ color: "white", left: 230, bottom: 33, fontWeight: "800" }}
         >
-          25%
+          5%
         </Text>
-        <Text style={{ left: 220, color: "#798497" }}>Subtext</Text>
+        <Text style={{ left: 220, color: "#798497" }}>Concerns</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
           <Button
             color={"#798497"}
             title={""}
             onPress={() => navigation.navigate("Archive")}
           />
-          <MaterialIcons
-            name="location-on"
+          <Fontisto
+            name="trash"
             size={20}
             style={{ color: "#FF5934", bottom: 50, right: 35 }}
           />
           <Text
             style={{ color: "#798497", bottom: 115, fontSize: 20, right: 30 }}
           >
-            Location
+            Main Pollutant
           </Text>
           <Text
             style={{
@@ -125,11 +163,22 @@ function WelcomeScreen({ navigation }) {
               paddingLeft: 20,
             }}
           >
-            Los Angeles, CA
+            {mainPollutant}
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.noteContainer}>
+      <View style={{top: 100,
+    marginLeft: 30,
+    paddingTop: 10,
+    paddingLeft: 50,
+    paddingRight: 50,
+    backgroundColor: "#2B2D2F",
+    borderRadius: 12,
+    width: 350,
+    height: 500,
+    zIndex: 0,
+    marginBottom: 10,
+    }}>
         <View style={styles.circleContainer1}>
           <View style={styles.progressLayer1}></View>
           <View style={styles.offsetLayer1}></View>
@@ -137,9 +186,9 @@ function WelcomeScreen({ navigation }) {
         <Text
           style={{ color: "white", left: 230, bottom: 33, fontWeight: "800" }}
         >
-          25%
+          5%
         </Text>
-        <Text style={{ left: 220, color: "#798497" }}>Subtext</Text>
+        <Text style={{ left: 220, color: "#798497" }}>Concerns</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
           <Button
             color={"#798497"}
@@ -147,14 +196,14 @@ function WelcomeScreen({ navigation }) {
             onPress={() => navigation.navigate("Archive")}
           />
           <MaterialIcons
-            name="location-on"
+            name="warning"
             size={20}
             style={{ color: "#FF5934", bottom: 50, right: 35 }}
           />
           <Text
             style={{ color: "#798497", bottom: 115, fontSize: 20, right: 30 }}
           >
-            Location
+            Effects
           </Text>
           <Text
             style={{
@@ -165,11 +214,21 @@ function WelcomeScreen({ navigation }) {
               paddingLeft: 20,
             }}
           >
-            Los Angeles, CA
+            {effects}
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.noteContainer}>
+      <View style={{top: 100,
+    marginLeft: 30,
+    paddingTop: 10,
+    paddingLeft: 50,
+    paddingRight: 50,
+    backgroundColor: "#2B2D2F",
+    borderRadius: 12,
+    width: 350,
+    height: 450,
+    zIndex: 0,
+    marginBottom: 10}}>
         <View style={styles.circleContainer1}>
           <View style={styles.progressLayer1}></View>
           <View style={styles.offsetLayer1}></View>
@@ -177,24 +236,24 @@ function WelcomeScreen({ navigation }) {
         <Text
           style={{ color: "white", left: 230, bottom: 33, fontWeight: "800" }}
         >
-          25%
+          5%
         </Text>
-        <Text style={{ left: 220, color: "#798497" }}>Subtext</Text>
+        <Text style={{ left: 220, color: "#798497" }}>Concerns</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
           <Button
             color={"#798497"}
             title={""}
             onPress={() => navigation.navigate("Archive")}
           />
-          <MaterialIcons
-            name="location-on"
+          <Fontisto
+            name="sourcetree"
             size={20}
             style={{ color: "#FF5934", bottom: 50, right: 35 }}
           />
           <Text
             style={{ color: "#798497", bottom: 115, fontSize: 20, right: 30 }}
           >
-            Location
+            Sources of Pollution
           </Text>
           <Text
             style={{
@@ -205,11 +264,23 @@ function WelcomeScreen({ navigation }) {
               paddingLeft: 20,
             }}
           >
-            Los Angeles, CA
+            {sources}
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.noteContainer}>
+      <View style={{top: 100,
+    marginLeft: 30,
+    paddingTop: 10,
+    paddingLeft: 50,
+    paddingRight: 50,
+    backgroundColor: "#2B2D2F",
+    borderRadius: 12,
+    width: 350,
+    bottom: 400,
+    height: 200,
+    zIndex: 0,
+    marginBottom: 100,
+    paddingBottom: 50}}>
         <View style={styles.circleContainer1}>
           <View style={styles.progressLayer1}></View>
           <View style={styles.offsetLayer1}></View>
@@ -217,24 +288,24 @@ function WelcomeScreen({ navigation }) {
         <Text
           style={{ color: "white", left: 230, bottom: 33, fontWeight: "800" }}
         >
-          25%
+          5%
         </Text>
-        <Text style={{ left: 220, color: "#798497" }}>Subtext</Text>
+        <Text style={{ left: 220, color: "#798497" }}>Concerns</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
           <Button
             color={"#798497"}
             title={""}
             onPress={() => navigation.navigate("Archive")}
           />
-          <MaterialIcons
-            name="location-on"
+          <AntDesign
+            name="heart"
             size={20}
             style={{ color: "#FF5934", bottom: 50, right: 35 }}
           />
           <Text
             style={{ color: "#798497", bottom: 115, fontSize: 20, right: 30 }}
           >
-            Location
+           Health Recommendations
           </Text>
           <Text
             style={{
@@ -245,51 +316,12 @@ function WelcomeScreen({ navigation }) {
               paddingLeft: 20,
             }}
           >
-            Los Angeles, CA
+            {healthRecommendations}
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={styles.noteContainer}>
-        <View style={styles.circleContainer1}>
-          <View style={styles.progressLayer1}></View>
-          <View style={styles.offsetLayer1}></View>
-        </View>
-        <Text
-          style={{ color: "white", left: 230, bottom: 33, fontWeight: "800" }}
-        >
-          25%
-        </Text>
-        <Text style={{ left: 220, color: "#798497" }}>Subtext</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
-          <Button
-            color={"#798497"}
-            title={""}
-            onPress={() => navigation.navigate("Archive")}
-          />
-          <MaterialIcons
-            name="location-on"
-            size={20}
-            style={{ color: "#FF5934", bottom: 50, right: 35 }}
-          />
-          <Text
-            style={{ color: "#798497", bottom: 115, fontSize: 20, right: 30 }}
-          >
-            Location
-          </Text>
-          <Text
-            style={{
-              color: "#798497",
-              bottom: 100,
-              fontSize: 25,
-              right: 30,
-              paddingLeft: 20,
-            }}
-          >
-            Los Angeles, CA
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    
+    </ScrollView>
   );
 }
 
@@ -314,7 +346,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "transparent",
     borderRightColor: "#FF5349",
     borderTopColor: "#FF5349",
-    transform: [{ rotateZ: "-45deg" }],
+    transform: [{ rotateZ: "-100deg" }],
   },
   offsetLayer1: {
     width: 50,
@@ -545,10 +577,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "white",
-    top: 75,
+    top: 55,
   },
   textContainer: {
-    padding: 10,
+    padding: 0,
     top: 15,
     zIndex: 100,
   },

@@ -14,9 +14,10 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import * as Location from "expo-location";
-let percent = 71;
-let percent1 = 65;
-let percent2 = 83;
+import * as Permissions from 'expo-permissions'
+var percent = 38;
+var percent1 = 58;
+var percent2 = 83;
 
 let propStyle = (percent, base_degrees) => {
   const rotateBy = base_degrees + percent * 3.6;
@@ -45,48 +46,58 @@ function WelcomeScreen({ navigation }) {
   const [aqicolor, setAQIColor] = useState();
   const [aqiLevel, setAQILevel] = useState();
   const [aqiCategory, setAQICategory] = useState();
+  const [resultsTitle, setResultsTitle] = useState()
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      if(status === 'granted'){
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        getData();
+        getWeather();
+        reverseGeocode()
       }
-
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      getData();
-      getWeather();
+      else{
+        <ActivityIndicator/>
+      }
     })();
   }, []);
-  // let longitude = location.coords.longitude
-  // let latitude = location.coords.latitude
-  // let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
-  // let getData = () =>{
-  //   console.log('about to fetch')
-  //   fetch (`https://api.breezometer.com/air-quality/v2/current-conditions?lat=${latitude}&lon=${longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`).then((response) => response.json()).then((res) => {
-  //     console.log(res)
-  //     let aqiLevel = res.data.indexes.baqi.aqi
-  //     setAQILevel(aqiLevel)
-  //     setAQICategory(res.data.indexes.baqi.category)
-  //     setAQIColor(res.data.indexes.baqi.color)
-  //   })
-  // }
-  // let getWeather = () => {
-  //   fetch (`https://api.breezometer.com/weather/v1/current-conditions?lat=${latitude}&lon=${longitude}&key=${apiKey}`).then((response) => response.json()).then((res) => {
-  //     console.log(res)
-  //     console.log(res.data.feels_like_temperature)
-  //     var temperature = C2F(res.data.feels_like_temperature.value)
-  //     setTemperature(temperature)
-  //   })
-  // }
-  // let C2F = (Celcius) => {
-  //   let F = (Celcius * 9/5) + 32
-  //   let multiple = F * 10
-  //   let roundedMultiple = Math.round(multiple)
-  //   let finalNumber = roundedMultiple/10
-  //   console.log(finalNumber)
-  //   return finalNumber
-  // }
+  console.disableYellowBox = true;
+  let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
+  let getData = () =>{
+    console.log('about to fetch')
+    fetch (`https://api.breezometer.com/air-quality/v2/current-conditions?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`).then((response) => response.json()).then((res) => {
+      let aqiLevel = res.data.indexes.baqi.aqi
+      setAQILevel(aqiLevel)
+      setAQICategory(res.data.indexes.baqi.category)
+      setAQIColor(res.data.indexes.baqi.color)
+      percent2 = aqiLevel
+    })
+  }
+  let getWeather = () => {
+    fetch (`https://api.breezometer.com/weather/v1/current-conditions?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=${apiKey}`).then((response) => response.json()).then((res) => {
+      var temperature = C2F(res.data.feels_like_temperature.value)
+      setTemperature(temperature)
+      percent = temperature
+    })
+  }
+  let reverseGeocode = () => {
+    fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en`).then((response) => response.json()).then((res) => {
+      
+      let resultsTitle = `${res.city}, ${res.principalSubdivisionCode}`
+      console.log(resultsTitle)
+      console.log(res)
+      setResultsTitle(resultsTitle)
+    } )
+  }
+  let C2F = (Celcius) => {
+    let F = (Celcius * 9/5) + 32
+    let multiple = F * 10
+    let roundedMultiple = Math.round(multiple)
+    let finalNumber = roundedMultiple/10
+    console.log(finalNumber)
+    return finalNumber
+  }
   let firstProgressLayerStyle;
   if (percent > 50) {
     firstProgressLayerStyle = propStyle(50, -135);
@@ -101,16 +112,15 @@ function WelcomeScreen({ navigation }) {
       <View style={styles.noteContainer}>
         <View style={styles.circleContainer1}>
           <View
-            style={[styles.firstProgressLayer, firstProgressLayerStyle]}
+            
           ></View>
-          {renderThirdLayer(percent2)}
         </View>
         <Text
-          style={{ color: "white", left: 230, bottom: 33, fontWeight: "800" }}
+          style={{ color: "#798497", left: 100, bottom: 23, fontWeight: "800" }}
         >
-          {percent2}%
+         
         </Text>
-        <Text style={{ left: 220, color: "#798497" }}>Subtext</Text>
+  <Text style={{ left: 220, color: "#798497" }}></Text>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
           <Button
             color={"#798497"}
@@ -122,21 +132,24 @@ function WelcomeScreen({ navigation }) {
             size={20}
             style={{ color: "#FF5934", bottom: 50, right: 35 }}
           />
+          <View style={{flexDirection: 'row'}}>
           <Text
             style={{ color: "#798497", bottom: 115, fontSize: 20, right: 30 }}
           >
-            Location
+            Location  
           </Text>
+          <Text style={{color: '#ffff', bottom: 110, right: 20, fontSize: 10, color: '#798497'}}>{Date()}</Text>
+          </View>
           <Text
             style={{
               color: "#798497",
               bottom: 100,
-              fontSize: 25,
+              fontSize: 20,
               right: 30,
               paddingLeft: 20,
             }}
           >
-            Los Angeles, CA
+            {resultsTitle}
           </Text>
         </TouchableOpacity>
       </View>
@@ -149,13 +162,13 @@ function WelcomeScreen({ navigation }) {
       <Text
         style={{
           color: "white",
-          left: 88,
+          left: 94,
           top: 242,
           fontWeight: "800",
           zIndex: 100,
         }}
       >
-        {percent1}%
+        {percent1}
       </Text>
       <Text
         style={{
@@ -179,17 +192,17 @@ function WelcomeScreen({ navigation }) {
           left: 60,
         }}
       >
-        {aqiLevel} {aqiCategory}
+        {aqiLevel}-Good
       </Text>
-      <View style={styles.bicardOne}>
-        <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
+      
+        <TouchableOpacity onPress={() => navigation.navigate("Pollution")} style={styles.bicardOne}>
           <Button
             color={"#798497"}
             title={""}
-            onPress={() => navigation.navigate("Archive")}
+            onPress={() => navigation.navigate("Air Quality")}
           />
         </TouchableOpacity>
-      </View>
+      
       <View style={styles.circleContainer3}>
         <View
           style={[styles.firstProgressLayer, firstProgressLayerStyle]}
@@ -205,7 +218,7 @@ function WelcomeScreen({ navigation }) {
           zIndex: 100,
         }}
       >
-        {percent}%
+        {percent}°F
       </Text>
       <Text
         style={{
@@ -231,51 +244,14 @@ function WelcomeScreen({ navigation }) {
       >
         {temperature}°F
       </Text>
-      <View style={styles.bicardTwo}>
-        <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
+        <TouchableOpacity onPress={() => navigation.navigate("Pollen")}style={styles.bicardTwo}>
           <Button
             color={"#798497"}
             title={""}
             onPress={() => navigation.navigate("Archive")}
           />
         </TouchableOpacity>
-      </View>
-      <View style={{ top: 45, zIndex: 100, left: 40 }}>
-        <Text
-          style={{
-            color: "#798497",
-            fontSize: 25,
-            bottom: 205,
-            fontWeight: "500",
-          }}
-        >
-          AQ Details
-        </Text>
-      </View>
-
-      <View style={styles.optionsContainer}>
-        <View>
-          <Text style={{ color: "#798497" }}>General Category</Text>
-          <Text style={{ color: "#798497" }}>
-            Main Pollutant: Nitrogen dioxide
-          </Text>
-          <Text style={{ color: "#798497" }}>
-            Effects: Exposure may cause...
-          </Text>
-          <Text style={{ color: "#798497" }}>
-            Sources of Pollution: Axhaust.....
-          </Text>
-          <Text style={{ color: "#798497" }}>Various Pollutants: </Text>
-          <Text style={{ color: "#798497" }}>Pollutant Concentration: </Text>
-          <Text style={{ color: "#798497" }}>
-            Health Reccomendations: Children....
-          </Text>
-          <Text style={{ color: "#798497" }}>
-            Sources of Pollution: Axhaust.....
-          </Text>
-        </View>
-      </View>
-      <View style={{ top: 45, zIndex: 100, left: 40 }}>
+        <View style={{ top: 45, zIndex: 100, left: 40 }}>
         <Text
           style={{
             color: "#798497",
@@ -287,26 +263,27 @@ function WelcomeScreen({ navigation }) {
           Heatmaps
         </Text>
       </View>
-
       <View style={styles.optionsContainer}>
         <TouchableOpacity style={styles.fireContainer}>
-          <MaterialCommunityIcons style={styles.fire} name="fire" size={45} />
+          <MaterialCommunityIcons style={styles.fire} name="fire" size={45} onPress={() => navigation.navigate('Wildfires')}/>
         </TouchableOpacity>
         <TouchableOpacity style={styles.windContainer}>
-          <FontAwesome5 style={styles.wind} name="wind" size={40} />
+          <FontAwesome5 style={styles.wind} name="wind" size={40} onPress={() => navigation.navigate('AQI Heatmap')}/>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.flowerContainer}>
+        <TouchableOpacity style={styles.flowerContainer} onPress={() => navigation.navigate('Pollen Heatmap')}>
           <MaterialCommunityIcons
             style={styles.flower}
             name="flower"
             size={40}
+            onPress={() => navigation.navigate('Pollen Heatmap')}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.factoryContainer}>
+        <TouchableOpacity style={styles.factoryContainer} onPress={() => navigation.navigate('Pollution Heatmap')}>
           <MaterialCommunityIcons
             style={styles.factory}
             name="factory"
             size={40}
+            onPress={() => navigation.navigate('Pollution Heatmap')}
           />
         </TouchableOpacity>
       </View>
@@ -319,11 +296,6 @@ const styles = StyleSheet.create({
     left: 220,
     width: 50,
     height: 50,
-    borderWidth: 5,
-    borderRadius: 100,
-    borderColor: "grey",
-    justifyContent: "center",
-    alignItems: "center",
   },
   progressLayer1: {
     width: 50,

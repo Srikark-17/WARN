@@ -8,7 +8,6 @@ import {
   LayoutAnimation,
 } from "react-native";
 import { SvgXml } from "react-native-svg";
-console.disableYellowBox = true;
 function WelcomeScreen({ navigation }) {
   LayoutAnimation.easeInEaseOut();
 

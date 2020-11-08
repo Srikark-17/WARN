@@ -19,6 +19,9 @@ import DiscussionsScreen from "./screens/MainScreens/DiscussionsScreen";
 import AccessArchiveScreen from "./screens/MainScreens/AccessArchiveScreen";
 import NotificationsScreen from "./screens/MainScreens/NotificationsScreen";
 import ProblemSolverNavigator from "./screens/MainScreens/OptionsScreen";
+import FireHeatmapScreen from './screens/MainScreens/FireHeatmapScreen'
+import AQIHeatmapScreen from './screens/MainScreens/AQIHeatmap'
+import PollenHeatmapScreen from './screens/MainScreens/PollenHeatmapScreen'
 // import MyNotesDetectedTextScreen from "./screens/MainScreens/MyNotesDetectedText";
 import AudioNotesScreen from "./screens/MainScreens/AudioNotesScreen";
 import ImageNotesScreen from "./screens/MainScreens/CameraScreen";
@@ -26,11 +29,12 @@ import HomeScreen2 from "./screens/AuthScreens/HomeScreen";
 import SplashScreen from "./screens/AuthScreens/SplashScreen";
 import LoginScreen from "./screens/AuthScreens/TestLoginScreen";
 import RegisterScreen from "./screens/AuthScreens/TestRegisterScreen";
+import PollutionHeatmapScreen from './screens/MainScreens/PollutionHeatmap'
 import OptionsScreen from "./screens/MainScreens/OptionsScreen";
 import PollutionScreen from "./screens/MainScreens/PollutionScreen";
 import PollenScreen from "./screens/MainScreens/PollenScreen";
 import NewQuestionScreen from "./screens/MainScreens/NewQuestionScreen";
-import AirQualityScreen from "./screens/MainScreens/AirQualityScreen";
+import AQScreen from "./screens/MainScreens/AirQualityScreen";
 import Firebasekeys from "./config";
 import * as firebase from "firebase";
 
@@ -46,14 +50,13 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 // import useNotifications from "../hooks/useNotifications";
-const inactiveColor = "#8E8E8E";
-const themecolor = "#2B2D2F";
-const tabcolor = "#Ff5349";
+const inactiveColor = '#8E8E8E'
+const themecolor = '#2B2D2F'
+const tabcolor = '#FF5349'
 const Tab = createMaterialBottomTabNavigator();
 const Auth = createStackNavigator();
 const Home = createStackNavigator();
 const Image = createStackNavigator();
-
 const ArchiveNavigator = ({ navigation }) => {
   return (
     <Home.Navigator
@@ -61,6 +64,7 @@ const ArchiveNavigator = ({ navigation }) => {
         headerShown: false,
       }}
       initialRouteName="Select Lecture"
+
     >
       <Home.Screen
         name="Export Detected Text"
@@ -87,23 +91,84 @@ const ArchiveNavigator = ({ navigation }) => {
     </Home.Navigator>
   );
 };
-const ImageNavigator = ({ navigation }) => {
+const Heatmaps = ({navigation}) => {
+  return (
+    <Image.Navigator
+    
+    
+    initialRouteName="AQI Heatmap"
+    >
+    
+    </Image.Navigator>
+  )
+}
+const HomeScreenNavigator = ({ navigation }) => {
   return (
     <Image.Navigator
       screenOptions={{
-        headerShown: false,
-      }}
+          headerShown:false
+        }}
+      
       initialRouteName="Home Screen"
     >
-      <Image.Screen name="Home Screen" component={HomeScreen} />
+      <Image.Screen name="Home Screen" component={HomeScreen2} />
       <Image.Screen
-        name="Option Navigation"
-        component={ProblemSolverNavigator}
+        name="Fire Screen"
+        component={AQScreen}
       />
       <Image.Screen name="Manual Input" component={NotificationsScreen} />
-
-      <Image.Screen name="Image Input" component={CameraScreen} />
       <Image.Screen name="Problem Results" component={ImageResultScreen} />
+      <Image.Screen name="Pollen" component={PollenScreen} />
+      <Image.Screen name="Pollution" component={PollenScreen} />
+      <Image.Screen name="AQI Heatmap" component={AQIHeatmapScreen} options={{
+        title: 'Heatmap',
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: `${themecolor}`
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            color: '#fff'
+          },
+          headerBackTitleStyle: {
+            color: `${inactiveColor}`
+          },
+          headerTintColor: `${inactiveColor}`,
+        }}/>
+    <Image.Screen name="Pollen Heatmap" component={PollenHeatmapScreen} options={{
+        title: 'Heatmap',
+        headerShown: true,
+          headerStyle: {
+            backgroundColor: `${themecolor}`
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            color: '#fff'
+          },
+          headerBackTitleStyle: {
+            color: `${inactiveColor}`
+          },
+          headerTintColor: `${inactiveColor}`,
+        }}/>
+    <Image.Screen name="Pollution Heatmap" component={PollutionHeatmapScreen} options={{
+        title: 'Heatmap',
+        headerShown: true,
+          headerStyle: {
+            backgroundColor: `${themecolor}`
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            color: '#fff'
+          },
+          headerBackTitleStyle: {
+            color: `${inactiveColor}`
+          },
+          headerTintColor: `${inactiveColor}`,
+        }}/>
+      
       {/* <Home.Screen
         name="My Notes Add Image Notes"
         component={MyNotesAddImageNotesScreen}
@@ -129,7 +194,7 @@ function MainTabs() {
       >
         <Tab.Screen
           name="Dashboard"
-          component={HomeScreen2}
+          component={HomeScreenNavigator}
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons
