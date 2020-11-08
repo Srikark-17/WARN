@@ -60,7 +60,7 @@ function WelcomeScreen({ navigation }) {
           25%
         </Text>
         <Text style={{ left: 220, color: "#798497" }}>Subtext</Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
+        <TouchableOpacity onPress={() => navigation.navigate("News Feed")}>
           <Button
             color={"#798497"}
             title={""}

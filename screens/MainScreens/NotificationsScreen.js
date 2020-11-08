@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   LayoutAnimation,
   Button,
+  Alert
 } from "react-native";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 
@@ -49,12 +50,12 @@ function WelcomeScreen({ navigation }) {
 
       <TouchableOpacity
         style={styles.bicardOne}
-        onPress={() => navigation.navigate("Archive")}
+        onPress={() => Alert.alert('jeje')}
       >
         <Button
           color={"#798497"}
           title={""}
-          onPress={() => navigation.navigate("Archive")}
+          onPress={() => Alert.alert('www')}
         />
       </TouchableOpacity>
 
@@ -89,7 +90,7 @@ function WelcomeScreen({ navigation }) {
       </Text>
       <TouchableOpacity
         style={styles.bicardTwo}
-        onPress={() => navigation.navigate("Archive")}
+        onPress={() => Alert.alert('hello')}
       >
         <Button
           color={"#798497"}
