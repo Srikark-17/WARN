@@ -1,20 +1,22 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
   Text,
   TouchableOpacity,
   LayoutAnimation,
-  Button, ScrollView
+  Button,
+  ScrollView,
 } from "react-native";
 import {
   MaterialCommunityIcons,
   FontAwesome5,
   MaterialIcons,
 } from "@expo/vector-icons";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
 let percent = 71;
+let percent1 = 65;
+let percent2 = 83;
 
 let propStyle = (percent, base_degrees) => {
   const rotateBy = base_degrees + percent * 3.6;
@@ -39,52 +41,52 @@ function WelcomeScreen({ navigation }) {
   LayoutAnimation.easeInEaseOut();
   const [location, setLocation] = useState();
   const [errorMsg, setErrorMsg] = useState();
-  const [temperature, setTemperature] = useState()
-  const [aqicolor, setAQIColor] = useState()
-  const [aqiLevel, setAQILevel] = useState()
-  const [aqiCategory, setAQICategory] = useState()
+  const [temperature, setTemperature] = useState();
+  const [aqicolor, setAQIColor] = useState();
+  const [aqiLevel, setAQILevel] = useState();
+  const [aqiCategory, setAQICategory] = useState();
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
       }
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-      getData()
-      getWeather()
+      getData();
+      getWeather();
     })();
   }, []);
-  let longitude = location.coords.longitude
-  let latitude = location.coords.latitude
-  let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
-  let getData = () =>{
-    console.log('about to fetch')
-    fetch (`https://api.breezometer.com/air-quality/v2/current-conditions?lat=${latitude}&lon=${longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`).then((response) => response.json()).then((res) => {
-      console.log(res)
-      let aqiLevel = res.data.indexes.baqi.aqi
-      setAQILevel(aqiLevel)
-      setAQICategory(res.data.indexes.baqi.category)
-      setAQIColor(res.data.indexes.baqi.color)
-    })
-  }
-  let getWeather = () => {
-    fetch (`https://api.breezometer.com/weather/v1/current-conditions?lat=${latitude}&lon=${longitude}&key=${apiKey}`).then((response) => response.json()).then((res) => {
-      console.log(res)
-      console.log(res.data.feels_like_temperature)
-      var temperature = C2F(res.data.feels_like_temperature.value)
-      setTemperature(temperature)
-    })
-  }
-  let C2F = (Celcius) => {
-    let F = (Celcius * 9/5) + 32
-    let multiple = F * 10
-    let roundedMultiple = Math.round(multiple)
-    let finalNumber = roundedMultiple/10
-    console.log(finalNumber)
-    return finalNumber
-  }
+  // let longitude = location.coords.longitude
+  // let latitude = location.coords.latitude
+  // let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
+  // let getData = () =>{
+  //   console.log('about to fetch')
+  //   fetch (`https://api.breezometer.com/air-quality/v2/current-conditions?lat=${latitude}&lon=${longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`).then((response) => response.json()).then((res) => {
+  //     console.log(res)
+  //     let aqiLevel = res.data.indexes.baqi.aqi
+  //     setAQILevel(aqiLevel)
+  //     setAQICategory(res.data.indexes.baqi.category)
+  //     setAQIColor(res.data.indexes.baqi.color)
+  //   })
+  // }
+  // let getWeather = () => {
+  //   fetch (`https://api.breezometer.com/weather/v1/current-conditions?lat=${latitude}&lon=${longitude}&key=${apiKey}`).then((response) => response.json()).then((res) => {
+  //     console.log(res)
+  //     console.log(res.data.feels_like_temperature)
+  //     var temperature = C2F(res.data.feels_like_temperature.value)
+  //     setTemperature(temperature)
+  //   })
+  // }
+  // let C2F = (Celcius) => {
+  //   let F = (Celcius * 9/5) + 32
+  //   let multiple = F * 10
+  //   let roundedMultiple = Math.round(multiple)
+  //   let finalNumber = roundedMultiple/10
+  //   console.log(finalNumber)
+  //   return finalNumber
+  // }
   let firstProgressLayerStyle;
   if (percent > 50) {
     firstProgressLayerStyle = propStyle(50, -135);
@@ -98,13 +100,15 @@ function WelcomeScreen({ navigation }) {
       </View>
       <View style={styles.noteContainer}>
         <View style={styles.circleContainer1}>
-          <View style={styles.progressLayer1}></View>
-          <View style={styles.offsetLayer1}></View>
+          <View
+            style={[styles.firstProgressLayer, firstProgressLayerStyle]}
+          ></View>
+          {renderThirdLayer(percent2)}
         </View>
         <Text
           style={{ color: "white", left: 230, bottom: 33, fontWeight: "800" }}
         >
-          25%
+          {percent2}%
         </Text>
         <Text style={{ left: 220, color: "#798497" }}>Subtext</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
@@ -137,8 +141,10 @@ function WelcomeScreen({ navigation }) {
         </TouchableOpacity>
       </View>
       <View style={styles.circleContainer2}>
-        <View style={styles.progressLayer2}></View>
-        <View style={styles.offsetLayer2}></View>
+        <View
+          style={[styles.firstProgressLayer, firstProgressLayerStyle]}
+        ></View>
+        {renderThirdLayer(percent1)}
       </View>
       <Text
         style={{
@@ -149,7 +155,7 @@ function WelcomeScreen({ navigation }) {
           zIndex: 100,
         }}
       >
-        {aqiLevel}%
+        {percent1}%
       </Text>
       <Text
         style={{
@@ -199,7 +205,7 @@ function WelcomeScreen({ navigation }) {
           zIndex: 100,
         }}
       >
-        80%
+        {percent}%
       </Text>
       <Text
         style={{
@@ -249,15 +255,24 @@ function WelcomeScreen({ navigation }) {
 
       <View style={styles.optionsContainer}>
         <View>
-
-        <Text style={{color: '#798497'}}>General Category</Text>
-        <Text style={{color: '#798497'}}>Main Pollutant: Nitrogen dioxide</Text>
-        <Text style={{color: '#798497'}}>Effects: Exposure may cause...</Text>
-        <Text style={{color: '#798497'}}>Sources of Pollution: Axhaust.....</Text>
-        <Text style={{color: '#798497'}}>Various Pollutants: </Text>
-        <Text style={{color: '#798497'}}>Pollutant Concentration: </Text>
-        <Text style={{color: '#798497'}}>Health Reccomendations: Children....</Text>
-        <Text style={{color: '#798497'}}>Sources of Pollution: Axhaust.....</Text>
+          <Text style={{ color: "#798497" }}>General Category</Text>
+          <Text style={{ color: "#798497" }}>
+            Main Pollutant: Nitrogen dioxide
+          </Text>
+          <Text style={{ color: "#798497" }}>
+            Effects: Exposure may cause...
+          </Text>
+          <Text style={{ color: "#798497" }}>
+            Sources of Pollution: Axhaust.....
+          </Text>
+          <Text style={{ color: "#798497" }}>Various Pollutants: </Text>
+          <Text style={{ color: "#798497" }}>Pollutant Concentration: </Text>
+          <Text style={{ color: "#798497" }}>
+            Health Reccomendations: Children....
+          </Text>
+          <Text style={{ color: "#798497" }}>
+            Sources of Pollution: Axhaust.....
+          </Text>
         </View>
       </View>
       <View style={{ top: 45, zIndex: 100, left: 40 }}>
@@ -272,7 +287,7 @@ function WelcomeScreen({ navigation }) {
           Heatmaps
         </Text>
       </View>
-      
+
       <View style={styles.optionsContainer}>
         <TouchableOpacity style={styles.fireContainer}>
           <MaterialCommunityIcons style={styles.fire} name="fire" size={45} />
@@ -295,7 +310,6 @@ function WelcomeScreen({ navigation }) {
           />
         </TouchableOpacity>
       </View>
-     
     </ScrollView>
   );
 }

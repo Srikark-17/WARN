@@ -129,7 +129,7 @@ function MainTabs() {
       >
         <Tab.Screen
           name="Dashboard"
-          component={AirQualityScreen}
+          component={HomeScreen2}
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons
