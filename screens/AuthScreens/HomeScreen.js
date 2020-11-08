@@ -14,7 +14,7 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import * as Location from 'expo-location';
-let percent = 80;
+let percent = 71;
 
 let propStyle = (percent, base_degrees) => {
   const rotateBy = base_degrees + percent * 3.6;
@@ -37,10 +37,12 @@ let renderThirdLayer = (percent) => {
 
 function WelcomeScreen({ navigation }) {
   LayoutAnimation.easeInEaseOut();
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-  
-  
+  const [location, setLocation] = useState();
+  const [errorMsg, setErrorMsg] = useState();
+  const [temperature, setTemperature] = useState()
+  const [aqicolor, setAQIColor] = useState()
+  const [aqiLevel, setAQILevel] = useState()
+  const [aqiCategory, setAQICategory] = useState()
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
@@ -51,17 +53,37 @@ function WelcomeScreen({ navigation }) {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
       getData()
+      getWeather()
     })();
   }, []);
-  console.log(location.coords)
-  const longitude = location.coords.longitude
-  const latitude = location.coords.latitude
-  const apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
-  const getData = () =>{
+  let longitude = location.coords.longitude
+  let latitude = location.coords.latitude
+  let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
+  let getData = () =>{
     console.log('about to fetch')
     fetch (`https://api.breezometer.com/air-quality/v2/current-conditions?lat=${latitude}&lon=${longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`).then((response) => response.json()).then((res) => {
       console.log(res)
+      let aqiLevel = res.data.indexes.baqi.aqi
+      setAQILevel(aqiLevel)
+      setAQICategory(res.data.indexes.baqi.category)
+      setAQIColor(res.data.indexes.baqi.color)
     })
+  }
+  let getWeather = () => {
+    fetch (`https://api.breezometer.com/weather/v1/current-conditions?lat=${latitude}&lon=${longitude}&key=${apiKey}`).then((response) => response.json()).then((res) => {
+      console.log(res)
+      console.log(res.data.feels_like_temperature)
+      var temperature = C2F(res.data.feels_like_temperature.value)
+      setTemperature(temperature)
+    })
+  }
+  let C2F = (Celcius) => {
+    let F = (Celcius * 9/5) + 32
+    let multiple = F * 10
+    let roundedMultiple = Math.round(multiple)
+    let finalNumber = roundedMultiple/10
+    console.log(finalNumber)
+    return finalNumber
   }
   let firstProgressLayerStyle;
   if (percent > 50) {
@@ -127,7 +149,7 @@ function WelcomeScreen({ navigation }) {
           zIndex: 100,
         }}
       >
-        47%
+        {aqiLevel}%
       </Text>
       <Text
         style={{
@@ -151,7 +173,7 @@ function WelcomeScreen({ navigation }) {
           left: 60,
         }}
       >
-        33 mmHg
+        {aqiLevel} {aqiCategory}
       </Text>
       <View style={styles.bicardOne}>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
@@ -201,7 +223,7 @@ function WelcomeScreen({ navigation }) {
           left: 270,
         }}
       >
-        100°F
+        {temperature}°F
       </Text>
       <View style={styles.bicardTwo}>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
@@ -332,7 +354,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     borderLeftColor: "transparent",
     borderBottomColor: "transparent",
-    borderRightColor: "#FF5349",
+    borderRightColor: `#FF5349`,
     borderTopColor: "#FF5349",
     transform: [{ rotateZ: "45deg" }],
   },
