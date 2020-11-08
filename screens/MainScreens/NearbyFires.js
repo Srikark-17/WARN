@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
   cardBottomTitle: {
     fontSize: 14,
     marginTop: 5,
-    color: "#6A63F6",
+    color: "#FF5934",
   },
   cardGroupIcon: {
     justifyContent: "center",
@@ -229,18 +229,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cardName: {
-    color: "#222",
+    color: "#A8A8A8",
     fontSize: 18,
     fontWeight: "bold",
   },
   cardTime: {
-    color: "#222",
+    color: "#798497",
     fontSize: 16,
     fontWeight: "500",
     marginTop: 5,
   },
   cardAddress: {
-    color: "gray",
+    color: "#798497",
     fontSize: 15,
     fontWeight: "500",
     marginTop: 5,

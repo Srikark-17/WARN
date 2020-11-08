@@ -151,7 +151,7 @@ function MainTabs() {
           }}
         />
         <Tab.Screen
-          name="Fires Nearby"
+          name="Nearby Fires"
           component={NearbyFiresScreen}
           options={{
             tabBarIcon: ({ focused }) => (

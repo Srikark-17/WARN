@@ -82,7 +82,7 @@ export default class ListThumbnailExample extends Component {
         <Content style={styles.container}>
           <View style={styles.textContainer}>
             <Text style={styles.title}>News Feed</Text>
-            <Text style={styles.subtext}>Results for: Wildfires</Text>
+            <Text style={styles.subtext}>Results for: wildfires</Text>
           </View>
           {view}
         </Content>
