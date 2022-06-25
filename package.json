@@ -55,6 +55,6 @@
     "react-test-renderer": "~16.13.1"
   },
   "private": true,
-  "name": "WARN",
+  "name": "warn",
   "version": "1.0.0"
 }
