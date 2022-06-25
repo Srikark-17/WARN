@@ -2,22 +2,16 @@ import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import StartLectureScreen from "./screens/MainScreens/StartLecture";
 import {
   Entypo,
   MaterialCommunityIcons,
   FontAwesome5,
 } from "@expo/vector-icons";
 import NearbyFiresScreen from "./screens/MainScreens/NearbyFires";
-import SelectLectureScreen from "./screens/MainScreens/SelectLectureScreen";
 import NewsFeed from "./screens/MainScreens/NewsFeed";
-import ExportDetectedTextScreen from "./screens/MainScreens/ExportDetectedTextScreen";
-import MyNotesAddImageScreen from "./screens/MainScreens/MyNotesAddImageNotesScreen";
-import AccessArchiveScreen from "./screens/MainScreens/AccessArchiveScreen";
 import NotificationsScreen from "./screens/MainScreens/NotificationsScreen";
 import AQIHeatmapScreen from "./screens/MainScreens/AQIHeatmap";
 import PollenHeatmapScreen from "./screens/MainScreens/PollenHeatmapScreen";
-import AudioNotesScreen from "./screens/MainScreens/AudioNotesScreen";
 import HomeScreen2 from "./screens/AuthScreens/HomeScreen";
 import SplashScreen from "./screens/AuthScreens/SplashScreen";
 import LoginScreen from "./screens/AuthScreens/TestLoginScreen";
@@ -28,47 +22,19 @@ import AQScreen from "./screens/MainScreens/AirQualityScreen";
 import Firebasekeys from "./config";
 import * as firebase from "firebase";
 
-import ImageResultScreen from "./screens/MainScreens/ImageResultScreen";
-
 import "firebase/firestore";
 
 let firebaseConfig = Firebasekeys;
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
-// import useNotifications from "../hooks/useNotifications";
+
 const inactiveColor = "#8E8E8E";
 const themecolor = "#2B2D2F";
 const tabcolor = "#FF5349";
 const Tab = createMaterialBottomTabNavigator();
 const Auth = createStackNavigator();
-const Home = createStackNavigator();
 const Image = createStackNavigator();
-const ArchiveNavigator = ({ navigation }) => {
-  return (
-    <Home.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      initialRouteName="Select Lecture"
-    >
-      <Home.Screen
-        name="Export Detected Text"
-        component={ExportDetectedTextScreen}
-      />
-      <Home.Screen name="Select Lecture" component={SelectLectureScreen} />
-
-      <Home.Screen name="Start Lecture" component={StartLectureScreen} />
-      <Home.Screen
-        name="My Notes Add Image"
-        component={MyNotesAddImageScreen}
-      />
-
-      <Image.Screen name="Audio" component={AudioNotesScreen} />
-      <Home.Screen name="Archive" component={AccessArchiveScreen} />
-    </Home.Navigator>
-  );
-};
 
 const HomeScreenNavigator = ({ navigation }) => {
   return (
@@ -144,15 +110,6 @@ const HomeScreenNavigator = ({ navigation }) => {
           headerTintColor: `${inactiveColor}`,
         }}
       />
-
-      {/* <Home.Screen
-        name="My Notes Add Image Notes"
-        component={MyNotesAddImageNotesScreen}
-      />
-      <Home.Screen
-        name="My Notes Detected Text"
-        component={MyNotesDetectedTextScreen}
-      /> */}
     </Image.Navigator>
   );
 };
@@ -236,12 +193,6 @@ function AuthNavigator() {
         <Auth.Screen name="Splash" component={SplashScreen} options={{}} />
         <Auth.Screen name="Login" component={LoginScreen} options={{}} />
         <Auth.Screen name="Register" component={RegisterScreen} options={{}} />
-        {/* <Auth.Screen name="MainTabs" component={MainTabs}
-       options={{
-         headerTitle: "Complaint Form Submission",
-
-       }}
-    /> */}
       </Auth.Navigator>
     </NavigationContainer>
   );
