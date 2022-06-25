@@ -1,19 +1,10 @@
 import React from "react";
-import {
-  StyleSheet,
-  Image,
-  Dimensions,
-  View,
-  Button,
-  LayoutAnimation,
-} from "react-native";
+import { StyleSheet, View, Button, LayoutAnimation } from "react-native";
 import Screen from "../../components/Screen";
 import { Form, FormField, SubmitButton } from "../../components/forms";
 import AppText from "../../components/Text";
 import * as firebase from "firebase";
 import { SvgXml } from "react-native-svg";
-
-const height = Dimensions.get("screen").height;
 
 const validationSchema = "";
 let errorMessage = false;
@@ -138,29 +129,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     left: 60,
   },
-  googleButton: {
-    marginTop: 15,
-    left: 65,
-    color: "#2D3748",
-    fontFamily: "Avenir",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  googleSignUp: {
-    flexDirection: "row",
-    backgroundColor: "#F8FAFB",
-    borderWidth: 2,
-    borderColor: "#CECECE",
-    borderRadius: 12,
-    height: 60,
-  },
   haveAccountContainer: {
     marginTop: 20,
     flexDirection: "row",
     justifyContent: "center",
   },
   haveAccountText: {
-    color: "#2D3748",
+    color: "#FFFFFF",
   },
   loginText: {
     color: "#3D8AFF",
@@ -179,11 +154,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowColor: "black",
     shadowOpacity: 0.25,
-  },
-  googleContainer: {
-    flex: 0.1,
-    padding: 30,
-    backgroundColor: "#fff",
   },
   formContainer: {
     padding: 30,
