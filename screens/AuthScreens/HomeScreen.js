@@ -5,7 +5,6 @@ import {
   Text,
   TouchableOpacity,
   Button,
-  ScrollView,
   StatusBar,
 } from "react-native";
 import {
@@ -18,7 +17,6 @@ import * as Permissions from "expo-permissions";
 import { HP, WP } from "../../config/responsive";
 var percent = 38;
 var percent1 = 58;
-var percent2 = 83;
 
 let propStyle = (percent, base_degrees) => {
   const rotateBy = base_degrees + percent * 3.6;
@@ -52,7 +50,6 @@ function WelcomeScreen({ navigation }) {
       if (status === "granted") {
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
-        console.log("about to fetch");
         fetch(
           `https://api.breezometer.com/air-quality/v2/current-conditions?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`
         )
@@ -107,7 +104,7 @@ function WelcomeScreen({ navigation }) {
       <View style={styles.textContainer}>
         <Text style={styles.title}>Dashboard</Text>
       </View>
-      <View style={styles.noteContainer}>
+      <View style={styles.circleContainer}>
         <View style={styles.circleContainer1}>
           <View></View>
         </View>
@@ -145,7 +142,7 @@ function WelcomeScreen({ navigation }) {
             <Text
               style={{
                 color: "#ffff",
-                bottom: HP(13.03),
+                bottom: HP(12.5),
                 right: WP(5.13),
                 fontSize: HP(1.18),
                 color: "#798497",
@@ -157,7 +154,7 @@ function WelcomeScreen({ navigation }) {
           <Text
             style={{
               color: "#798497",
-              bottom: HP(25.64),
+              bottom: HP(11.5),
               fontSize: HP(2.37),
               right: WP(7.69),
               paddingLeft: WP(5.13),
@@ -329,13 +326,13 @@ function WelcomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   circleContainer1: {
-    left: 220,
-    width: 50,
-    height: 50,
+    left: WP(56.41),
+    width: WP(12.82),
+    height: HP(5.92),
   },
   progressLayer1: {
-    width: 50,
-    height: 50,
+    width: WP(12.82),
+    height: HP(5.92),
     borderWidth: 5,
     borderRadius: 100,
     position: "absolute",
@@ -346,8 +343,8 @@ const styles = StyleSheet.create({
     transform: [{ rotateZ: "-45deg" }],
   },
   offsetLayer1: {
-    width: 50,
-    height: 50,
+    width: WP(12.82),
+    height: HP(5.92),
     borderWidth: 5,
     borderRadius: 100,
     borderLeftColor: "transparent",
@@ -357,10 +354,10 @@ const styles = StyleSheet.create({
     transform: [{ rotateZ: "-135deg" }],
   },
   circleContainer2: {
-    left: 80,
-    top: 275,
-    width: 50,
-    height: 50,
+    left: WP(20.51),
+    top: HP(32.58),
+    width: WP(12.82),
+    height: HP(5.92),
     borderWidth: 5,
     borderRadius: 100,
     borderColor: "grey",
@@ -369,8 +366,8 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   progressLayer2: {
-    width: 50,
-    height: 50,
+    width: WP(12.82),
+    height: HP(5.92),
     borderWidth: 5,
     borderRadius: 100,
     position: "absolute",
@@ -381,8 +378,8 @@ const styles = StyleSheet.create({
     transform: [{ rotateZ: "45deg" }],
   },
   offsetLayer2: {
-    width: 50,
-    height: 50,
+    width: WP(12.82),
+    height: HP(5.92),
     borderWidth: 5,
     borderRadius: 100,
     borderLeftColor: "transparent",
@@ -392,10 +389,10 @@ const styles = StyleSheet.create({
     transform: [{ rotateZ: "220deg" }],
   },
   circleContainer3: {
-    left: 275,
-    bottom: 10,
-    width: 50,
-    height: 50,
+    left: WP(70.52),
+    bottom: HP(1.18),
+    width: WP(12.82),
+    height: HP(5.92),
     borderWidth: 5,
     borderRadius: 100,
     borderColor: "grey",
@@ -404,8 +401,8 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   progressLayer3: {
-    width: 50,
-    height: 50,
+    width: WP(12.82),
+    height: HP(5.92),
     borderWidth: 5,
     borderRadius: 100,
     position: "absolute",
@@ -416,8 +413,8 @@ const styles = StyleSheet.create({
     transform: [{ rotateZ: "55deg" }],
   },
   offsetLayer3: {
-    width: 50,
-    height: 50,
+    width: WP(12.82),
+    height: HP(5.92),
     borderWidth: 5,
     borderRadius: 100,
     borderLeftColor: "transparent",
@@ -427,8 +424,8 @@ const styles = StyleSheet.create({
     transform: [{ rotateZ: "240deg" }],
   },
   firstProgressLayer: {
-    width: 50,
-    height: 50,
+    width: WP(12.82),
+    height: HP(5.92),
     borderWidth: 5,
     borderRadius: 100,
     position: "absolute",
@@ -439,8 +436,8 @@ const styles = StyleSheet.create({
     transform: [{ rotateZ: "-135deg" }],
   },
   secondProgressLayer: {
-    width: 50,
-    height: 50,
+    width: WP(12.82),
+    height: HP(5.92),
     position: "absolute",
     borderWidth: 5,
     borderRadius: 100,
@@ -451,8 +448,8 @@ const styles = StyleSheet.create({
     transform: [{ rotateZ: "45deg" }],
   },
   offsetLayer: {
-    width: 50,
-    height: 50,
+    width: WP(12.82),
+    height: HP(5.92),
     position: "absolute",
     borderWidth: 5,
     borderRadius: 100,
@@ -463,35 +460,39 @@ const styles = StyleSheet.create({
     transform: [{ rotateZ: "-135deg" }],
   },
   fireContainer: {
-    padding: 10,
-    height: 60,
-    width: 60,
-    marginRight: 20,
+    paddingVertical: HP(1.18),
+    paddingHorizontal: WP(2.56),
+    height: HP(7.11),
+    width: WP(15.38),
+    marginRight: WP(5.13),
     borderRadius: 100,
     backgroundColor: "#FF5349",
   },
   fire: {
-    left: -2,
-    bottom: 3,
+    left: WP(-0.51),
+    bottom: HP(0.36),
     color: "orange",
   },
   windContainer: {
-    padding: 10,
-    height: 60,
-    width: 60,
-    marginRight: 20,
+    paddingVertical: HP(1.18),
+    paddingHorizontal: WP(2.56),
+    height: HP(7.11),
+    width: WP(15.38),
+    marginRight: WP(5.13),
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 100,
     backgroundColor: "#89CFF0",
   },
   wind: {
-    left: -2,
-    bottom: 3,
     color: "white",
   },
   flowerContainer: {
-    padding: 10,
-    height: 60,
-    width: 60,
+    paddingVertical: HP(1.18),
+    paddingHorizontal: WP(2.56),
+    height: HP(7.11),
+    marginRight: WP(5.13),
+    width: WP(15.38),
     borderRadius: 100,
     backgroundColor: "#7EC850",
   },
@@ -499,64 +500,64 @@ const styles = StyleSheet.create({
     color: "#FCC200",
   },
   factoryContainer: {
-    padding: 10,
-    height: 60,
-    width: 60,
+    paddingVertical: HP(1.18),
+    paddingHorizontal: WP(2.56),
+    height: HP(7.11),
+    width: WP(15.38),
     borderRadius: 100,
-    marginLeft: 20,
     backgroundColor: "#6F7691",
   },
   factory: {
-    left: -2,
-    bottom: 3,
+    left: WP(-0.51),
+    bottom: HP(0.36),
     color: "black",
   },
-  noteContainer: {
-    top: 100,
-    marginLeft: 30,
-    paddingTop: 10,
-    paddingLeft: 50,
-    paddingRight: 50,
+  circleContainer: {
+    top: HP(11.85),
+    marginLeft: WP(7.69),
+    paddingTop: HP(1.18),
+    paddingLeft: WP(12.82),
+    paddingRight: WP(12.82),
     backgroundColor: "#2B2D2F",
     borderRadius: 12,
-    width: 350,
-    height: 120,
+    width: WP(89.74),
+    height: HP(14.22),
     zIndex: 0,
   },
   bicardOne: {
-    top: 50,
-    marginLeft: 30,
-    paddingTop: 10,
-    paddingLeft: 50,
-    paddingRight: 50,
+    top: HP(5.92),
+    marginLeft: WP(7.69),
+    paddingTop: HP(1.18),
+    paddingLeft: WP(12.82),
+    paddingRight: WP(12.82),
     backgroundColor: "#2B2D2F",
     borderRadius: 12,
-    width: 160,
-    height: 170,
+    width: WP(41.03),
+    height: HP(20.14),
     zIndex: 0,
   },
   bicardTwo: {
-    bottom: 235,
-    marginLeft: 220,
-    paddingTop: 10,
-    paddingLeft: 50,
-    paddingRight: 50,
+    bottom: HP(27.84),
+    marginLeft: WP(56.41),
+    paddingTop: HP(1.18),
+    paddingLeft: WP(12.82),
+    paddingRight: WP(12.82),
     backgroundColor: "#2B2D2F",
     borderRadius: 12,
-    width: 160,
-    height: 170,
+    width: WP(41.03),
+    height: HP(20.14),
     zIndex: 0,
   },
   optionsContainer: {
-    bottom: 200,
-    marginLeft: 30,
-    paddingTop: 10,
-    paddingLeft: 50,
-    paddingRight: 50,
+    bottom: HP(23.7),
+    marginLeft: WP(7.69),
+    paddingTop: HP(1.18),
+    paddingLeft: WP(12.82),
+    paddingRight: WP(12.82),
     backgroundColor: "#2B2D2F",
     borderRadius: 12,
-    width: 350,
-    height: 150,
+    width: WP(89.74),
+    height: HP(17.77),
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-evenly",
@@ -569,15 +570,16 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "Avenir",
-    fontSize: 40,
+    fontSize: HP(4.74),
     fontWeight: "bold",
     textAlign: "center",
     color: "white",
-    top: 75,
+    top: HP(8.89),
   },
   textContainer: {
-    padding: 10,
-    top: 15,
+    paddingVertical: HP(1.18),
+    paddingHorizontal: WP(2.56),
+    top: HP(1.78),
     zIndex: 100,
   },
   container: {
