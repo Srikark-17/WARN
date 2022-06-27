@@ -1,48 +1,52 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
   Text,
   TouchableOpacity,
-  LayoutAnimation,
   Button,
-  Alert
+  Alert,
+  ScrollView,
 } from "react-native";
 
-import { Container, Header, Content, ListItem, CheckBox, Body } from 'native-base';
+import { CheckBox } from "native-base";
 import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
+import { HP, WP } from "../../config/responsive";
 
-function WelcomeScreen({ navigation }) {
-  LayoutAnimation.easeInEaseOut();
+function WelcomeScreen() {
   const [fireState, inverseFire] = useState(false);
   const [AQState, inverseAQ] = useState(false);
   const [pollenState, inversePollen] = useState(false);
   const [pollutionState, inversePollution] = useState(false);
-  const textColor = '#fff'
-const themeColor = '#FF5757'
-const checkboxColor = '#00AB66'
+  const textColor = "#fff";
+  const checkboxColor = "#00AB66";
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.textContainer}>
         <Text style={styles.title}>Notifications</Text>
-       
       </View>
       <MaterialCommunityIcons
-        style={{ color: "orange", top: 85, left: 25, zIndex: 100 }}
+        style={{ color: "orange", top: HP(10.07), left: WP(6.41), zIndex: 100 }}
         name="fire"
         size={50}
       />
-      <CheckBox checked={fireState} color={fireState ? checkboxColor : textColor} onPress={() => {
-        inverseFire(!fireState)
-        }} style={{top: 100, left:42, zIndex: 100}}/>
+      <CheckBox
+        checked={fireState}
+        color={fireState ? checkboxColor : textColor}
+        onPress={() => {
+          inverseFire(!fireState);
+        }}
+        style={{ top: HP(11.85), left: WP(10.77), zIndex: 100 }}
+      />
       <Text
         style={{
           color: "white",
           fontWeight: "800",
-          fontSize: 30,
-          top: 20,
+          fontSize: HP(3.55),
+          top: HP(2.7),
           zIndex: 100,
-          left: 90,
+          left: WP(23.08),
         }}
       >
         Fire
@@ -51,42 +55,40 @@ const checkboxColor = '#00AB66'
         style={{
           color: "white",
           fontWeight: "700",
-          fontSize: 20,
+          fontSize: HP(2.37),
           zIndex: 100,
-          top: 30,
-          left: 90,
+          top: HP(3.7),
+          left: WP(23.08),
         }}
       >
         Click to get notified if the {"\n"}selected option is dangerous
       </Text>
 
-      <TouchableOpacity
-        style={styles.bicardOne}
-        onPress={() => Alert.alert('jeje')}
-      >
-        <Button
-          color={"#798497"}
-          title={""}
-          onPress={() => Alert.alert('www')}
-        />
+      <TouchableOpacity style={styles.cardOne} activeOpacity={1}>
+        <Button color={"#798497"} title={""} />
       </TouchableOpacity>
 
       <FontAwesome5
-        style={{ color: "white", zIndex: 100, top: -20, left: 30 }}
+        style={{ color: "white", zIndex: 100, top: HP(-1.87), left: WP(7.7) }}
         name="wind"
         size={40}
       />
-      <CheckBox checked={AQState} color={AQState ? checkboxColor : textColor} onPress={() => {
-        inverseAQ(!AQState)
-        }} style={{top: 0, left:42, zIndex: 100}}/>
+      <CheckBox
+        checked={AQState}
+        color={AQState ? checkboxColor : textColor}
+        onPress={() => {
+          inverseAQ(!AQState);
+        }}
+        style={{ left: WP(10.77), zIndex: 100 }}
+      />
       <Text
         style={{
           color: "white",
           fontWeight: "800",
-          fontSize: 30,
-          top: -75,
+          fontSize: HP(3.55),
+          top: HP(-8.89),
           zIndex: 100,
-          left: 90,
+          left: WP(23.08),
         }}
       >
         Air Quality
@@ -95,40 +97,43 @@ const checkboxColor = '#00AB66'
         style={{
           color: "white",
           fontWeight: "700",
-          fontSize: 20,
+          fontSize: HP(2.37),
           zIndex: 100,
-          top: -65,
-          left: 90,
+          top: HP(-7.7),
+          left: WP(23.08),
         }}
       >
         Click to get notified if the {"\n"}selected option is dangerous
       </Text>
-      <TouchableOpacity
-        style={styles.bicardTwo}
-        onPress={() => Alert.alert('hello')}
-      >
-        <Button
-          color={"#798497"}
-          title={""}
-          onPress={() => navigation.navigate("Archive")}
-        />
+      <TouchableOpacity activeOpacity={1} style={styles.cardTwo}>
+        <Button color={"#798497"} title={""} />
       </TouchableOpacity>
       <MaterialCommunityIcons
-        style={{ color: "#FCC200", zIndex: 100, left: 30, top: -120 }}
+        style={{
+          color: "#FCC200",
+          zIndex: 100,
+          left: WP(7.69),
+          top: HP(-13.21),
+        }}
         name="flower"
         size={40}
       />
-      <CheckBox checked={pollenState} color={pollenState ? checkboxColor : textColor} onPress={() => {
-        inversePollen(!pollenState)
-        }} style={{bottom: 100, left:42, zIndex: 100}}/>
+      <CheckBox
+        checked={pollenState}
+        color={pollenState ? checkboxColor : textColor}
+        onPress={() => {
+          inversePollen(!pollenState);
+        }}
+        style={{ bottom: HP(11.85), left: WP(10.77), zIndex: 100 }}
+      />
       <Text
         style={{
           color: "white",
           fontWeight: "800",
-          fontSize: 30,
-          top: -170,
+          fontSize: HP(3.55),
+          top: HP(-20.14),
           zIndex: 100,
-          left: 90,
+          left: WP(23.08),
         }}
       >
         Pollen
@@ -137,40 +142,38 @@ const checkboxColor = '#00AB66'
         style={{
           color: "white",
           fontWeight: "700",
-          fontSize: 20,
+          fontSize: HP(2.37),
           zIndex: 100,
-          top: -170,
-          left: 90,
+          top: HP(-20.14),
+          left: WP(23.08),
         }}
       >
         Click to get notified if the {"\n"}selected option is dangerous
       </Text>
-      <TouchableOpacity
-        style={styles.bicardThree}
-        onPress={() => navigation.navigate("Archive")}
-      >
-        <Button
-          color={"#798497"}
-          title={""}
-          onPress={() => navigation.navigate("Archive")}
-        />
+      <TouchableOpacity style={styles.cardThree} activeOpacity={1}>
+        <Button color={"#798497"} title={""} />
       </TouchableOpacity>
       <MaterialCommunityIcons
-        style={{ color: "black", zIndex: 100, top: -225, left: 30 }}
+        style={{ color: "black", zIndex: 100, top: HP(-25.66), left: WP(7.69) }}
         name="factory"
         size={40}
       />
-       <CheckBox checked={pollutionState} color={pollutionState ? checkboxColor : textColor} onPress={() => {
-        inversePollution(!pollutionState)
-        }} style={{bottom:200,left:42, zIndex: 100}}/>
+      <CheckBox
+        checked={pollutionState}
+        color={pollutionState ? checkboxColor : textColor}
+        onPress={() => {
+          inversePollution(!pollutionState);
+        }}
+        style={{ bottom: HP(23.7), left: WP(10.77), zIndex: 100 }}
+      />
       <Text
         style={{
           color: "white",
           fontWeight: "800",
-          fontSize: 30,
-          top: -272,
+          fontSize: HP(3.55),
+          top: HP(-32.23),
           zIndex: 100,
-          left: 90,
+          left: WP(23.08),
         }}
       >
         Pollution
@@ -179,89 +182,83 @@ const checkboxColor = '#00AB66'
         style={{
           color: "white",
           fontWeight: "700",
-          fontSize: 20,
+          fontSize: HP(2.37),
           zIndex: 100,
-          top: -270,
-          left: 90,
+          top: HP(-32),
+          left: WP(23.08),
         }}
       >
         Click to get notified if the {"\n"}selected option is dangerous
       </Text>
-      <TouchableOpacity
-        style={styles.bicardFour}
-        onPress={() => navigation.navigate("Archive")}
-      >
-        <Button
-          color={"#798497"}
-          title={""}
-          onPress={() => navigation.navigate("Archive")}
-        />
+      <TouchableOpacity style={styles.cardFour} activeOpacity={1}>
+        <Button color={"#798497"} title={""} />
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  bicardOne: {
-    top: -70,
-    left: 10,
-    paddingTop: 10,
-    paddingLeft: 50,
-    paddingRight: 50,
+  cardOne: {
+    top: HP(-8.29),
+    left: WP(2.56),
+    paddingTop: HP(1.18),
+    paddingLeft: WP(12.82),
+    paddingRight: WP(12.82),
     backgroundColor: "#FF5349",
     borderRadius: 12,
-    width: 400,
-    height: 120,
+    width: WP(95),
+    height: HP(14.22),
     zIndex: 0,
   },
-  bicardTwo: {
-    top: -170,
-    left: 10,
-    paddingTop: 10,
-    paddingLeft: 50,
-    paddingRight: 50,
+  cardTwo: {
+    top: HP(-20.14),
+    left: WP(2.56),
+    paddingTop: HP(1.18),
+    paddingLeft: WP(12.82),
+    paddingRight: WP(12.82),
     backgroundColor: "#89CFF0",
     borderRadius: 12,
-    width: 400,
-    height: 120,
+    width: WP(95),
+    height: HP(14.22),
     zIndex: 0,
   },
-  bicardThree: {
-    top: -270,
-    left: 10,
-    paddingTop: 10,
-    paddingLeft: 50,
-    paddingRight: 50,
+  cardThree: {
+    top: HP(-32),
+    left: WP(2.56),
+    paddingTop: HP(1.18),
+    paddingLeft: WP(12.82),
+    paddingRight: WP(12.82),
     backgroundColor: "#7EC850",
     borderRadius: 12,
-    width: 400,
-    height: 120,
+    width: WP(95),
+    height: HP(14.22),
     zIndex: 0,
   },
-  bicardFour: {
-    bottom: 370,
-    left: 10,
-    paddingTop: 10,
-    paddingLeft: 50,
-    paddingRight: 50,
+  cardFour: {
+    bottom: HP(43.84),
+    left: WP(2.56),
+    paddingTop: HP(1.18),
+    paddingLeft: WP(12.82),
+    paddingRight: WP(12.82),
     backgroundColor: "#6F7691",
     borderRadius: 12,
-    width: 400,
-    height: 120,
+    width: WP(95),
+    height: HP(14.22),
     zIndex: 0,
   },
   title: {
     fontFamily: "Avenir",
-    fontSize: 45,
+    fontSize: HP(5.33),
     fontWeight: "bold",
     textAlign: "center",
     color: "white",
-    top: 60,
+    top: HP(7.11),
   },
   textContainer: {
-    padding: 10,
-    top: 15,
-    marginBottom: 30,
+    paddingVertical: HP(1.18),
+    paddingHorizontal: WP(2.56),
+    top: HP(1.78),
+    marginBottom: HP(3.55),
   },
   container: {
     flex: 1,

@@ -23,6 +23,7 @@ import Firebasekeys from "./config";
 import * as firebase from "firebase";
 
 import "firebase/firestore";
+import { HP } from "./config/responsive";
 
 let firebaseConfig = Firebasekeys;
 if (!firebase.apps.length) {
@@ -121,7 +122,7 @@ function MainTabs() {
         sceneAnimationEnabled="true"
         activeColor={tabcolor}
         inactiveColor={inactiveColor}
-        barStyle={{ backgroundColor: `${themecolor}`, bottomPadding: 10 }}
+        barStyle={{ backgroundColor: `${themecolor}`, height: HP(8.89) }}
         shifting={true}
       >
         <Tab.Screen
