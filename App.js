@@ -10,13 +10,10 @@ import {
 import NearbyFiresScreen from "./screens/MainScreens/NearbyFires";
 import NewsFeed from "./screens/MainScreens/NewsFeed";
 import NotificationsScreen from "./screens/MainScreens/NotificationsScreen";
-import AQIHeatmapScreen from "./screens/MainScreens/AQIHeatmap";
-import PollenHeatmapScreen from "./screens/MainScreens/PollenHeatmapScreen";
 import HomeScreen2 from "./screens/AuthScreens/HomeScreen";
 import SplashScreen from "./screens/AuthScreens/SplashScreen";
 import LoginScreen from "./screens/AuthScreens/TestLoginScreen";
 import RegisterScreen from "./screens/AuthScreens/TestRegisterScreen";
-import PollutionHeatmapScreen from "./screens/MainScreens/PollutionHeatmap";
 import PollenScreen from "./screens/MainScreens/PollenScreen";
 import AQScreen from "./screens/MainScreens/AirQualityScreen";
 import Firebasekeys from "./config";
@@ -50,66 +47,6 @@ const HomeScreenNavigator = ({ navigation }) => {
       <Home.Screen name="Manual Input" component={NotificationsScreen} />
       <Home.Screen name="Pollen" component={PollenScreen} />
       <Home.Screen name="Pollution" component={PollenScreen} />
-      <Home.Screen
-        name="AQI Heatmap"
-        component={AQIHeatmapScreen}
-        options={{
-          title: "Heatmap",
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: `${themecolor}`,
-          },
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontWeight: "bold",
-            color: "#fff",
-          },
-          headerBackTitleStyle: {
-            color: `${inactiveColor}`,
-          },
-          headerTintColor: `${inactiveColor}`,
-        }}
-      />
-      <Home.Screen
-        name="Pollen Heatmap"
-        component={PollenHeatmapScreen}
-        options={{
-          title: "Heatmap",
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: `${themecolor}`,
-          },
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontWeight: "bold",
-            color: "#fff",
-          },
-          headerBackTitleStyle: {
-            color: `${inactiveColor}`,
-          },
-          headerTintColor: `${inactiveColor}`,
-        }}
-      />
-      <Home.Screen
-        name="Pollution Heatmap"
-        component={PollutionHeatmapScreen}
-        options={{
-          title: "Heatmap",
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: `${themecolor}`,
-          },
-          headerTintColor: "#fff",
-          headerTitleStyle: {
-            fontWeight: "bold",
-            color: "#fff",
-          },
-          headerBackTitleStyle: {
-            color: `${inactiveColor}`,
-          },
-          headerTintColor: `${inactiveColor}`,
-        }}
-      />
     </Home.Navigator>
   );
 };

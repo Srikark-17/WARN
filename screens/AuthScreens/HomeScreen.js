@@ -7,11 +7,7 @@ import {
   Button,
   StatusBar,
 } from "react-native";
-import {
-  MaterialCommunityIcons,
-  FontAwesome5,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { HP, WP } from "../../config/responsive";
 var percent = 38;
@@ -46,26 +42,26 @@ function WelcomeScreen({ navigation }) {
   const [levelInterpretation, setLevelInterpretation] = useState();
 
   let K2F = (kelvin) => {
-    return Math.round(((kelvin-273.15)*1.8) + 32)
-  }
+    return Math.round((kelvin - 273.15) * 1.8 + 32);
+  };
 
   let levelInterpreter = (value) => {
-      if(value == 1){
-        return "Good"
-      }
-      if(value == 2){
-        return "Fair"
-      }
-      if(value == 3){
-        return "Moderate"
-      }
-      if(value == 4){
-        return "Poor"
-      }
-      if(value == 5){
-        return "Very Poor"
-      }
-  }
+    if (value == 1) {
+      return "Good";
+    }
+    if (value == 2) {
+      return "Fair";
+    }
+    if (value == 3) {
+      return "Moderate";
+    }
+    if (value == 4) {
+      return "Poor";
+    }
+    if (value == 5) {
+      return "Very Poor";
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -80,7 +76,7 @@ function WelcomeScreen({ navigation }) {
           .then((res) => {
             let aqiLevel = res.list[0].main.aqi;
             setAQILevel(aqiLevel);
-            setLevelInterpretation(levelInterpreter(aqiLevel))
+            setLevelInterpretation(levelInterpreter(aqiLevel));
             setAQICategory(res.data.indexes.baqi.category);
             setAQIColor(res.data.indexes.baqi.color);
             percent2 = aqiLevel;
@@ -134,19 +130,15 @@ function WelcomeScreen({ navigation }) {
         </View>
         <Text
           style={{
-            color: "#798497",
+            color: "#FFFFFF",
             left: WP(25.64),
             bottom: HP(2.73),
             fontWeight: "800",
           }}
         ></Text>
-        <Text style={{ left: WP(26.07), color: "#798497" }}></Text>
+        <Text style={{ left: WP(26.07), color: "#FFFFFF" }}></Text>
         <TouchableOpacity onPress={() => navigation.navigate("Archive")}>
-          <Button
-            color={"#798497"}
-            title={""}
-            onPress={() => navigation.navigate("Archive")}
-          />
+          <Button color={"#FFFFFF"} title={""} />
           <MaterialIcons
             name="location-on"
             size={20}
@@ -155,7 +147,7 @@ function WelcomeScreen({ navigation }) {
           <View style={{ flexDirection: "row" }}>
             <Text
               style={{
-                color: "#798497",
+                color: "#FFFFFF",
                 bottom: HP(13.63),
                 fontSize: HP(2.37),
                 right: WP(7.69),
@@ -169,7 +161,7 @@ function WelcomeScreen({ navigation }) {
                 bottom: HP(12.5),
                 right: WP(5.13),
                 fontSize: HP(1.18),
-                color: "#798497",
+                color: "#FFFFFF",
               }}
             >
               {Date()}
@@ -177,7 +169,7 @@ function WelcomeScreen({ navigation }) {
           </View>
           <Text
             style={{
-              color: "#798497",
+              color: "#FFFFFF",
               bottom: HP(11.5),
               fontSize: HP(2.37),
               right: WP(7.69),
@@ -197,7 +189,7 @@ function WelcomeScreen({ navigation }) {
       <Text
         style={{
           color: "white",
-          left: WP(24.1),
+          left: WP(23.5),
           top: HP(28.67),
           fontWeight: "800",
           zIndex: 100,
@@ -207,19 +199,19 @@ function WelcomeScreen({ navigation }) {
       </Text>
       <Text
         style={{
-          color: "#798497",
+          color: "#FFFFFF",
           fontSize: HP(2.37),
           fontWeight: "700",
           top: HP(14.22),
           zIndex: 100,
-          left: WP(15.38),
+          left: WP(14.5),
         }}
       >
         Air Quality {"\n"} (from 1-5)
       </Text>
       <Text
         style={{
-          color: "#798497",
+          color: "#FFFFFF",
           fontSize: HP(2.37),
           fontWeight: "700",
           top: HP(16.59),
@@ -235,7 +227,7 @@ function WelcomeScreen({ navigation }) {
         style={styles.bicardOne}
       >
         <Button
-          color={"#798497"}
+          color={"#FFFFFF"}
           title={""}
           onPress={() => navigation.navigate("Air Quality")}
         />
@@ -250,7 +242,7 @@ function WelcomeScreen({ navigation }) {
       <Text
         style={{
           color: "white",
-          left: WP(72.56),
+          left: WP(67.5),
           bottom: HP(5.09),
           fontWeight: "800",
           zIndex: 100,
@@ -260,11 +252,11 @@ function WelcomeScreen({ navigation }) {
       </Text>
       <Text
         style={{
-          color: "#798497",
+          color: "#FFFFFF",
           fontSize: HP(2.37),
           fontWeight: "700",
-          bottom: HP(20.14),
-          left: WP(61.54),
+          bottom: HP(19.5),
+          left: WP(57.54),
           zIndex: 100,
         }}
       >
@@ -272,78 +264,32 @@ function WelcomeScreen({ navigation }) {
       </Text>
       <Text
         style={{
-          color: "#798497",
+          color: "#FFFFFF",
           fontSize: HP(2.37),
           fontWeight: "700",
-          bottom: HP(20.14),
-          left: WP(61.54),
+          bottom: HP(17.14),
+          left: WP(66.54),
           zIndex: 100,
         }}
       >
-        {temperature}°F
+        {temperature} °F
       </Text>
       <TouchableOpacity
         onPress={() => navigation.navigate("Pollen")}
         style={styles.bicardTwo}
       >
-        <Button
-          color={"#798497"}
-          title={""}
-          onPress={() => navigation.navigate("Archive")}
-        />
+        <Button color={"#FFFFFF"} title={""} />
       </TouchableOpacity>
-      {/* <View style={{ top: HP(5.33), zIndex: 100, left: WP(10.26) }}>
-        <Text
-          style={{
-            color: "#798497",
-            fontSize: 25,
-            bottom: 205,
-            fontWeight: "500",
-          }}
-        >
-          Heatmaps
-        </Text>
-      </View> */}
-      {/* <View style={styles.optionsContainer}>
-        <TouchableOpacity style={styles.fireContainer}>
-          <MaterialCommunityIcons
-            style={styles.fire}
-            name="fire"
-            size={45}
-            onPress={() => navigation.navigate("Wildfires")}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.windContainer}>
-          <FontAwesome5
-            style={styles.wind}
-            name="wind"
-            size={40}
-            onPress={() => navigation.navigate("AQI Heatmap")}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.flowerContainer}
-          onPress={() => navigation.navigate("Pollen Heatmap")}
-        >
-          <MaterialCommunityIcons
-            style={styles.flower}
-            name="flower"
-            size={40}
-            onPress={() => navigation.navigate("Pollen Heatmap")}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.factoryContainer}
-          onPress={() => navigation.navigate("Pollution Heatmap")}
-        >
-          <MaterialCommunityIcons
-            style={styles.factory}
-            name="factory"
-            size={40}
-            onPress={() => navigation.navigate("Pollution Heatmap")}
-          />
-        </TouchableOpacity>
-      </View> */}
+      <View style={styles.bicardContainer}>
+        <View style={styles.bicard}>
+          <Text style={styles.bicardTitle}>Wind Pressure</Text>
+          <Text style={styles.bicardText}>51.2 psf</Text>
+        </View>
+        <View style={styles.bicard}>
+          <Text style={styles.bicardTitle}>Wind Speed</Text>
+          <Text style={styles.bicardText}>6 mph</Text>
+        </View>
+      </View>
     </View>
   );
 }
@@ -378,7 +324,7 @@ const styles = StyleSheet.create({
     transform: [{ rotateZ: "-135deg" }],
   },
   circleContainer2: {
-    left: WP(20.51),
+    left: WP(19.5),
     top: HP(32.58),
     width: WP(12.82),
     height: HP(5.92),
@@ -413,7 +359,7 @@ const styles = StyleSheet.create({
     transform: [{ rotateZ: "220deg" }],
   },
   circleContainer3: {
-    left: WP(70.52),
+    left: WP(65.52),
     bottom: HP(1.18),
     width: WP(12.82),
     height: HP(5.92),
@@ -550,7 +496,7 @@ const styles = StyleSheet.create({
   },
   bicardOne: {
     top: HP(5.92),
-    marginLeft: WP(7.69),
+    marginLeft: WP(5.69),
     paddingTop: HP(1.18),
     paddingLeft: WP(12.82),
     paddingRight: WP(12.82),
@@ -562,7 +508,7 @@ const styles = StyleSheet.create({
   },
   bicardTwo: {
     bottom: HP(27.84),
-    marginLeft: WP(56.41),
+    marginLeft: WP(53),
     paddingTop: HP(1.18),
     paddingLeft: WP(12.82),
     paddingRight: WP(12.82),
@@ -609,6 +555,34 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#000",
+  },
+  bicardContainer: {
+    bottom: HP(25),
+    width: WP(100),
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    flexDirection: "row",
+  },
+  bicard: {
+    paddingTop: HP(3.18),
+    backgroundColor: "#2B2D2F",
+    borderRadius: 12,
+    width: WP(41.03),
+    height: HP(20.14),
+    zIndex: 0,
+    alignItems: "center",
+  },
+  bicardTitle: {
+    color: "#FFFFFF",
+    fontSize: HP(2.37),
+    fontWeight: "700",
+  },
+  bicardText: {
+    color: "#FFFFFF",
+    fontSize: HP(2.37),
+    fontWeight: "700",
+    marginTop: HP(5),
   },
 });
 
