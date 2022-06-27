@@ -43,6 +43,7 @@ function WelcomeScreen({ navigation }) {
   const [aqiLevel, setAQILevel] = useState();
   const [aqiCategory, setAQICategory] = useState();
   const [resultsTitle, setResultsTitle] = useState();
+  const [levelInterpretation, setLevelInterpretation] = useState();
 
   let levelInterpreter = (value) => {
       if(value == 1){
@@ -75,6 +76,7 @@ function WelcomeScreen({ navigation }) {
           .then((res) => {
             let aqiLevel = res.list[0].main.aqi;
             setAQILevel(aqiLevel);
+            setLevelInterpretation(levelInterpreter(aqiLevel))
             setAQICategory(res.data.indexes.baqi.category);
             setAQIColor(res.data.indexes.baqi.color);
             percent2 = aqiLevel;
@@ -209,7 +211,7 @@ function WelcomeScreen({ navigation }) {
           left: WP(15.38),
         }}
       >
-        Air Quality {"\n"} from 1-5
+        Air Quality {"\n"} (from 1-5)
       </Text>
       <Text
         style={{
@@ -221,7 +223,7 @@ function WelcomeScreen({ navigation }) {
           left: WP(15.38),
         }}
       >
-        {aqiLevel} - Good
+        {aqiLevel} - {levelInterpretation}
       </Text>
 
       <TouchableOpacity
