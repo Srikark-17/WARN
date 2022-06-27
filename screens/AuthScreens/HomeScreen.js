@@ -45,6 +45,10 @@ function WelcomeScreen({ navigation }) {
   const [resultsTitle, setResultsTitle] = useState();
   const [levelInterpretation, setLevelInterpretation] = useState();
 
+  let K2F = (kelvin) => {
+    return Math.round(((kelvin-273.15)*1.8) + 32)
+  }
+
   let levelInterpreter = (value) => {
       if(value == 1){
         return "Good"
@@ -86,7 +90,7 @@ function WelcomeScreen({ navigation }) {
         )
           .then((response) => response.json())
           .then((res) => {
-            var temperature = C2F(res.data.feels_like_temperature.value);
+            var temperature = K2F(res.main.temp);
             setTemperature(temperature);
             percent = temperature;
           });
