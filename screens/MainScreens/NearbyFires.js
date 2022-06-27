@@ -138,7 +138,7 @@ function HomeScreen() {
     let arrayLocations = [];
     for (let i = 0; i < fires.length; i++) {
       fetch(
-        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${fires[i].position.lat}&longitude=${fires[i].lon}&localityLanguage=en`
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${fire[i].geometry[0].coordinates[0]}&longitude=${fire[i].geometry[0].coordinates[1]}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
       )
         .then((response) => response.json())
         .then((res) => {

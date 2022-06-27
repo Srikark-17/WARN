@@ -13,7 +13,6 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
 import { HP, WP } from "../../config/responsive";
 var percent = 38;
 var percent1 = 58;
@@ -44,25 +43,44 @@ function WelcomeScreen({ navigation }) {
   const [aqiLevel, setAQILevel] = useState();
   const [aqiCategory, setAQICategory] = useState();
   const [resultsTitle, setResultsTitle] = useState();
+
+  let levelInterpreter = (value) => {
+      if(value == 1){
+        return "Good"
+      }
+      if(value == 2){
+        return "Fair"
+      }
+      if(value == 3){
+        return "Moderate"
+      }
+      if(value == 4){
+        return "Poor"
+      }
+      if(value == 5){
+        return "Very Poor"
+      }
+  }
+
   useEffect(() => {
     (async () => {
-      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      let { status } = await Location.requestForegroundPermissionsAsync();
       if (status === "granted") {
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
         fetch(
-          `https://api.breezometer.com/air-quality/v2/current-conditions?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=${apiKey}&features=breezometer_aqi,local_aqi,health_recommendations,sources_and_effects,pollutants_concentrations,pollutants_aqi_information`
+          `http://api.openweathermap.org/data/2.5/air_pollution?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
         )
           .then((response) => response.json())
           .then((res) => {
-            let aqiLevel = res.data.indexes.baqi.aqi;
+            let aqiLevel = res.list[0].main.aqi;
             setAQILevel(aqiLevel);
             setAQICategory(res.data.indexes.baqi.category);
             setAQIColor(res.data.indexes.baqi.color);
             percent2 = aqiLevel;
           });
         fetch(
-          `https://api.breezometer.com/weather/v1/current-conditions?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=${apiKey}`
+          `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
         )
           .then((response) => response.json())
           .then((res) => {
@@ -71,11 +89,11 @@ function WelcomeScreen({ navigation }) {
             percent = temperature;
           });
         fetch(
-          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en`
+          `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
         )
           .then((response) => response.json())
           .then((res) => {
-            let resultsTitle = `${res.city}, ${res.principalSubdivisionCode}`;
+            let resultsTitle = `${res.localityInfo.administrative[3].name}, ${res.principalSubdivisionCode}`;
             console.log(resultsTitle);
             console.log(res);
             setResultsTitle(resultsTitle);
@@ -191,7 +209,7 @@ function WelcomeScreen({ navigation }) {
           left: WP(15.38),
         }}
       >
-        Air Quality
+        Air Quality {"\n"} from 1-5
       </Text>
       <Text
         style={{
@@ -268,7 +286,7 @@ function WelcomeScreen({ navigation }) {
           onPress={() => navigation.navigate("Archive")}
         />
       </TouchableOpacity>
-      <View style={{ top: HP(5.33), zIndex: 100, left: WP(10.26) }}>
+      {/* <View style={{ top: HP(5.33), zIndex: 100, left: WP(10.26) }}>
         <Text
           style={{
             color: "#798497",
@@ -279,8 +297,8 @@ function WelcomeScreen({ navigation }) {
         >
           Heatmaps
         </Text>
-      </View>
-      <View style={styles.optionsContainer}>
+      </View> */}
+      {/* <View style={styles.optionsContainer}>
         <TouchableOpacity style={styles.fireContainer}>
           <MaterialCommunityIcons
             style={styles.fire}
@@ -319,7 +337,7 @@ function WelcomeScreen({ navigation }) {
             onPress={() => navigation.navigate("Pollution Heatmap")}
           />
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
 }

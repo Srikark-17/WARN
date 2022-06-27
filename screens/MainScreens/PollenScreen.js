@@ -13,7 +13,6 @@ import {
   MaterialIcons,Fontisto, AntDesign
 } from "@expo/vector-icons";
 import * as Location from "expo-location";
-import * as Permissions from 'expo-permissions'
 let percent = 80;
 
 let propStyle = (percent, base_degrees) => {
@@ -56,7 +55,7 @@ function WelcomeScreen({ navigation }) {
   let apiKey = 'f0aaf130ca6e4d849bda5e9780058332'
   useEffect(() => {
     (async () => {
-      let { status } = await Permissions.askAsync(Permissions.LOCATION);
+      let { status } = await Location.requestForegroundPermissionsAsync();
       if(status === 'granted'){
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
