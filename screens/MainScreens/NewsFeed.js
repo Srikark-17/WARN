@@ -1,21 +1,10 @@
 import React, { Component } from "react";
-import {
-  Container,
-  Header,
-  Content,
-  List,
-  ListItem,
-  Thumbnail,
-  Text,
-  Left,
-  Body,
-  Right,
-  Button,
-} from "native-base";
+import { Container, Content, List, Text } from "native-base";
 import { getArticles } from "./components/feedNews";
 import { Alert, View, ActivityIndicator, StyleSheet } from "react-native";
 import { DataItem } from "./components/dataItemNews";
 import Modal from "./components/modal";
+import { HP, WP } from "../../config/responsive";
 export default class ListThumbnailExample extends Component {
   constructor(props) {
     super(props);
@@ -103,22 +92,21 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "Avenir",
-    fontSize: 40,
+    fontSize: HP(4.74),
     fontWeight: "bold",
     textAlign: "center",
     color: "white",
-    top: 0,
   },
   textContainer: {
-    padding: 10,
-    top: 15,
+    paddingVertical: HP(1.18),
+    paddingHorizontal: WP(2.56),
+    top: HP(1.78),
     zIndex: 100,
   },
   subtext: {
     color: "#798497",
     fontFamily: "Avenir",
-    fontSize: 18,
+    fontSize: HP(2.13),
     textAlign: "center",
-    top: 0,
   },
 });
