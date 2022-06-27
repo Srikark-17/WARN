@@ -34,23 +34,22 @@ const themecolor = "#2B2D2F";
 const tabcolor = "#FF5349";
 const Tab = createMaterialBottomTabNavigator();
 const Auth = createStackNavigator();
-const Image = createStackNavigator();
+const Home = createStackNavigator();
 
 const HomeScreenNavigator = ({ navigation }) => {
   return (
-    <Image.Navigator
+    <Home.Navigator
       screenOptions={{
         headerShown: false,
       }}
       initialRouteName="Home Screen"
     >
-      <Image.Screen name="Home Screen" component={HomeScreen2} />
-      <Image.Screen name="Fire Screen" component={AQScreen} />
-      <Image.Screen name="Manual Input" component={NotificationsScreen} />
-      <Image.Screen name="Problem Results" component={ImageResultScreen} />
-      <Image.Screen name="Pollen" component={PollenScreen} />
-      <Image.Screen name="Pollution" component={PollenScreen} />
-      <Image.Screen
+      <Home.Screen name="Home Screen" component={HomeScreen2} />
+      <Home.Screen name="Fire Screen" component={AQScreen} />
+      <Home.Screen name="Manual Input" component={NotificationsScreen} />
+      <Home.Screen name="Pollen" component={PollenScreen} />
+      <Home.Screen name="Pollution" component={PollenScreen} />
+      <Home.Screen
         name="AQI Heatmap"
         component={AQIHeatmapScreen}
         options={{
@@ -70,7 +69,7 @@ const HomeScreenNavigator = ({ navigation }) => {
           headerTintColor: `${inactiveColor}`,
         }}
       />
-      <Image.Screen
+      <Home.Screen
         name="Pollen Heatmap"
         component={PollenHeatmapScreen}
         options={{
@@ -90,7 +89,7 @@ const HomeScreenNavigator = ({ navigation }) => {
           headerTintColor: `${inactiveColor}`,
         }}
       />
-      <Image.Screen
+      <Home.Screen
         name="Pollution Heatmap"
         component={PollutionHeatmapScreen}
         options={{
@@ -110,7 +109,7 @@ const HomeScreenNavigator = ({ navigation }) => {
           headerTintColor: `${inactiveColor}`,
         }}
       />
-    </Image.Navigator>
+    </Home.Navigator>
   );
 };
 
