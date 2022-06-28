@@ -7,7 +7,7 @@ import {
   Button,
   StatusBar,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, Feather, AntDesign} from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { HP, WP } from "../../config/responsive";
 
@@ -272,6 +272,16 @@ function WelcomeScreen({ navigation }) {
       >
         {percent}°F
       </Text>
+      <Feather
+                name="wind"
+                size={24}
+                color="#fff"
+              />
+      <AntDesign
+                name="arrowdown"
+                size={24}
+                color="#fff"
+              />
       <Text
         style={{
           color: "#FFFFFF",
@@ -296,6 +306,7 @@ function WelcomeScreen({ navigation }) {
       >
         {temperature} °F
       </Text>
+      
       <TouchableOpacity
         onPress={() => navigation.navigate("Pollen")}
         style={styles.bicardTwo}
