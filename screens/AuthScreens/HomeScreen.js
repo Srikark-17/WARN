@@ -10,8 +10,6 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { HP, WP } from "../../config/responsive";
-var percent = 38;
-var percent1 = 58;
 
 let propStyle = (percent, base_degrees) => {
   const rotateBy = base_degrees + percent * 3.6;
@@ -35,15 +33,38 @@ function WelcomeScreen({ navigation }) {
 
   const [location, setLocation] = useState();
   const [temperature, setTemperature] = useState();
-  const [aqicolor, setAQIColor] = useState();
+  const [percent, setPercent] = useState();
+  const [percent1, setPercent2] = useState()
+  const [windDirection, setWindDirection] = useState();
   const [aqiLevel, setAQILevel] = useState();
-  const [aqiCategory, setAQICategory] = useState();
+  const [windSpeed, setWindSpeed] = useState();
+  const [windType, setWindType] = useState();
   const [resultsTitle, setResultsTitle] = useState();
   const [levelInterpretation, setLevelInterpretation] = useState();
 
   let K2F = (kelvin) => {
     return Math.round((kelvin - 273.15) * 1.8 + 32);
   };
+  
+  let M2I = (meters) => {
+    return 2.2369 * meters
+  }
+
+  let D2D = (degrees) => {
+    if(degrees<11.25){
+      return "N"
+    } else if(degrees < 33.75){
+      return "NE"
+    } else if (degrees < 78.75){
+      return "E"
+    } else if (degrees < 123.75){
+      return "SE"
+    } else if (degrees < 168.75){
+      return "S"
+    } else if (degrees < 213.75){
+      return ""
+    }
+  }
 
   let levelInterpreter = (value) => {
     if (value == 1) {
@@ -79,7 +100,7 @@ function WelcomeScreen({ navigation }) {
             setLevelInterpretation(levelInterpreter(aqiLevel));
             setAQICategory(res.data.indexes.baqi.category);
             setAQIColor(res.data.indexes.baqi.color);
-            percent2 = aqiLevel;
+            setPercent2(aqiLevel)
           });
         fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
@@ -88,7 +109,10 @@ function WelcomeScreen({ navigation }) {
           .then((res) => {
             var temperature = K2F(res.main.temp);
             setTemperature(temperature);
-            percent = temperature;
+            setPercent(temperature)
+            setWindDirection(res.wind.direction)
+            setWindSpeed(M2I(res.wind.speed))
+            setSunrise(res.sys.sunrise)
           });
         fetch(
           `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
@@ -96,8 +120,6 @@ function WelcomeScreen({ navigation }) {
           .then((response) => response.json())
           .then((res) => {
             let resultsTitle = `${res.localityInfo.administrative[3].name}, ${res.principalSubdivisionCode}`;
-            console.log(resultsTitle);
-            console.log(res);
             setResultsTitle(resultsTitle);
           });
       } else {
@@ -282,12 +304,12 @@ function WelcomeScreen({ navigation }) {
       </TouchableOpacity>
       <View style={styles.bicardContainer}>
         <View style={styles.bicard}>
-          <Text style={styles.bicardTitle}>Wind Pressure</Text>
-          <Text style={styles.bicardText}>51.2 psf</Text>
+          <Text style={styles.bicardTitle}>Wind</Text>
+          <Text style={styles.bicardText}>51.2 psf </Text>
         </View>
         <View style={styles.bicard}>
           <Text style={styles.bicardTitle}>Wind Speed</Text>
-          <Text style={styles.bicardText}>6 mph</Text>
+          <Text style={styles.bicardText}>{windSpeed} mph {"\n"} {windType} {"\n"} {windDirection}</Text>
         </View>
       </View>
     </View>
