@@ -8,7 +8,6 @@ import {
   Text,
 } from "react-native";
 import Screen from "../../components/Screen";
-import AppText from "../../components/Text";
 import * as firebase from "firebase";
 import { SvgXml } from "react-native-svg";
 import { HP, WP } from "../../config/responsive";
@@ -36,7 +35,7 @@ function LoginScreen({ navigation }) {
   return (
     <View style={{ backgroundColor: "#000", flex: 1, width: WP(100) }}>
       <View style={styles.titleContainer}>
-        <AppText style={styles.text}>Login</AppText>
+        <Text style={styles.text}>Login</Text>
       </View>
       <StatusBar barStyle="light-content" />
       <View style={styles.SVGcontainer}>
