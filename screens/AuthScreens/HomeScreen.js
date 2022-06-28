@@ -7,7 +7,7 @@ import {
   Button,
   StatusBar,
 } from "react-native";
-import { MaterialIcons, Feather, AntDesign} from "@expo/vector-icons";
+import { MaterialIcons, Feather, AntDesign, Ionicons} from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { HP, WP } from "../../config/responsive";
 
@@ -282,6 +282,16 @@ function WelcomeScreen({ navigation }) {
                 size={24}
                 color="#fff"
               />
+      <Ionicons
+                name="water"
+                size={24}
+                color="#fff"
+              />
+      <Feather
+                name="sunrise"
+                size={24}
+                color="#fff"
+              />
       <Text
         style={{
           color: "#FFFFFF",
@@ -315,7 +325,7 @@ function WelcomeScreen({ navigation }) {
       </TouchableOpacity>
       <View style={styles.bicardContainer}>
         <View style={styles.bicard}>
-          <Text style={styles.bicardTitle}>Wind</Text>
+          <Text style={styles.bicardTitle}>Air Pressure</Text>
           <Text style={styles.bicardText}>51.2 psf </Text>
         </View>
         <View style={styles.bicard}>
