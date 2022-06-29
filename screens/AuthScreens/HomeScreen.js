@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, StatusBar, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  StatusBar,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import {
   MaterialIcons,
   Feather,
@@ -24,6 +31,7 @@ function WelcomeScreen() {
   const [humidity, setHumidity] = useState();
   const [resultsTitle, setResultsTitle] = useState();
   const [levelInterpretation, setLevelInterpretation] = useState();
+  const [pressed, setPressed] = useState(false);
 
   let convertTime = (time) => {
     fetch(
@@ -170,6 +178,13 @@ function WelcomeScreen() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
+      <TouchableOpacity activeOpacity={1} onPress={() => setPressed(true)}>
+        <View style={styles.switch}>
+          <Text style={styles.switchText}>
+            {pressed ? "Switch to Metric" : "Switch to Imperial"}
+          </Text>
+        </View>
+      </TouchableOpacity>
       <View style={styles.textContainer}>
         <Text style={styles.title}>Dashboard</Text>
       </View>
@@ -279,12 +294,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "white",
-    top: HP(8.89),
   },
   textContainer: {
     paddingVertical: HP(1.18),
     paddingHorizontal: WP(2.56),
-    top: HP(1.78),
   },
   bicardContainer: {
     width: WP(100),
@@ -314,6 +327,25 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: HP(2.37),
     fontWeight: "700",
+  },
+  switch: {
+    alignSelf: "center",
+    borderRadius: 12,
+
+    backgroundColor: "#FF5349",
+    width: WP(70),
+    height: HP(7.11),
+    shadowOffset: { width: WP(0), height: HP(0.24) },
+    shadowColor: "black",
+    shadowOpacity: 0.25,
+    justifyContent: "center",
+    top: HP(17),
+    alignItems: "center",
+  },
+  switchText: {
+    fontSize: HP(2.2),
+    color: "#FFFFFF",
+    fontWeight: "bold",
   },
 });
 
