@@ -19,7 +19,9 @@ function WelcomeScreen() {
   const [windDirection, setWindDirection] = useState();
   const [aqiLevel, setAQILevel] = useState();
   const [windSpeed, setWindSpeed] = useState();
-  const [windType, setWindType] = useState();
+  const [pressure, setPressure] = useState();
+  const [sunset, setSunset] = useState();
+  const [humidity, setHumidity] = useState();
   const [resultsTitle, setResultsTitle] = useState();
   const [levelInterpretation, setLevelInterpretation] = useState();
 
@@ -28,22 +30,30 @@ function WelcomeScreen() {
   };
 
   let M2I = (meters) => {
-    return 2.2369 * meters;
+    return Math.round(2.2369 * meters);
   };
 
   let D2D = (degrees) => {
-    if (degrees < 11.25) {
+    if (degrees < 22.5) {
       return "N";
     } else if (degrees < 33.75) {
       return "NE";
-    } else if (degrees < 78.75) {
+    } else if (degrees < 67.5) {
       return "E";
-    } else if (degrees < 123.75) {
+    } else if (degrees < 112.5) {
       return "SE";
-    } else if (degrees < 168.75) {
+    } else if (degrees < 157.5) {
       return "S";
-    } else if (degrees < 213.75) {
-      return "";
+    } else if (degrees < 202.5) {
+      return "SW";
+    } else if (degrees < 247.5) {
+      return "W";
+    } else if (degrees < 292.5) {
+      return "N";
+    } else if (degrees < 337.5) {
+      return "NW";
+    } else if (degrees < 360) {
+      return "N";
     }
   };
 
@@ -76,11 +86,9 @@ function WelcomeScreen() {
         )
           .then((response) => response.json())
           .then((res) => {
-            let aqiLevel = res.list[0].main.aqi;
-            setAQILevel(aqiLevel);
+            let aqiLevel = res.list[0].main.aqi
+            setAQILevel(aqiLevel)
             setLevelInterpretation(levelInterpreter(aqiLevel));
-            setAQICategory(res.data.indexes.baqi.category);
-            setAQIColor(res.data.indexes.baqi.color);
           });
         fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
@@ -89,9 +97,11 @@ function WelcomeScreen() {
           .then((res) => {
             var temperature = K2F(res.main.temp);
             setTemperature(temperature);
-            setWindDirection(res.wind.direction);
+            setPressure(res.main.pressure);
+            setWindDirection(D2D(res.wind.direction))
             setWindSpeed(M2I(res.wind.speed));
-            setSunrise(res.sys.sunrise);
+            setSunset(res.sys.sunrise);
+            setHumidity(res.main.humidity)
           });
         fetch(
           `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
@@ -184,13 +194,13 @@ function WelcomeScreen() {
         <View style={styles.bicardContainer}>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Air Pressure</Text>
-            <Text style={styles.bicardText}>51.2 psf </Text>
+            <Text style={styles.bicardText}>{pressure} hPa </Text>
             <Feather name="wind" size={40} color="#fff" />
           </View>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Wind Speed</Text>
             <Text style={styles.bicardText}>
-              {windSpeed} mph {windType} {windDirection}
+              {windSpeed} mph {windDirection}
             </Text>
             <AntDesign name="arrowdown" size={40} color="#fff" />
           </View>
@@ -198,12 +208,12 @@ function WelcomeScreen() {
         <View style={styles.bicardContainer}>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Humidity</Text>
-            <Text style={styles.bicardText}>20 g/m^3</Text>
+            <Text style={styles.bicardText}>{humidity} %</Text>
             <Ionicons name="water" size={40} color="#fff" />
           </View>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Sunset</Text>
-            <Text style={styles.bicardText}>6:20 PM</Text>
+            <Text style={styles.bicardText}>{sunset} PM</Text>
             <Feather name="sunset" size={40} color="#fff" />
           </View>
         </View>
