@@ -14,8 +14,7 @@ import HomeScreen2 from "./screens/AuthScreens/HomeScreen";
 import SplashScreen from "./screens/AuthScreens/SplashScreen";
 import LoginScreen from "./screens/AuthScreens/TestLoginScreen";
 import RegisterScreen from "./screens/AuthScreens/TestRegisterScreen";
-import PollenScreen from "./screens/MainScreens/PollenScreen";
-import AQScreen from "./screens/MainScreens/AirQualityScreen";
+import MapScreen from './screens/MainScreens/MapScreen';
 import Firebasekeys from "./config";
 import * as firebase from "firebase";
 
@@ -32,22 +31,19 @@ const themecolor = "#2B2D2F";
 const tabcolor = "#FF5349";
 const Tab = createMaterialBottomTabNavigator();
 const Auth = createStackNavigator();
-const Home = createStackNavigator();
+const Fires = createStackNavigator();
 
-const HomeScreenNavigator = ({ navigation }) => {
+const FireScreenNavigator = ({ navigation }) => {
   return (
-    <Home.Navigator
+    <Fires.Navigator
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="Home Screen"
+      initialRouteName="Nearby Fires Screen"
     >
-      <Home.Screen name="Home Screen" component={HomeScreen2} />
-      <Home.Screen name="Fire Screen" component={AQScreen} />
-      <Home.Screen name="Manual Input" component={NotificationsScreen} />
-      <Home.Screen name="Pollen" component={PollenScreen} />
-      <Home.Screen name="Pollution" component={PollenScreen} />
-    </Home.Navigator>
+      <Fires.Screen name="Nearby Fires Screen" component={NearbyFiresScreen} />
+      <Fires.Screen name="Fires Screen" component={MapScreen} />
+    </Fires.Navigator>
   );
 };
 
@@ -64,7 +60,7 @@ function MainTabs() {
       >
         <Tab.Screen
           name="Dashboard"
-          component={HomeScreenNavigator}
+          component={HomeScreen2}
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons
@@ -90,7 +86,7 @@ function MainTabs() {
         />
         <Tab.Screen
           name="Nearby Fires"
-          component={NearbyFiresScreen}
+          component={FireScreenNavigator}
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons
