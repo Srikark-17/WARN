@@ -25,6 +25,17 @@ function WelcomeScreen() {
   const [resultsTitle, setResultsTitle] = useState();
   const [levelInterpretation, setLevelInterpretation] = useState();
 
+  let convertTime = (time) => {
+    fetch(
+      `https://showcase.api.linx.twenty57.net/UnixTime/fromunix?timestamp=${time}`
+    )
+      .then((response) => response.json())
+      .then((res) => {
+        console.log(res)
+        return res
+      });
+  }
+
   let K2F = (kelvin) => {
     return Math.round((kelvin - 273.15) * 1.8 + 32);
   };
@@ -100,7 +111,7 @@ function WelcomeScreen() {
             setPressure(res.main.pressure);
             setWindDirection(D2D(res.wind.direction))
             setWindSpeed(M2I(res.wind.speed));
-            setSunset(res.sys.sunrise);
+            setSunset(convertTime(res.sys.sunrise));
             setHumidity(res.main.humidity)
           });
         fetch(
