@@ -3,7 +3,6 @@ import { Image, ScrollView, View, StyleSheet, FlatList } from "react-native";
 import { Text, Icon } from "native-base";
 
 import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
 import { AntDesign } from "@expo/vector-icons";
 import { HP, WP } from "../../config/responsive";
 const Face = ({ icon, title, color, full }) => {
