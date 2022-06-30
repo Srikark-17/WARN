@@ -136,7 +136,7 @@ function NearbyFiresScreen({navigation}) {
   }, []);
   return (
     <View style={styles.container}>
-      <SafeAreaView>
+      <ScrollView>
         <View style={styles.headerContainer}>
           <Text style={styles.heading}>Fires Nearby</Text>
           <Text style={styles.desc}>View nearby fires</Text>
@@ -163,7 +163,7 @@ function NearbyFiresScreen({navigation}) {
     }
       
       />
-      </SafeAreaView>
+      </ScrollView>
     </View>
   );
 }
