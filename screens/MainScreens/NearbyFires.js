@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Image, ScrollView, View, StyleSheet, FlatList } from "react-native";
+import { Image, ScrollView, View, StyleSheet, FlatList, SafeAreaView } from "react-native";
 import { Text, Icon } from "native-base";
 
 import * as Location from "expo-location";
@@ -77,24 +77,7 @@ function NearbyFiresScreen({navigation}) {
   const [fires, setFires] = useState()
   const[locationState, setGeocodedLocation] = useState()
   const [distance, setDistance] = useState()
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if(status === 'granted'){
-        let location = await Location.getCurrentPositionAsync({});
-        setLocation(location);
-        console.log('about to fetch')
-        
-      fetch (`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`).then((response) => response.json()).then((res) => {     
-      setFires(reverseGeocode(res.events))
-      //console.log(res.events)
-    })
-      }
-      else{
-        <ActivityIndicator/>
-      }
-    })();
-  }, []);
+
   let calculateDistance = (longitude, latitude) => {
     let latitudeDifference = Math.abs((location.coords.latitude - latitude)*69)
     let longitudeDifference = Math.abs((location.coords.longitude - longitude)*54.6)
@@ -132,9 +115,28 @@ function NearbyFiresScreen({navigation}) {
     console.log("amednfiresd:" + amendedFires.length)
     return amendedFires
   }
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if(status === 'granted'){
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        console.log('about to fetch')
+        
+      fetch (`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`).then((response) => response.json()).then((res) => {     
+      setFires(reverseGeocode(res.events))
+      //console.log(res.events)
+    })
+      }
+      else{
+        <ActivityIndicator/>
+      }
+    })();
+  }, []);
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <SafeAreaView>
         <View style={styles.headerContainer}>
           <Text style={styles.heading}>Fires Nearby</Text>
           <Text style={styles.desc}>View nearby fires</Text>
@@ -161,7 +163,7 @@ function NearbyFiresScreen({navigation}) {
     }
       
       />
-      </ScrollView>
+      </SafeAreaView>
     </View>
   );
 }

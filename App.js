@@ -16,10 +16,28 @@ import LoginScreen from "./screens/AuthScreens/TestLoginScreen";
 import RegisterScreen from "./screens/AuthScreens/TestRegisterScreen";
 import MapScreen from './screens/MainScreens/MapScreen';
 import Firebasekeys from "./config";
+import { LogBox } from "react-native";
 import * as firebase from "firebase";
 
 import "firebase/firestore";
 import { HP } from "./config/responsive";
+
+const ignoreWarns = [
+  "Setting a timer for a long period of time",
+  "VirtualizedLists should never be nested inside plain ScrollViews with the same orientation",
+  "ViewPropTypes will be removed",
+  "AsyncStorage has been extracted from react-native",
+  "EventEmitter.removeListener",
+];
+const warn = console.warn;
+console.warn = (...arg) => {
+  for (let i = 0; i < ignoreWarns.length; i++) {
+      if (arg[0].startsWith(ignoreWarns[i])) return;
+  }
+  warn(...arg);
+};
+
+LogBox.ignoreLogs(ignoreWarns);
 
 let firebaseConfig = Firebasekeys;
 if (!firebase.apps.length) {
