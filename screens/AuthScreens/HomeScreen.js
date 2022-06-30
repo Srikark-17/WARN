@@ -17,9 +17,11 @@ import {
 } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { HP, WP } from "../../config/responsive";
+import * as Localization from "expo-localization";
 
-function WelcomeScreen() {
+function HomeScreen() {
   let apiKey = "f0aaf130ca6e4d849bda5e9780058332";
+  console.log(Localization.isMetric);
 
   const [location, setLocation] = useState();
   const [temperature, setTemperature] = useState();
@@ -31,7 +33,6 @@ function WelcomeScreen() {
   const [humidity, setHumidity] = useState();
   const [resultsTitle, setResultsTitle] = useState();
   const [levelInterpretation, setLevelInterpretation] = useState();
-  const [pressed, setPressed] = useState(false);
 
   let convertTime = (time) => {
     fetch(
@@ -39,10 +40,10 @@ function WelcomeScreen() {
     )
       .then((response) => response.json())
       .then((res) => {
-        console.log(res)
-        return res
+        console.log(res);
+        return res;
       });
-  }
+  };
 
   let K2F = (kelvin) => {
     return Math.round((kelvin - 273.15) * 1.8 + 32);
@@ -105,8 +106,8 @@ function WelcomeScreen() {
         )
           .then((response) => response.json())
           .then((res) => {
-            let aqiLevel = res.list[0].main.aqi
-            setAQILevel(aqiLevel)
+            let aqiLevel = res.list[0].main.aqi;
+            setAQILevel(aqiLevel);
             setLevelInterpretation(levelInterpreter(aqiLevel));
           });
         fetch(
@@ -116,11 +117,11 @@ function WelcomeScreen() {
           .then((res) => {
             var temperature = K2F(res.main.temp);
             setTemperature(temperature);
-            setPressure(res.main.pressure);
-            setWindDirection(D2D(res.wind.direction))
+            setPressure(Math.round(res.main.pressure * 2.088546));
+            setWindDirection(D2D(res.wind.direction));
             setWindSpeed(M2I(res.wind.speed));
             setSunset(convertTime(res.sys.sunrise));
-            setHumidity(res.main.humidity)
+            setHumidity(res.main.humidity);
           });
         fetch(
           `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
@@ -135,6 +136,7 @@ function WelcomeScreen() {
       }
     })();
   }, []);
+
   let C2F = (Celcius) => {
     let F = (Celcius * 9) / 5 + 32;
     let multiple = F * 10;
@@ -142,6 +144,19 @@ function WelcomeScreen() {
     let finalNumber = roundedMultiple / 10;
     return finalNumber;
   };
+
+  if (Localization.isMetric == true) {
+    // convert temp
+    const metricTemp = (temperature - 32) * 1.8;
+    const roundedMetricTemp = Math.round(metricTemp);
+    setTemperature(roundedMetricTemp + " °C");
+
+    // convert pressure
+    setPressure(pressure / 2.088456 + " hPa");
+
+    // convert wind Speed
+    setWindSpeed(windSpeed * 1.609 + " kmh");
+  }
 
   let rawTime = new Date().getHours() + ":" + new Date().getMinutes();
   rawTime = rawTime.split(":"); // convert to array
@@ -152,7 +167,6 @@ function WelcomeScreen() {
 
   // calculate
   let time = null;
-  console.log(hours > 12);
 
   if (hours > 0 && hours <= 12) {
     time = "" + hours;
@@ -178,13 +192,6 @@ function WelcomeScreen() {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
-      <TouchableOpacity activeOpacity={1} onPress={() => setPressed(true)}>
-        <View style={styles.switch}>
-          <Text style={styles.switchText}>
-            {pressed ? "Switch to Metric" : "Switch to Imperial"}
-          </Text>
-        </View>
-      </TouchableOpacity>
       <View style={styles.textContainer}>
         <Text style={styles.title}>Dashboard</Text>
       </View>
@@ -220,7 +227,7 @@ function WelcomeScreen() {
         <View style={styles.bicardContainer}>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Air Pressure</Text>
-            <Text style={styles.bicardText}>{pressure} hPa </Text>
+            <Text style={styles.bicardText}>{pressure} psi</Text>
             <Feather name="wind" size={40} color="#fff" />
           </View>
           <View style={styles.bicard}>
@@ -328,25 +335,6 @@ const styles = StyleSheet.create({
     fontSize: HP(2.37),
     fontWeight: "700",
   },
-  switch: {
-    alignSelf: "center",
-    borderRadius: 12,
-
-    backgroundColor: "#FF5349",
-    width: WP(70),
-    height: HP(7.11),
-    shadowOffset: { width: WP(0), height: HP(0.24) },
-    shadowColor: "black",
-    shadowOpacity: 0.25,
-    justifyContent: "center",
-    top: HP(17),
-    alignItems: "center",
-  },
-  switchText: {
-    fontSize: HP(2.2),
-    color: "#FFFFFF",
-    fontWeight: "bold",
-  },
 });
 
-export default WelcomeScreen;
+export default HomeScreen;

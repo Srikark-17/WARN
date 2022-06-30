@@ -10,7 +10,7 @@ import {
 import NearbyFiresScreen from "./screens/MainScreens/NearbyFires";
 import NewsFeed from "./screens/MainScreens/NewsFeed";
 import NotificationsScreen from "./screens/MainScreens/NotificationsScreen";
-import HomeScreen2 from "./screens/AuthScreens/HomeScreen";
+import HomeScreen from "./screens/AuthScreens/HomeScreen";
 import SplashScreen from "./screens/AuthScreens/SplashScreen";
 import LoginScreen from "./screens/AuthScreens/TestLoginScreen";
 import RegisterScreen from "./screens/AuthScreens/TestRegisterScreen";
@@ -114,7 +114,7 @@ function MainTabs() {
       >
         <Tab.Screen
           name="Dashboard"
-          component={HomeScreen2}
+          component={HomeScreen}
           options={{
             tabBarIcon: ({ focused }) => (
               <MaterialCommunityIcons
