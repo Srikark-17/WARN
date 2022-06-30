@@ -72,7 +72,7 @@ export const CardHome = ({ title, info, noHeader, noFooter, book }) => {
 
 let apiKey = "f0aaf130ca6e4d849bda5e9780058332";
 
-function HomeScreen() {
+function NearbyFiresScreen({navigation}) {
   const [location, setLocation] = useState();
   const [fires, setFires] = useState()
   const[locationState, setGeocodedLocation] = useState()
@@ -138,7 +138,7 @@ function HomeScreen() {
         <View style={styles.headerContainer}>
           <Text style={styles.heading}>Fires Nearby</Text>
           <Text style={styles.desc}>View nearby fires</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Map")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Map Screen")}>
             <Text style={styles.heading}>Map</Text>
           </TouchableOpacity>
         </View>
@@ -166,7 +166,7 @@ function HomeScreen() {
   );
 }
 
-export default HomeScreen;
+export default NearbyFiresScreen;
 
 const styles = StyleSheet.create({
   rating: {

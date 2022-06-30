@@ -32,17 +32,53 @@ const tabcolor = "#FF5349";
 const Tab = createMaterialBottomTabNavigator();
 const Auth = createStackNavigator();
 const Fires = createStackNavigator();
+const FireMap = createStackNavigator();
+
+const FireMaps = ({ navigation }) => {
+  return (
+    <FireMap.Navigator
+      screenOptions={{
+        headerShown: true,
+        headerStyle: {
+          backgroundColor: themecolor,          
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          color: "#fff",
+          
+        },
+      }}
+
+      initialRouteName="Map Screen"
+    >
+      <FireMap.Screen name="Map Screen" component={MapScreen} options={{
+        headerBackTitleVisible: false
+      }} />
+    </FireMap.Navigator>
+  );
+};
 
 const FireScreenNavigator = ({ navigation }) => {
   return (
     <Fires.Navigator
       screenOptions={{
         headerShown: false,
+        headerStyle: {
+          backgroundColor: themecolor,          
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          color: "#fff",
+          
+        },
       }}
+
       initialRouteName="Nearby Fires Screen"
     >
-      <Fires.Screen name="Nearby Fires Screen" component={NearbyFiresScreen} />
-      <Fires.Screen name="Fires Screen" component={MapScreen} />
+      <Fires.Screen name="Nearby Fires Screen" component={NearbyFiresScreen} options={{
+        headerBackTitleVisible: false
+      }} />
+      <Fires.Screen name="Map Screen" component={FireMaps} />
     </Fires.Navigator>
   );
 };
