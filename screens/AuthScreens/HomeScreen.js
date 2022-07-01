@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-evenly",
     flexDirection: "row",
-    top: HP(15),
+    marginTop: HP(15),
     marginBottom: HP(2),
   },
   bicard: {
