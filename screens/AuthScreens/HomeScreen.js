@@ -301,6 +301,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "white",
+    top: HP(10),
   },
   textContainer: {
     paddingVertical: HP(1.18),
