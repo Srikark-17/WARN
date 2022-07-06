@@ -117,9 +117,9 @@ function HomeScreen() {
           .then((res) => {
             var temperature = K2F(res.main.temp);
             setTemperature(temperature + " °F");
-            setPressure(Math.round(res.main.pressure * 2.088546)+ " psi");
+            setPressure(Math.round(res.main.pressure * 2.088546) + " psi");
             setWindDirection(D2D(res.wind.direction));
-            setWindSpeed(M2I(res.wind.speed)+" mph");
+            setWindSpeed(M2I(res.wind.speed) + " mph");
             setSunset(convertTime(res.sys.sunrise));
             setHumidity(res.main.humidity);
           });
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-evenly",
     flexDirection: "row",
-    marginTop: HP(15),
+    top: HP(15),
     marginBottom: HP(2),
   },
   bicard: {
