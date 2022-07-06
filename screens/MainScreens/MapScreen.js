@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import {
-  StyleSheet,
-  View,
-  ActivityIndicator,
-  Dimensions,
-  Text,
-} from "react-native";
+import { StyleSheet, View, Dimensions, Text } from "react-native";
 import AnimatedLoader from "react-native-animated-loader";
 import { HP, WP } from "../../config/responsive";
 
