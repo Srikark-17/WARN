@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Image, ScrollView, View, StyleSheet, FlatList, SafeAreaView } from "react-native";
+import { Image, ScrollView, View, StyleSheet, FlatList, SafeAreaView, ActivityIndicator } from "react-native";
 import { Text, Icon } from "native-base";
 
 import * as Location from "expo-location";
