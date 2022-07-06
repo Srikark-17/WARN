@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Image, ScrollView, View, StyleSheet, FlatList, SafeAreaView, ActivityIndicator } from "react-native";
+import {
+  Image,
+  ScrollView,
+  View,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import { Text, Icon } from "native-base";
 
 import * as Location from "expo-location";
 import { AntDesign } from "@expo/vector-icons";
 import { HP, WP } from "../../config/responsive";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Button } from "react-native-web";
 const Face = ({ icon, title, color, full }) => {
   return (
     <View style={styles.faceGroup}>
@@ -72,65 +78,77 @@ export const CardHome = ({ title, info, noHeader, noFooter, book }) => {
 
 let apiKey = "f0aaf130ca6e4d849bda5e9780058332";
 
-function NearbyFiresScreen({navigation}) {
+function NearbyFiresScreen({ navigation }) {
   const [location, setLocation] = useState();
-  const [fires, setFires] = useState()
-  const[locationState, setGeocodedLocation] = useState()
-  const [distance, setDistance] = useState()
+  const [fires, setFires] = useState();
+  const [locationState, setGeocodedLocation] = useState();
+  const [distance, setDistance] = useState();
 
   let calculateDistance = (longitude, latitude) => {
-    let latitudeDifference = Math.abs((location.coords.latitude - latitude)*69)
-    let longitudeDifference = Math.abs((location.coords.longitude - longitude)*54.6)
-    let totalDistance = Math.pow(latitudeDifference, 2)+ Math.pow(longitudeDifference,2)
-    let finalDistance = Math.pow(totalDistance, 1/2)
-    if(finalDistance > 600){
-      return false
+    let latitudeDifference = Math.abs(
+      (location.coords.latitude - latitude) * 69
+    );
+    let longitudeDifference = Math.abs(
+      (location.coords.longitude - longitude) * 54.6
+    );
+    let totalDistance =
+      Math.pow(latitudeDifference, 2) + Math.pow(longitudeDifference, 2);
+    let finalDistance = Math.pow(totalDistance, 1 / 2);
+    if (finalDistance > 600) {
+      return false;
     } else {
-      setDistance(finalDistance)
-      return true
-    }    
-  }
-  let reverseGeocode = (fire) => { 
-    let amendedFires = []
-    let arrayLocations = [] 
-    let latestLocation = []
-    console.log("originalfires" + fire.length)
-    for (let i = 0; i < fire.length; i++){
-  
-    if(calculateDistance(fire[i].geometry[0].coordinates[0], fire[i].geometry[0].coordinates[1])){
-      fire[i].geometry[0].coordinates.push(distance)
-      amendedFires.push(fire[i])
-      setDistance(0)
-      fetch(`
-      https://api.bigdatacloud.net/data/reverse-geocode?latitude=${fire[i].geometry[0].coordinates[0]}&longitude=${fire[i].geometry[0].coordinates[1]}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`).then((response) => response.json()).then((res) => {
-      console.log(res)
-      let resultsTitle = `${res.events}, ${res.principalSubdivisionCode}`
-      //console.log(resultsTitle)
-      //console.log(res)
-      arrayLocations.push(resultsTitle)
-    } )
+      setDistance(finalDistance);
+      return true;
     }
-    setGeocodedLocation(arrayLocations)
-  }
-    console.log("amednfiresd:" + amendedFires.length)
-    return amendedFires
-  }
+  };
+  let reverseGeocode = (fire) => {
+    let amendedFires = [];
+    let arrayLocations = [];
+    let latestLocation = [];
+    console.log("originalfires" + fire.length);
+    for (let i = 0; i < fire.length; i++) {
+      if (
+        calculateDistance(
+          fire[i].geometry[0].coordinates[0],
+          fire[i].geometry[0].coordinates[1]
+        )
+      ) {
+        fire[i].geometry[0].coordinates.push(distance);
+        amendedFires.push(fire[i]);
+        setDistance(0);
+        fetch(`
+      https://api.bigdatacloud.net/data/reverse-geocode?latitude=${fire[i].geometry[0].coordinates[0]}&longitude=${fire[i].geometry[0].coordinates[1]}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`)
+          .then((response) => response.json())
+          .then((res) => {
+            console.log(res);
+            let resultsTitle = `${res.events}, ${res.principalSubdivisionCode}`;
+            //console.log(resultsTitle)
+            //console.log(res)
+            arrayLocations.push(resultsTitle);
+          });
+      }
+      setGeocodedLocation(arrayLocations);
+    }
+    console.log("amednfiresd:" + amendedFires.length);
+    return amendedFires;
+  };
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if(status === 'granted'){
+      if (status === "granted") {
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
-        console.log('about to fetch')
-        
-      fetch (`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`).then((response) => response.json()).then((res) => {     
-      setFires(reverseGeocode(res.events))
-      //console.log(res.events)
-    })
-      }
-      else{
-        <ActivityIndicator/>
+        console.log("about to fetch");
+
+        fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`)
+          .then((response) => response.json())
+          .then((res) => {
+            setFires(reverseGeocode(res.events));
+            //console.log(res.events)
+          });
+      } else {
+        <ActivityIndicator />;
       }
     })();
   }, []);
@@ -140,29 +158,30 @@ function NearbyFiresScreen({navigation}) {
         <View style={styles.headerContainer}>
           <Text style={styles.heading}>Fires Nearby</Text>
           <Text style={styles.desc}>View nearby fires</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Map Screen")}>
-            <Text style={styles.heading}>Map</Text>
-          </TouchableOpacity>
         </View>
         <FlatList
-      data={fires}
-      renderItem = {({item}) => (
-        
-          <CardHome
-          title=""
-          info={{
-            name: `${item.title} Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States`,
-            time: `Distance away: ${item.geometry[0].coordinates[2]} miles`,
-            address: "Fire-Type: Wildfire",
-            tag: `Update-time: ${item.geometry[0].date}`,
-            detail: `Source: Local Authority${"\n"}Status: Active${"\n"}Fire-Cause: Unknown${"\n"}Percentage Contained: N/a`,
-          }}
+          data={fires}
+          renderItem={({ item }) => (
+            <CardHome
+              title=""
+              info={{
+                name: `${item.title} Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States`,
+                time: `Distance away: ${item.geometry[0].coordinates[2]} miles`,
+                address: "Fire-Type: Wildfire",
+                tag: `Update-time: ${item.geometry[0].date}`,
+                detail: `Source: Local Authority${"\n"}Status: Active${"\n"}Fire-Cause: Unknown${"\n"}Percentage Contained: N/a`,
+              }}
+            />
+          )}
         />
-        
-      )
-    }
-      
-      />
+        <TouchableOpacity
+          activeOpacity={1}
+          onPress={() => navigation.navigate("Map Screen")}
+        >
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>View Map</Text>
+          </View>
+        </TouchableOpacity>
       </ScrollView>
     </View>
   );
@@ -312,6 +331,19 @@ const styles = StyleSheet.create({
   buttonBooks: {
     flexDirection: "row",
     marginTop: HP(2.37),
+  },
+  button: {
+    width: WP(80),
+    height: HP(7),
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FF5349",
+    borderRadius: 12,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: HP(2.5),
   },
   btnGradient: {
     paddingVertical: HP(1.18),
