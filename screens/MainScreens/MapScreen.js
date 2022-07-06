@@ -28,8 +28,7 @@ export default function App({navigation}) {
       coordinate={{ latitude: report.geometry[0].coordinates[0], longitude: report.geometry[0].coordinates[1]}}
       title={report.title}
       description={report.sources.url}
-    >
-    </Marker >)
+    />)
   }
 
   useEffect(() => {
@@ -50,12 +49,17 @@ export default function App({navigation}) {
     })
     })();
   }, []);
-  return (latitude && latitude) ? (
+  return (latitude && latitude && fires) ? (
     <View style={styles.container}>
         <MapView style={styles.map} 
-        initialRegion={{latitude, longitude, latitudeDelta: 1, longitudeDelta: 1}}
+        initialRegion={{latitude, longitude, latitudeDelta: 0.1, longitudeDelta: 0.1}}
         >
-            {mapMarkers()}
+            {fires.map((report) => (<Marker
+            key={report.id}
+            coordinate={{ latitude: report.geometry[0].coordinates[0], longitude: report.geometry[0].coordinates[1]}}
+            title={report.title}
+            description={report.sources.url}
+            />))}
         </MapView>
     </View>
   ) : <ActivityIndicator/>
