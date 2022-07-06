@@ -14,7 +14,7 @@ import HomeScreen from "./screens/AuthScreens/HomeScreen";
 import SplashScreen from "./screens/AuthScreens/SplashScreen";
 import LoginScreen from "./screens/AuthScreens/TestLoginScreen";
 import RegisterScreen from "./screens/AuthScreens/TestRegisterScreen";
-import MapScreen from './screens/MainScreens/MapScreen';
+import MapScreen from "./screens/MainScreens/MapScreen";
 import Firebasekeys from "./config";
 import { LogBox } from "react-native";
 import * as firebase from "firebase";
@@ -32,7 +32,7 @@ const ignoreWarns = [
 const warn = console.warn;
 console.warn = (...arg) => {
   for (let i = 0; i < ignoreWarns.length; i++) {
-      if (arg[0].startsWith(ignoreWarns[i])) return;
+    if (arg[0].startsWith(ignoreWarns[i])) return;
   }
   warn(...arg);
 };
@@ -58,20 +58,22 @@ const FireMaps = ({ navigation }) => {
       screenOptions={{
         headerShown: true,
         headerStyle: {
-          backgroundColor: themecolor,          
+          backgroundColor: themecolor,
         },
         headerTintColor: "#fff",
         headerTitleStyle: {
           color: "#fff",
-          
         },
       }}
-
       initialRouteName="Map Screen"
     >
-      <FireMap.Screen name="Map Screen" component={MapScreen} options={{
-        headerBackTitleVisible: false
-      }} />
+      <FireMap.Screen
+        name="Map Screen"
+        component={MapScreen}
+        options={{
+          headerBackTitleVisible: false,
+        }}
+      />
     </FireMap.Navigator>
   );
 };
@@ -82,20 +84,22 @@ const FireScreenNavigator = ({ navigation }) => {
       screenOptions={{
         headerShown: false,
         headerStyle: {
-          backgroundColor: themecolor,          
+          backgroundColor: themecolor,
         },
         headerTintColor: "#fff",
         headerTitleStyle: {
           color: "#fff",
-          
         },
       }}
-
       initialRouteName="Nearby Fires Screen"
     >
-      <Fires.Screen name="Nearby Fires Screen" component={NearbyFiresScreen} options={{
-        headerBackTitleVisible: false
-      }} />
+      <Fires.Screen
+        name="Nearby Fires Screen"
+        component={NearbyFiresScreen}
+        options={{
+          headerBackTitleVisible: false,
+        }}
+      />
       <Fires.Screen name="Map Screen" component={FireMaps} />
     </Fires.Navigator>
   );
