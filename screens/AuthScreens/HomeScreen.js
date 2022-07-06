@@ -116,10 +116,10 @@ function HomeScreen() {
           .then((response) => response.json())
           .then((res) => {
             var temperature = K2F(res.main.temp);
-            setTemperature(temperature);
-            setPressure(Math.round(res.main.pressure * 2.088546));
+            setTemperature(temperature + " °F");
+            setPressure(Math.round(res.main.pressure * 2.088546)+ " psi");
             setWindDirection(D2D(res.wind.direction));
-            setWindSpeed(M2I(res.wind.speed));
+            setWindSpeed(M2I(res.wind.speed)+" mph");
             setSunset(convertTime(res.sys.sunrise));
             setHumidity(res.main.humidity);
           });
@@ -190,12 +190,12 @@ function HomeScreen() {
     time;
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <StatusBar barStyle="light-content" />
       <View style={styles.textContainer}>
         <Text style={styles.title}>Dashboard</Text>
       </View>
-      <ScrollView>
+      <View>
         <View style={styles.locationContainer}>
           <View style={styles.innerContainer}>
             <Text style={styles.locationHeading}>Location</Text>
@@ -220,20 +220,20 @@ function HomeScreen() {
           </View>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Temperature</Text>
-            <Text style={styles.bicardText}>{temperature} °F</Text>
+            <Text style={styles.bicardText}>{temperature}</Text>
             <FontAwesome size={40} name="thermometer-3" color="#fff" />
           </View>
         </View>
         <View style={styles.bicardContainer}>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Air Pressure</Text>
-            <Text style={styles.bicardText}>{pressure} psi</Text>
+            <Text style={styles.bicardText}>{pressure}</Text>
             <Feather name="wind" size={40} color="#fff" />
           </View>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Wind Speed</Text>
             <Text style={styles.bicardText}>
-              {windSpeed} mph {windDirection}
+              {windSpeed} {windDirection}
             </Text>
             <AntDesign name="arrowdown" size={40} color="#fff" />
           </View>
@@ -250,8 +250,8 @@ function HomeScreen() {
             <Feather name="sunset" size={40} color="#fff" />
           </View>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
 
