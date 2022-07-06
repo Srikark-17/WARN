@@ -60,6 +60,7 @@ export default function App({navigation}) {
             title={report.title}
             description={report.sources.url}
             />))}
+            <Marker location={{longitude: longitude, latitude: latitude}} image={require('./navigation.png')} />
         </MapView>
     </View>
   ) : <ActivityIndicator/>
