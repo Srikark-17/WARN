@@ -129,7 +129,7 @@ function MainTabs() {
             ),
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Notifications"
           component={NotificationsScreen}
           options={{
@@ -141,7 +141,7 @@ function MainTabs() {
               />
             ),
           }}
-        />
+        /> */}
         <Tab.Screen
           name="Nearby Fires"
           component={FireScreenNavigator}

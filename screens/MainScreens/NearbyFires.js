@@ -174,6 +174,9 @@ function NearbyFiresScreen({ navigation }) {
             />
           )}
         />
+        <View style={{paddingBottom: 10}}>
+
+        </View>
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => navigation.navigate("Map Screen")}
