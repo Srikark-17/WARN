@@ -250,6 +250,17 @@ function HomeScreen() {
             <Feather name="sunset" size={40} color="#fff" />
           </View>
         </View>
+        <View style={styles.bicardContainer}>
+          <View style={{
+             borderRadius: 12,
+             width: WP(41.03),
+             height: HP(12.14),
+             alignItems: "center",
+             justifyContent: "space-evenly",
+          }}>
+
+          </View>
+        </View>
       </View>
     </ScrollView>
   );
