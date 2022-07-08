@@ -6,6 +6,7 @@ import {
   StatusBar,
   ScrollView,
   TouchableOpacity,
+  RefreshControl
 } from "react-native";
 import {
   MaterialIcons,
@@ -203,8 +204,56 @@ function HomeScreen() {
     " " +
     time;
 
+    const wait = timeout => {
+      return new Promise(resolve => setTimeout(resolve, timeout));
+    };
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(async () => {
+      setRefreshing(true);
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        let location = await Location.getCurrentPositionAsync({ accuracy: Platform.OS === 'ios' ? Location.Accuracy.Lowest : Location.Accuracy.Low});
+        setLocation(location);
+        fetch(
+          `http://api.openweathermap.org/data/2.5/air_pollution?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
+        )
+          .then((response) => response.json())
+          .then((res) => {
+            let aqiLevel = res.list[0].main.aqi;
+            setAQILevel(aqiLevel);
+            setLevelInterpretation(levelInterpreter(aqiLevel));
+          });
+        fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
+        )
+          .then((response) => response.json())
+          .then((res) => {
+            var temperature = K2F(res.main.temp);
+            setTemperature(temperature + " °F");
+            setPressure(Math.round(res.main.pressure *  0.0145038) + " psi");
+            setWindDirection(D2D(res.wind.direction));
+            setWindSpeed(M2I(res.wind.speed) + " mph");
+            convertTime(res.sys.sunset, res.timezone)
+            setHumidity(res.main.humidity);
+          });
+        fetch(
+          `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
+        )
+          .then((response) => response.json())
+          .then((res) => {
+            let resultsTitle = `${res.localityInfo.administrative[3].name}, ${res.principalSubdivisionCode}`;
+            setResultsTitle(resultsTitle);
+          });
+      }
+      wait(2000).then(() => setRefreshing(false));
+    }, []);
+    
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container}
+      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+    >
       <StatusBar barStyle="light-content" />
       <View style={styles.textContainer}>
         <Text style={styles.title}>Dashboard</Text>
@@ -326,7 +375,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "white",
-    top: HP(10),
+    top: HP(7.5),
   },
   textContainer: {
     paddingVertical: HP(1.18),

@@ -47,7 +47,7 @@ export default function MapScreen() {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status === "granted") {
-        let location = await Location.getCurrentPositionAsync({});
+        const location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced, });
         setLongitude(location.coords.longitude);
         setLatitude(location.coords.latitude);
       } else {
