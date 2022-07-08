@@ -70,6 +70,7 @@ export default function MapScreen() {
         });
     })();
   }, []);
+
   return latitude && latitude && fires ? (
     <View style={styles.container}>
       <MapView
@@ -84,12 +85,14 @@ export default function MapScreen() {
         {fires.map((report) => (
           <Marker
             key={report.id}
+            image={require("./../../assets/fire2.png")}
             coordinate={{
               latitude: report.geometry[0].coordinates[0],
               longitude: report.geometry[0].coordinates[1],
             }}
             title={report.title}
             description={report.sources.url}
+            
           />
         ))}
         <Marker
@@ -115,12 +118,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
     justifyContent: "center",
+    alignContent: "flex-start"
   },
   map: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    height: Dimensions.get("window").height*0.6,
   },
   lottie: {
     width: WP(20),

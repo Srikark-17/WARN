@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import * as Linking from 'expo-linking';
+import * as WebBrowser from 'expo-web-browser';
 import { ListItem, Left, Right, Thumbnail, Body, View, Text, Button } from 'native-base';
 
 
@@ -11,7 +13,8 @@ export class DataItem extends Component {
 
     handlePress = () => {
       const {url, title} = this.data;
-      this.props.onPress({url, title});
+      //this.props.onPress({url, title});
+      WebBrowser.openBrowserAsync(`${url}`);
     }
 
     render() {

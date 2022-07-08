@@ -21,7 +21,7 @@ import * as Localization from "expo-localization";
 
 function HomeScreen() {
   let apiKey = "f0aaf130ca6e4d849bda5e9780058332";
-  console.log(Localization.isMetric);
+  //console.log(Localization.isMetric);
 
   const [location, setLocation] = useState();
   const [temperature, setTemperature] = useState();
@@ -34,14 +34,28 @@ function HomeScreen() {
   const [resultsTitle, setResultsTitle] = useState();
   const [levelInterpretation, setLevelInterpretation] = useState();
 
-  let convertTime = (time) => {
+  let convertTime = (time, timezone) => {
     fetch(
       `https://showcase.api.linx.twenty57.net/UnixTime/fromunix?timestamp=${time}`
     )
       .then((response) => response.json())
       .then((res) => {
-        console.log(res);
-        return res;
+        let slicedString = res.slice(11)
+        let hours = slicedString.slice(0,2)
+        let integerHours = parseInt(hours)
+        let convertedTimezone = timezone/3600
+        let realTime = integerHours + convertedTimezone
+        console.log(realTime)
+        if (Math.sign(realTime == 0)){
+          slicedString = "An Error Has Occurred"
+          console.log("final string"+ slicedString)
+        } else if (Math.sign(realTime) == -1 || Math.sign(realTime) == 0) {
+          realTime = realTime + 12
+          slicedString = realTime + slicedString.slice(2)
+          console.log(slicedString)
+        }
+        console.log(slicedString)
+        setSunset(slicedString)
       });
   };
 
@@ -117,10 +131,10 @@ function HomeScreen() {
           .then((res) => {
             var temperature = K2F(res.main.temp);
             setTemperature(temperature + " °F");
-            setPressure(Math.round(res.main.pressure * 2.088546) + " psi");
+            setPressure(Math.round(res.main.pressure *  0.0145038) + " psi");
             setWindDirection(D2D(res.wind.direction));
             setWindSpeed(M2I(res.wind.speed) + " mph");
-            setSunset(convertTime(res.sys.sunrise));
+            convertTime(res.sys.sunset, res.timezone)
             setHumidity(res.main.humidity);
           });
         fetch(
