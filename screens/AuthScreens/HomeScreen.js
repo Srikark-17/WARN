@@ -113,7 +113,7 @@ function HomeScreen() {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status === "granted") {
-        let location = await Location.getCurrentPositionAsync({});
+        let location = await Location.getCurrentPositionAsync({ accuracy: Platform.OS === 'ios' ? Location.Accuracy.Lowest : Location.Accuracy.Low});
         setLocation(location);
         fetch(
           `http://api.openweathermap.org/data/2.5/air_pollution?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { Text, Icon } from "native-base";
 
@@ -79,29 +80,34 @@ export const CardHome = ({ title, info, noHeader, noFooter, book }) => {
 let apiKey = "f0aaf130ca6e4d849bda5e9780058332";
 
 function NearbyFiresScreen({ navigation }) {
-  const [location, setLocation] = useState();
   const [fires, setFires] = useState();
   const [locationState, setGeocodedLocation] = useState();
+  const [Longitude, setLongitude] = useState();
+  const [Latitude, setLatitude] = useState();
   const [distance, setDistance] = useState();
 
   let calculateDistance = (longitude, latitude) => {
+    //console.log("enters CalculateDistance")
     let latitudeDifference = Math.abs(
-      (location.coords.latitude - latitude) * 69
+      (Latitude - latitude) * 69
     );
     let longitudeDifference = Math.abs(
-      (location.coords.longitude - longitude) * 54.6
+      (Longitude - longitude) * 54.6
     );
-    let totalDistance =
-      Math.pow(latitudeDifference, 2) + Math.pow(longitudeDifference, 2);
+    let totalDistance = Math.pow(latitudeDifference, 2) + Math.pow(longitudeDifference, 2);
     let finalDistance = Math.pow(totalDistance, 1 / 2);
-    if (finalDistance > 600) {
+    if (finalDistance > 600) {      
       return false;
     } else {
       setDistance(finalDistance);
+      console.log(finalDistance)
+      console.log("properly entered")
       return true;
     }
   };
+
   let reverseGeocode = (fire) => {
+    console.log("enters reverseGeocode")
     let amendedFires = [];
     let arrayLocations = [];
     let latestLocation = [];
@@ -113,23 +119,30 @@ function NearbyFiresScreen({ navigation }) {
           fire[i].geometry[0].coordinates[1]
         )
       ) {
-        fire[i].geometry[0].coordinates.push(distance);
         amendedFires.push(fire[i]);
-        setDistance(0);
+        console.log("before fetch amendedfires" + amendedFires)
+        console.log(fire[i])
+        // amendedFires.geometry[0].coordinates.push(distance);
+        //setDistance(0);
+        console.log("enters fetch")
         fetch(`
       https://api.bigdatacloud.net/data/reverse-geocode?latitude=${fire[i].geometry[0].coordinates[0]}&longitude=${fire[i].geometry[0].coordinates[1]}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`)
           .then((response) => response.json())
           .then((res) => {
             console.log(res);
             let resultsTitle = `${res.events}, ${res.principalSubdivisionCode}`;
+            //amendedFires.geometry[0].coordinates.push(resultsTitle);
             //console.log(resultsTitle)
             //console.log(res)
-            arrayLocations.push(resultsTitle);
-          });
-      }
-      setGeocodedLocation(arrayLocations);
+            //arrayLocations.push(resultsTitle);
+          }).catch((error)=>{
+            console.log(error)
+          })
+        }
+      //setGeocodedLocation(arrayLocations);
     }
-    console.log("amednfiresd:" + amendedFires.length);
+    console.log("after fetch amendedfires: "+ amendedFires)
+    console.log("amended fires length is :" + amendedFires.length);
     return amendedFires;
   };
 
@@ -137,9 +150,10 @@ function NearbyFiresScreen({ navigation }) {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status === "granted") {
-        let location = await Location.getCurrentPositionAsync({});
-        setLocation(location);
-        console.log("about to fetch");
+        let location = await Location.getCurrentPositionAsync({ accuracy: Platform.OS === 'ios' ? Location.Accuracy.Lowest : Location.Accuracy.Low});
+        // console.log(location)
+        setLongitude(location.coords.longitude)
+        setLatitude(location.coords.latitude)
 
         fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`)
           .then((response) => response.json())
@@ -165,9 +179,9 @@ function NearbyFiresScreen({ navigation }) {
             <CardHome
               title=""
               info={{
-                name: `${item.title} Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States`,
+                name: `${item.title} ${item.geometry[0].coordinates[3]}`,//Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States
                 time: `Distance away: ${item.geometry[0].coordinates[2]} miles`,
-                address: "Fire-Type: Wildfire",
+                address: "Fire-Type:",//Wildfire
                 tag: `Update-time: ${item.geometry[0].date}`,
                 detail: `Source: Local Authority${"\n"}Status: Active${"\n"}Fire-Cause: Unknown${"\n"}Percentage Contained: N/a`,
               }}
