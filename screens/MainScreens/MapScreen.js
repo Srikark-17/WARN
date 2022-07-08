@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   map: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height*0.6,
+    height: Dimensions.get("window").height,
   },
   lottie: {
     width: WP(20),
