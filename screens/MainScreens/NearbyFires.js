@@ -8,14 +8,14 @@ import {
   ActivityIndicator,
   Platform,
 } from "react-native";
-import {Picker} from '@react-native-picker/picker'
+import { Picker } from "@react-native-picker/picker";
 import { Text, Icon, Button } from "native-base";
-import * as WebBrowser from 'expo-web-browser';
+import * as WebBrowser from "expo-web-browser";
 import * as Location from "expo-location";
 import { AntDesign } from "@expo/vector-icons";
 import { HP, WP } from "../../config/responsive";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import MultiSelect from 'react-native-multiple-select';
+import MultiSelect from "react-native-multiple-select";
 
 const Face = ({ icon, title, color, full }) => {
   return (
@@ -54,11 +54,18 @@ const Rating = ({ rating }) => {
   );
 };
 
-export const CardHome = ({ title, info, noHeader, firecause, percentagecontained, link, status}) => {
-
+export const CardHome = ({
+  title,
+  info,
+  noHeader,
+  firecause,
+  percentagecontained,
+  link,
+  status,
+}) => {
   let handleOpenBrowser = () => {
-    WebBrowser.openBrowserAsync(`${link}`)
-  }
+    WebBrowser.openBrowserAsync(`${link}`);
+  };
 
   return (
     <View style={styles.cardContainer}>
@@ -80,8 +87,8 @@ export const CardHome = ({ title, info, noHeader, firecause, percentagecontained
             <Text style={styles.cardAddress}>{info.source}</Text>
             {/* <Text style={styles.cardAddress}>{info.firecause}</Text>
             <Text style={styles.cardAddress}>{info.percentagecontained}</Text> */}
-            <Button transparent onPress={handleOpenBrowser} >
-              <Text style={{color: '#FF5349'}}>View</Text>
+            <Button transparent onPress={handleOpenBrowser}>
+              <Text style={{ color: "#FF5349" }}>View</Text>
             </Button>
             {info.rating && <Rating rating={info.rating} />}
           </View>
@@ -99,36 +106,33 @@ function NearbyFiresScreen({ navigation }) {
   const [Longitude, setLongitude] = useState();
   const [Latitude, setLatitude] = useState();
   const [range, setRange] = useState(50);
-  const [stringRange, setStringRange] = useState("50")
+  const [stringRange, setStringRange] = useState("50");
   const [distance, setDistance] = useState();
 
   let checkRelevancy = (updateTime) => {
-    let stringTime = JSON.stringify(updateTime)
-    return stringTime.indexOf("2022") >= 0 
-  }
+    let stringTime = JSON.stringify(updateTime);
+    return stringTime.indexOf("2022") >= 0;
+  };
 
   let calculateDistance = (longitude, latitude) => {
     //console.log("enters CalculateDistance")
-    let latitudeDifference = Math.abs(
-      (Latitude - latitude) * 69
-    );
-    let longitudeDifference = Math.abs(
-      (Longitude - longitude) * 54.6
-    );
-    let totalDistance = Math.pow(latitudeDifference, 2) + Math.pow(longitudeDifference, 2);
+    let latitudeDifference = Math.abs((Latitude - latitude) * 69);
+    let longitudeDifference = Math.abs((Longitude - longitude) * 54.6);
+    let totalDistance =
+      Math.pow(latitudeDifference, 2) + Math.pow(longitudeDifference, 2);
     let finalDistance = Math.pow(totalDistance, 1 / 2);
-    if (finalDistance > 1500) {      
+    if (finalDistance > 1500) {
       return false;
     } else {
       setDistance(finalDistance);
-      console.log(finalDistance)
-      console.log("properly entered")
+      console.log(finalDistance);
+      console.log("properly entered");
       return true;
     }
   };
 
   let reverseGeocode = (fire) => {
-    console.log("enters reverseGeocode")
+    console.log("enters reverseGeocode");
     let amendedFires = [];
     let arrayLocations = [];
     let latestLocation = [];
@@ -138,14 +142,15 @@ function NearbyFiresScreen({ navigation }) {
         calculateDistance(
           fire[i].geometry[0].coordinates[0],
           fire[i].geometry[0].coordinates[1]
-        ) && checkRelevancy(fire[i].geometry[0].date)
+        ) &&
+        checkRelevancy(fire[i].geometry[0].date)
       ) {
         amendedFires.push(fire[i]);
-        console.log("before fetch amendedfires" + amendedFires)
-        console.log(fire[i])
+        console.log("before fetch amendedfires" + amendedFires);
+        console.log(fire[i]);
         // amendedFires.geometry[0].coordinates.push(distance);
         //setDistance(0);
-        console.log("enters fetch")
+        console.log("enters fetch");
         fetch(`
       https://api.bigdatacloud.net/data/reverse-geocode?latitude=${fire[i].geometry[0].coordinates[0]}&longitude=${fire[i].geometry[0].coordinates[1]}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`)
           .then((response) => response.json())
@@ -156,13 +161,14 @@ function NearbyFiresScreen({ navigation }) {
             //console.log(resultsTitle)
             //console.log(res)
             //arrayLocations.push(resultsTitle);
-          }).catch((error)=>{
-            console.log(error)
           })
-        }
+          .catch((error) => {
+            console.log(error);
+          });
+      }
       //setGeocodedLocation(arrayLocations);
     }
-    console.log("after fetch amendedfires: "+ amendedFires)
+    console.log("after fetch amendedfires: " + amendedFires);
     console.log("amended fires length is :" + amendedFires.length);
     return amendedFires;
   };
@@ -171,10 +177,15 @@ function NearbyFiresScreen({ navigation }) {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status === "granted") {
-        let location = await Location.getCurrentPositionAsync({ accuracy: Platform.OS === 'ios' ? Location.Accuracy.Lowest : Location.Accuracy.Low});
+        let location = await Location.getCurrentPositionAsync({
+          accuracy:
+            Platform.OS === "ios"
+              ? Location.Accuracy.Lowest
+              : Location.Accuracy.Low,
+        });
         // console.log(location)
-        setLongitude(location.coords.longitude)
-        setLatitude(location.coords.latitude)
+        setLongitude(location.coords.longitude);
+        setLatitude(location.coords.latitude);
       } else {
         <ActivityIndicator />;
       }
@@ -188,25 +199,31 @@ function NearbyFiresScreen({ navigation }) {
           <Text style={styles.desc}>View nearby fires</Text>
           <Picker
             selectedValue={stringRange}
-            style={{ height: 50, width: 150, paddingBottom: 200, paddingLeft: 50 }}
+            style={{
+              height: 50,
+              width: 150,
+              paddingBottom: 200,
+              paddingLeft: 50,
+            }}
             onValueChange={(itemValue, itemIndex) => {
-              setRange(parseInt(itemValue))
-              setStringRange(itemValue)
-              fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`)
-              .then((response) => response.json())
-              .then((res) => {
-                setFires(reverseGeocode(res.events));
-                //console.log(res.events)
-              });
-            }
-          }
-            itemStyle={{color:"#fff"}}
-            themeVariant={'light'}
+              setRange(parseInt(itemValue));
+              setStringRange(itemValue);
+              fetch(
+                `https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`
+              )
+                .then((response) => response.json())
+                .then((res) => {
+                  setFires(reverseGeocode(res.events));
+                  //console.log(res.events)
+                });
+            }}
+            itemStyle={{ color: "#fff" }}
+            themeVariant={"light"}
           >
-          <Picker.Item label="50" value="50" />
-          <Picker.Item label="100" value="100" />
-          <Picker.Item label="500" value="500" />
-          <Picker.Item label="1000" value="1000" />
+            <Picker.Item label="50" value="50" />
+            <Picker.Item label="100" value="100" />
+            <Picker.Item label="500" value="500" />
+            <Picker.Item label="1000" value="1000" />
           </Picker>
         </View>
         <FlatList
@@ -215,10 +232,13 @@ function NearbyFiresScreen({ navigation }) {
             <CardHome
               title=""
               info={{
-                name: `${item.title} ${item.geometry[0].coordinates[3]}`,//Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States
+                name: `${item.title} ${item.geometry[0].coordinates[3]}`, //Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States
                 time: `Distance away: ${item.geometry[0].coordinates[2]} miles`,
-                address: `Type: ${item.categories[0].title}`,//Wildfire
-                tag: `Update-time: ${item.geometry[0].date}`,
+                address: `Type: ${item.categories[0].title}`, //Wildfire
+                tag: `${item.geometry[0].date.slice(
+                  0,
+                  10
+                )} ${item.geometry[0].date.slice(11, 16)}`,
                 source: `Source: ${item.sources[0].id}`,
                 status: `Status: Active`,
                 // firecause:`Fire-Cause: Unknown`,
@@ -228,9 +248,7 @@ function NearbyFiresScreen({ navigation }) {
             />
           )}
         />
-        <View style={{paddingBottom: 10}}>
-
-        </View>
+        <View style={{ paddingBottom: 10 }}></View>
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => navigation.navigate("Map Screen")}
@@ -253,6 +271,7 @@ const styles = StyleSheet.create({
   },
   tag: {
     color: "#B066A4",
+    fontWeight: "600",
   },
   cardContainer: {
     paddingVertical: HP(1.78),
