@@ -121,7 +121,7 @@ function NearbyFiresScreen({ navigation }) {
     let totalDistance =
       Math.pow(latitudeDifference, 2) + Math.pow(longitudeDifference, 2);
     let finalDistance = Math.pow(totalDistance, 1 / 2);
-    if (finalDistance > 1500) {
+    if (finalDistance > range) {
       return false;
     } else {
       setDistance(finalDistance);
@@ -215,17 +215,20 @@ function NearbyFiresScreen({ navigation }) {
                 )
                   .then((response) => response.json())
                   .then((res) => {
+                    setFires([])
                     setFires(reverseGeocode(res.events));
                     //console.log(res.events)
                   });
               }}
               itemStyle={{ color: "#fff" }}
-              themeVariant={"light"}
             >
               <Picker.Item label="10" value="10" />
               <Picker.Item label="25" value="25" />
               <Picker.Item label="50" value="50" />
-              <Picker.Item label="75" value="75" />
+              <Picker.Item label="100" value="75" />
+              <Picker.Item label="500" value="500" />
+              <Picker.Item label="1000" value="1000" />
+              <Picker.Item label="2000" value="2000" />
             </Picker>
           </View>
         </View>
