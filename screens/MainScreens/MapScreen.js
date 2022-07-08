@@ -43,6 +43,21 @@ export default function MapScreen() {
     ));
   };
 
+  let checkRelevancy = (updateTime) => {
+    let stringTime = JSON.stringify(updateTime);
+    return stringTime.indexOf("2022") >= 0;
+  };
+
+  let filterFires = (fire) => {
+    let amendedFires = []
+    for (let i = 0; i < fire.length; i++) {
+      if(checkRelevancy(fire[i].geometry[0].date)){
+        amendedFires.push(fire[i])
+      }
+    }
+    return amendedFires
+  }
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -64,7 +79,7 @@ export default function MapScreen() {
       fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`)
         .then((response) => response.json())
         .then((res) => {
-          setFires(res.events);
+          setFires(filterFires(res.events));
           console.log(res.events);
           console.log("exiting Use Effect");
         });
@@ -95,10 +110,10 @@ export default function MapScreen() {
             
           />
         ))}
-        <Marker
+        {/* <Marker
           location={{ longitude: longitude, latitude: latitude }}
           image={require("./navigation.png")}
-        />
+        /> */}
       </MapView>
     </View>
   ) : (

@@ -195,35 +195,39 @@ function NearbyFiresScreen({ navigation }) {
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.headerContainer}>
-          <Text style={styles.heading}>Fires Nearby</Text>
-          <Text style={styles.desc}>View nearby fires</Text>
-          <Picker
-            selectedValue={stringRange}
-            style={{
-              height: HP(5.9),
-              width: WP(38.4),
-              paddingBottom: HP(22.5),
-            }}
-            onValueChange={(itemValue, itemIndex) => {
-              setRange(parseInt(itemValue));
-              setStringRange(itemValue);
-              fetch(
-                `https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`
-              )
-                .then((response) => response.json())
-                .then((res) => {
-                  setFires(reverseGeocode(res.events));
-                  //console.log(res.events)
-                });
-            }}
-            itemStyle={{ color: "#fff" }}
-            themeVariant={"light"}
-          >
-            <Picker.Item label="10" value="10" />
-            <Picker.Item label="25" value="25" />
-            <Picker.Item label="50" value="50" />
-            <Picker.Item label="75" value="75" />
-          </Picker>
+          <View>
+            <Text style={styles.heading}>Fires Nearby</Text>
+            <Text style={styles.desc}>View nearby fires</Text>
+          </View>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={stringRange}
+              style={{
+                height: HP(5.9),
+                width: WP(38.4),
+                paddingBottom: HP(22.5),
+              }}
+              onValueChange={(itemValue, itemIndex) => {
+                setRange(parseInt(itemValue));
+                setStringRange(itemValue);
+                fetch(
+                  `https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`
+                )
+                  .then((response) => response.json())
+                  .then((res) => {
+                    setFires(reverseGeocode(res.events));
+                    //console.log(res.events)
+                  });
+              }}
+              itemStyle={{ color: "#fff" }}
+              themeVariant={"light"}
+            >
+              <Picker.Item label="10" value="10" />
+              <Picker.Item label="25" value="25" />
+              <Picker.Item label="50" value="50" />
+              <Picker.Item label="75" value="75" />
+            </Picker>
+          </View>
         </View>
         <FlatList
           data={fires}
@@ -429,5 +433,12 @@ const styles = StyleSheet.create({
     fontSize: HP(1.66),
     fontWeight: "bold",
     color: "#fff",
+  },
+  pickerContainer: {
+    fontSize: HP(1.66),
+    fontWeight: "bold",
+    color: "#fff",
+    alignItems: 'flex-end',
+    paddingTop: HP(-10)
   },
 });
