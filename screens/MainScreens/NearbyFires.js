@@ -200,10 +200,9 @@ function NearbyFiresScreen({ navigation }) {
           <Picker
             selectedValue={stringRange}
             style={{
-              height: 50,
-              width: 150,
-              paddingBottom: 200,
-              paddingLeft: 50,
+              height: HP(5.9),
+              width: WP(38.4),
+              paddingBottom: HP(22.5),
             }}
             onValueChange={(itemValue, itemIndex) => {
               setRange(parseInt(itemValue));
@@ -220,10 +219,10 @@ function NearbyFiresScreen({ navigation }) {
             itemStyle={{ color: "#fff" }}
             themeVariant={"light"}
           >
+            <Picker.Item label="10" value="10" />
+            <Picker.Item label="25" value="25" />
             <Picker.Item label="50" value="50" />
-            <Picker.Item label="100" value="100" />
-            <Picker.Item label="500" value="500" />
-            <Picker.Item label="1000" value="1000" />
+            <Picker.Item label="75" value="75" />
           </Picker>
         </View>
         <FlatList
