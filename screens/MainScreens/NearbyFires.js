@@ -8,12 +8,15 @@ import {
   ActivityIndicator,
   Platform,
 } from "react-native";
-import { Text, Icon } from "native-base";
-
+import {Picker} from '@react-native-picker/picker'
+import { Text, Icon, Button } from "native-base";
+import * as WebBrowser from 'expo-web-browser';
 import * as Location from "expo-location";
 import { AntDesign } from "@expo/vector-icons";
 import { HP, WP } from "../../config/responsive";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import MultiSelect from 'react-native-multiple-select';
+
 const Face = ({ icon, title, color, full }) => {
   return (
     <View style={styles.faceGroup}>
@@ -51,7 +54,12 @@ const Rating = ({ rating }) => {
   );
 };
 
-export const CardHome = ({ title, info, noHeader, noFooter, book }) => {
+export const CardHome = ({ title, info, noHeader, firecause, percentagecontained, link, status}) => {
+
+  let handleOpenBrowser = () => {
+    WebBrowser.openBrowserAsync(`${link}`)
+  }
+
   return (
     <View style={styles.cardContainer}>
       {!noHeader && <View style={styles.cardHeaderContaner}></View>}
@@ -68,7 +76,13 @@ export const CardHome = ({ title, info, noHeader, noFooter, book }) => {
             <Text style={styles.cardName}>{info.name}</Text>
             <Text style={styles.cardTime}>{info.time}</Text>
             <Text style={styles.cardAddress}>{info.address}</Text>
-            <Text style={styles.cardAddress}>{info.detail}</Text>
+            <Text style={styles.cardAddress}>{info.status}</Text>
+            <Text style={styles.cardAddress}>{info.source}</Text>
+            {/* <Text style={styles.cardAddress}>{info.firecause}</Text>
+            <Text style={styles.cardAddress}>{info.percentagecontained}</Text> */}
+            <Button transparent onPress={handleOpenBrowser} >
+              <Text style={{color: '#FF5349'}}>View</Text>
+            </Button>
             {info.rating && <Rating rating={info.rating} />}
           </View>
         </View>
@@ -84,7 +98,14 @@ function NearbyFiresScreen({ navigation }) {
   const [locationState, setGeocodedLocation] = useState();
   const [Longitude, setLongitude] = useState();
   const [Latitude, setLatitude] = useState();
+  const [range, setRange] = useState(50);
+  const [stringRange, setStringRange] = useState("50")
   const [distance, setDistance] = useState();
+
+  let checkRelevancy = (updateTime) => {
+    let stringTime = JSON.stringify(updateTime)
+    return stringTime.indexOf("2022") >= 0 
+  }
 
   let calculateDistance = (longitude, latitude) => {
     //console.log("enters CalculateDistance")
@@ -96,7 +117,7 @@ function NearbyFiresScreen({ navigation }) {
     );
     let totalDistance = Math.pow(latitudeDifference, 2) + Math.pow(longitudeDifference, 2);
     let finalDistance = Math.pow(totalDistance, 1 / 2);
-    if (finalDistance > 600) {      
+    if (finalDistance > 1500) {      
       return false;
     } else {
       setDistance(finalDistance);
@@ -117,7 +138,7 @@ function NearbyFiresScreen({ navigation }) {
         calculateDistance(
           fire[i].geometry[0].coordinates[0],
           fire[i].geometry[0].coordinates[1]
-        )
+        ) && checkRelevancy(fire[i].geometry[0].date)
       ) {
         amendedFires.push(fire[i]);
         console.log("before fetch amendedfires" + amendedFires)
@@ -154,13 +175,6 @@ function NearbyFiresScreen({ navigation }) {
         // console.log(location)
         setLongitude(location.coords.longitude)
         setLatitude(location.coords.latitude)
-
-        fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`)
-          .then((response) => response.json())
-          .then((res) => {
-            setFires(reverseGeocode(res.events));
-            //console.log(res.events)
-          });
       } else {
         <ActivityIndicator />;
       }
@@ -172,6 +186,28 @@ function NearbyFiresScreen({ navigation }) {
         <View style={styles.headerContainer}>
           <Text style={styles.heading}>Fires Nearby</Text>
           <Text style={styles.desc}>View nearby fires</Text>
+          <Picker
+            selectedValue={stringRange}
+            style={{ height: 50, width: 150, paddingBottom: 200, paddingLeft: 50 }}
+            onValueChange={(itemValue, itemIndex) => {
+              setRange(parseInt(itemValue))
+              setStringRange(itemValue)
+              fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`)
+              .then((response) => response.json())
+              .then((res) => {
+                setFires(reverseGeocode(res.events));
+                //console.log(res.events)
+              });
+            }
+          }
+            itemStyle={{color:"#fff"}}
+            themeVariant={'light'}
+          >
+          <Picker.Item label="50" value="50" />
+          <Picker.Item label="100" value="100" />
+          <Picker.Item label="500" value="500" />
+          <Picker.Item label="1000" value="1000" />
+          </Picker>
         </View>
         <FlatList
           data={fires}
@@ -181,10 +217,14 @@ function NearbyFiresScreen({ navigation }) {
               info={{
                 name: `${item.title} ${item.geometry[0].coordinates[3]}`,//Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States
                 time: `Distance away: ${item.geometry[0].coordinates[2]} miles`,
-                address: "Fire-Type:",//Wildfire
+                address: `Type: ${item.categories[0].title}`,//Wildfire
                 tag: `Update-time: ${item.geometry[0].date}`,
-                detail: `Source: Local Authority${"\n"}Status: Active${"\n"}Fire-Cause: Unknown${"\n"}Percentage Contained: N/a`,
+                source: `Source: ${item.sources[0].id}`,
+                status: `Status: Active`,
+                // firecause:`Fire-Cause: Unknown`,
+                // percentagecontained: `Percentage Contained: N/a`
               }}
+              link={item.sources[0].url}
             />
           )}
         />
