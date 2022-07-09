@@ -76,7 +76,7 @@ export default function MapScreen() {
           <Text>{}</Text>
         </AnimatedLoader>;
       }
-      fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`)
+      await fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`)
         .then((response) => response.json())
         .then((res) => {
           setFires(filterFires(res.events));

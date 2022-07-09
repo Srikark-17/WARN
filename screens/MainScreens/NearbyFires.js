@@ -108,10 +108,11 @@ function NearbyFiresScreen({ navigation }) {
   const [range, setRange] = useState(50);
   const [stringRange, setStringRange] = useState("50");
   const [distance, setDistance] = useState();
+  const [state, setState] = useState();
 
   let checkRelevancy = (updateTime) => {
     let stringTime = JSON.stringify(updateTime);
-    return stringTime.indexOf("2022") >= 0;
+    return stringTime.includes("2022")
   };
 
   let calculateDistance = (longitude, latitude) => {
@@ -126,18 +127,50 @@ function NearbyFiresScreen({ navigation }) {
     } else {
       setDistance(finalDistance);
       console.log(finalDistance);
-      console.log("properly entered");
+      // console.log("properly entered");
       return true;
     }
   };
 
-  let reverseGeocode = (fire) => {
+  let retrieveDistance = (longitude, latitude) => {
+    //console.log("enters CalculateDistance")
+    let latitudeDifference = Math.abs((Latitude - latitude))  * 69;
+    let longitudeDifference = Math.abs((Longitude - longitude)) *  54.6;
+    let totalDistance =
+      Math.pow(latitudeDifference, 2) + Math.pow(longitudeDifference, 2);
+    let finalDistance = Math.pow(totalDistance, 1 / 2);
+    return Math.round(finalDistance)
+  };
+
+  let convertCoords = async (latitude, longitude) => {
+    await fetch(`
+    https://api.bigdatacloud.net/data/reverse-geocode?latitude=${latitude}&longitude=${longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`)
+        .then((response) => response.json())
+        .then((res) => {
+          console.log(res);
+          let resultsTitle = `${res.events}` + `${res.principalSubdivisionCode}`
+          console.log(resultsTitle)
+          return resultsTitle
+          //amendedFires.geometry[0].coordinates.push(resultsTitle);
+          //console.log(resultsTitle)
+          //console.log(res)
+          //arrayLocations.push(resultsTitle);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
+
+  let filterArray = (fire) => {
     console.log("enters reverseGeocode");
     let amendedFires = [];
-    let arrayLocations = [];
-    let latestLocation = [];
     console.log("originalfires" + fire.length);
     for (let i = 0; i < fire.length; i++) {
+      console.log("state:" + calculateDistance(
+        fire[i].geometry[0].coordinates[0],
+        fire[i].geometry[0].coordinates[1]
+      ) +
+      checkRelevancy(fire[i].geometry[0].date))
       if (
         calculateDistance(
           fire[i].geometry[0].coordinates[0],
@@ -147,30 +180,21 @@ function NearbyFiresScreen({ navigation }) {
       ) {
         amendedFires.push(fire[i]);
         console.log("before fetch amendedfires" + amendedFires);
-        console.log(fire[i]);
-        // amendedFires.geometry[0].coordinates.push(distance);
-        //setDistance(0);
-        console.log("enters fetch");
         fetch(`
       https://api.bigdatacloud.net/data/reverse-geocode?latitude=${fire[i].geometry[0].coordinates[0]}&longitude=${fire[i].geometry[0].coordinates[1]}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`)
           .then((response) => response.json())
           .then((res) => {
             console.log(res);
             let resultsTitle = `${res.events}, ${res.principalSubdivisionCode}`;
-            //amendedFires.geometry[0].coordinates.push(resultsTitle);
-            //console.log(resultsTitle)
-            //console.log(res)
-            //arrayLocations.push(resultsTitle);
           })
           .catch((error) => {
             console.log(error);
           });
       }
-      //setGeocodedLocation(arrayLocations);
     }
     console.log("after fetch amendedfires: " + amendedFires);
     console.log("amended fires length is :" + amendedFires.length);
-    return amendedFires;
+    setFires(amendedFires)
   };
 
   useEffect(() => {
@@ -207,16 +231,16 @@ function NearbyFiresScreen({ navigation }) {
                 width: WP(38.4),
                 paddingBottom: HP(22.5),
               }}
-              onValueChange={(itemValue, itemIndex) => {
+              onValueChange={ async (itemValue, itemIndex) => {
                 setRange(parseInt(itemValue));
                 setStringRange(itemValue);
-                fetch(
+                await fetch(
                   `https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`
                 )
                   .then((response) => response.json())
                   .then((res) => {
-                    setFires([])
-                    setFires(reverseGeocode(res.events));
+                    // setFires([])
+                    filterArray(res.events)
                     //console.log(res.events)
                   });
               }}
@@ -228,6 +252,7 @@ function NearbyFiresScreen({ navigation }) {
               <Picker.Item label="100" value="75" />
               <Picker.Item label="500" value="500" />
               <Picker.Item label="1000" value="1000" />
+              <Picker.Item label="1000" value="1500" />
               <Picker.Item label="2000" value="2000" />
             </Picker>
           </View>
@@ -238,8 +263,8 @@ function NearbyFiresScreen({ navigation }) {
             <CardHome
               title=""
               info={{
-                name: `${item.title} ${item.geometry[0].coordinates[3]}`, //Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States
-                time: `Distance away: ${item.geometry[0].coordinates[2]} miles`,
+                name: `${item.title} ${convertCoords(item.geometry[0].coordinates[0], item.geometry[0].coordinates[1])}`, //Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States
+                time: `Distance away: ${retrieveDistance(item.geometry[0].coordinates[0], item.geometry[0].coordinates[1])} miles`,
                 address: `Type: ${item.categories[0].title}`, //Wildfire
                 tag: `${item.geometry[0].date.slice(
                   0,
