@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Callout, Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { StyleSheet, View, Dimensions, Text } from "react-native";
 import AnimatedLoader from "react-native-animated-loader";
@@ -62,7 +62,9 @@ export default function MapScreen() {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status === "granted") {
-        const location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced, });
+        const location = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Balanced,
+        });
         setLongitude(location.coords.longitude);
         setLatitude(location.coords.latitude);
       } else {
@@ -107,8 +109,18 @@ export default function MapScreen() {
             }}
             title={report.title}
             description={report.sources.url}
-            
-          />
+          >
+            <Callout tooltip>
+              <View>
+                <View style={styles.bubble}>
+                  <Text style={styles.name}>{report.title}</Text>
+                  <Text>{report.sources.url}</Text>
+                </View>
+                <View style={styles.arrowBorder} />
+                <View style={styles.arrow} />
+              </View>
+            </Callout>
+          </Marker>
         ))}
         {/* <Marker
           location={{ longitude: longitude, latitude: latitude }}
@@ -134,7 +146,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     justifyContent: "center",
-    alignContent: "flex-start"
+    alignContent: "flex-start",
   },
   map: {
     width: Dimensions.get("window").width,
@@ -143,5 +155,40 @@ const styles = StyleSheet.create({
   lottie: {
     width: WP(20),
     height: HP(5),
+  },
+  bubble: {
+    flexDirection: "column",
+    alignSelf: "flex-start",
+    backgroundColor: "#fff",
+    borderRadius: 6,
+    borderColor: "#ccc",
+    borderWidth: 0.5,
+    paddingVertical: HP(1.78),
+    paddingHorizontal: WP(3.85),
+    width: WP(38.46),
+  },
+  arrow: {
+    backgroundColor: "transparent",
+    borderColor: "transparent",
+    borderTopColor: "#fff",
+    borderWidth: 16,
+    alignSelf: "center",
+    marginTop: HP(-3.79),
+  },
+  arrowBorder: {
+    backgroundColor: "transparent",
+    borderColor: "transparent",
+    borderTopColor: "#007a87",
+    borderWidth: 16,
+    alignSelf: "center",
+    marginTop: HP(-0.06),
+  },
+  name: {
+    fontSize: HP(1.9),
+    marginBottom: HP(0.06),
+  },
+  image: {
+    width: "100%",
+    height: HP(9.48),
   },
 });
