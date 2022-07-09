@@ -58,7 +58,6 @@ function RegisterScreen({ navigation }) {
                 placeholder="Full Name"
                 autoCapitalize="none"
                 autoCorrect={false}
-                textContentType="fullName"
                 placeholderTextColor="#999"
                 style={styles.textColor}
                 onChangeText={(text) => setFullName(text)}
