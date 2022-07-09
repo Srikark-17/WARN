@@ -6,7 +6,7 @@ import {
   StatusBar,
   ScrollView,
   TouchableOpacity,
-  RefreshControl
+  RefreshControl,
 } from "react-native";
 import {
   MaterialIcons,
@@ -41,22 +41,22 @@ function HomeScreen() {
     )
       .then((response) => response.json())
       .then((res) => {
-        let slicedString = res.slice(11)
-        let hours = slicedString.slice(0,2)
-        let integerHours = parseInt(hours)
-        let convertedTimezone = timezone/3600
-        let realTime = integerHours + convertedTimezone
-        console.log(realTime)
-        if (Math.sign(realTime == 0)){
-          slicedString = "An Error Has Occurred"
-          console.log("final string"+ slicedString)
+        let slicedString = res.slice(11);
+        let hours = slicedString.slice(0, 2);
+        let integerHours = parseInt(hours);
+        let convertedTimezone = timezone / 3600;
+        let realTime = integerHours + convertedTimezone;
+        console.log(realTime);
+        if (Math.sign(realTime == 0)) {
+          slicedString = "An Error Has Occurred";
+          console.log("final string" + slicedString);
         } else if (Math.sign(realTime) == -1 || Math.sign(realTime) == 0) {
-          realTime = realTime + 12
-          slicedString = realTime + slicedString.slice(2)
-          console.log(slicedString)
+          realTime = realTime + 12;
+          slicedString = realTime + slicedString.slice(2);
+          console.log(slicedString);
         }
-        console.log(slicedString)
-        setSunset(slicedString)
+        console.log(slicedString);
+        setSunset(slicedString);
       });
   };
 
@@ -114,7 +114,12 @@ function HomeScreen() {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status === "granted") {
-        let location = await Location.getCurrentPositionAsync({ accuracy: Platform.OS === 'ios' ? Location.Accuracy.Lowest : Location.Accuracy.Low});
+        let location = await Location.getCurrentPositionAsync({
+          accuracy:
+            Platform.OS === "ios"
+              ? Location.Accuracy.Lowest
+              : Location.Accuracy.Low,
+        });
         setLocation(location);
         fetch(
           `http://api.openweathermap.org/data/2.5/air_pollution?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
@@ -132,10 +137,10 @@ function HomeScreen() {
           .then((res) => {
             var temperature = K2F(res.main.temp);
             setTemperature(temperature + " °F");
-            setPressure(Math.round(res.main.pressure *  0.0145038) + " psi");
+            setPressure(Math.round(res.main.pressure * 0.0145038) + " psi");
             setWindDirection(D2D(res.wind.direction));
             setWindSpeed(M2I(res.wind.speed) + " mph");
-            convertTime(res.sys.sunset, res.timezone)
+            convertTime(res.sys.sunset, res.timezone);
             setHumidity(res.main.humidity);
           });
         fetch(
@@ -204,55 +209,63 @@ function HomeScreen() {
     " " +
     time;
 
-    const wait = timeout => {
-      return new Promise(resolve => setTimeout(resolve, timeout));
-    };
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
 
-    const [refreshing, setRefreshing] = React.useState(false);
+  const [refreshing, setRefreshing] = React.useState(false);
 
-    const onRefresh = React.useCallback(async () => {
-      setRefreshing(true);
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        let location = await Location.getCurrentPositionAsync({ accuracy: Platform.OS === 'ios' ? Location.Accuracy.Lowest : Location.Accuracy.Low});
-        setLocation(location);
-        fetch(
-          `http://api.openweathermap.org/data/2.5/air_pollution?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
-        )
-          .then((response) => response.json())
-          .then((res) => {
-            let aqiLevel = res.list[0].main.aqi;
-            setAQILevel(aqiLevel);
-            setLevelInterpretation(levelInterpreter(aqiLevel));
-          });
-        fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
-        )
-          .then((response) => response.json())
-          .then((res) => {
-            var temperature = K2F(res.main.temp);
-            setTemperature(temperature + " °F");
-            setPressure(Math.round(res.main.pressure *  0.0145038) + " psi");
-            setWindDirection(D2D(res.wind.direction));
-            setWindSpeed(M2I(res.wind.speed) + " mph");
-            convertTime(res.sys.sunset, res.timezone)
-            setHumidity(res.main.humidity);
-          });
-        fetch(
-          `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
-        )
-          .then((response) => response.json())
-          .then((res) => {
-            let resultsTitle = `${res.localityInfo.administrative[3].name}, ${res.principalSubdivisionCode}`;
-            setResultsTitle(resultsTitle);
-          });
-      }
-      wait(2000).then(() => setRefreshing(false));
-    }, []);
-    
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status === "granted") {
+      let location = await Location.getCurrentPositionAsync({
+        accuracy:
+          Platform.OS === "ios"
+            ? Location.Accuracy.Lowest
+            : Location.Accuracy.Low,
+      });
+      setLocation(location);
+      fetch(
+        `http://api.openweathermap.org/data/2.5/air_pollution?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
+      )
+        .then((response) => response.json())
+        .then((res) => {
+          let aqiLevel = res.list[0].main.aqi;
+          setAQILevel(aqiLevel);
+          setLevelInterpretation(levelInterpreter(aqiLevel));
+        });
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
+      )
+        .then((response) => response.json())
+        .then((res) => {
+          var temperature = K2F(res.main.temp);
+          setTemperature(temperature + " °F");
+          setPressure(Math.round(res.main.pressure * 0.0145038) + " psi");
+          setWindDirection(D2D(res.wind.direction));
+          setWindSpeed(M2I(res.wind.speed) + " mph");
+          convertTime(res.sys.sunset, res.timezone);
+          setHumidity(res.main.humidity);
+        });
+      fetch(
+        `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
+      )
+        .then((response) => response.json())
+        .then((res) => {
+          let resultsTitle = `${res.localityInfo.administrative[3].name}, ${res.principalSubdivisionCode}`;
+          setResultsTitle(resultsTitle);
+        });
+    }
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   return (
-    <ScrollView style={styles.container}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     >
       <StatusBar barStyle="light-content" />
       <View style={styles.textContainer}>
@@ -305,23 +318,12 @@ function HomeScreen() {
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Humidity</Text>
             <Text style={styles.bicardText}>{humidity} %</Text>
-            <Ionicons name="water" size={40} color="#fff" />
+            <Ionicons name="water" size={40} color="#d4f1f9" />
           </View>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Sunset</Text>
             <Text style={styles.bicardText}>{sunset} PM</Text>
-            <Feather name="sunset" size={40} color="#fff" />
-          </View>
-        </View>
-        <View style={styles.bicardContainer}>
-          <View style={{
-             borderRadius: 12,
-             width: WP(41.03),
-             height: HP(12.14),
-             alignItems: "center",
-             justifyContent: "space-evenly",
-          }}>
-
+            <Feather name="sunset" size={40} color="#FAC668" />
           </View>
         </View>
       </View>
