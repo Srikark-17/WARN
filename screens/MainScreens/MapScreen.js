@@ -6,9 +6,12 @@ import * as Location from "expo-location";
 import { StyleSheet, View, Dimensions, Text } from "react-native";
 import AnimatedLoader from "react-native-animated-loader";
 import { HP, WP } from "../../config/responsive";
+import { useRoute } from '@react-navigation/native';
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-export default function MapScreen() {
+export default function MapScreen({navigation}) {
+  // const route = useRoute();
+  //const route = useRoute();
   const [longitude, setLongitude] = useState();
   const [visible, setVisible] = useState(true);
   const [latitude, setLatitude] = useState();
@@ -32,19 +35,19 @@ export default function MapScreen() {
     ],
   };
 
-  let mapMarkers = () => {
-    return fires.map((report) => (
-      <Marker
-        key={report.id}
-        coordinate={{
-          latitude: report.geometry[0].coordinates[0],
-          longitude: report.geometry[0].coordinates[1],
-        }}
-        title={report.title}
-        description={report.sources.url}
-      />
-    ));
-  };
+  // let mapMarkers = () => {
+  //   return route.params.selectedFires.map((report) => (
+  //     <Marker
+  //       key={report.id}
+  //       coordinate={{
+  //         latitude: report.geometry[0].coordinates[0],
+  //         longitude: report.geometry[0].coordinates[1],
+  //       }}
+  //       title={report.title}
+  //       description={report.sources.url}
+  //     />
+  //   ));
+  // };
 
   let checkRelevancy = (updateTime) => {
     let stringTime = JSON.stringify(updateTime);
@@ -81,6 +84,7 @@ export default function MapScreen() {
           <Text>{}</Text>
         </AnimatedLoader>;
       }
+      //console.log(route.params.selectedFires)
       await fetch(`https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`)
         .then((response) => response.json())
         .then((res) => {

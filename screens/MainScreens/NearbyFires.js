@@ -7,6 +7,7 @@ import {
   FlatList,
   ActivityIndicator,
   Platform,
+  InteractionManager,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Text, Icon, Button } from "native-base";
@@ -16,6 +17,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { HP, WP } from "../../config/responsive";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MultiSelect from "react-native-multiple-select";
+import { set } from "react-native-reanimated";
 
 const Face = ({ icon, title, color, full }) => {
   return (
@@ -105,14 +107,26 @@ function NearbyFiresScreen({ navigation }) {
   const [locationState, setGeocodedLocation] = useState();
   const [Longitude, setLongitude] = useState();
   const [Latitude, setLatitude] = useState();
-  const [range, setRange] = useState(50);
-  const [stringRange, setStringRange] = useState("50");
+  const [range, setRange] = useState();
+  const [stringRange, setStringRange] = useState();
   const [distance, setDistance] = useState();
   const [state, setState] = useState();
+  const [data, setData] = useState();
 
-  let checkRelevancy = (updateTime) => {
-    let stringTime = JSON.stringify(updateTime);
-    return stringTime.includes("2022");
+  // function useForceUpdate() {
+  //   let [value, setState] = useState(true);
+  //   return () => setState(!value);
+  // }  
+
+  let checkRelevancy = (events) => {
+    let relevantList = []
+    for (let i = 0; i < events.length; i++) {
+      let stringTime = JSON.stringify(events[i].geometry[0].date); // .geometry[0].date
+      if(stringTime.includes("2022")){
+        relevantList.push(events[i])
+      }
+    }
+    return relevantList
   };
 
   let calculateDistance = (longitude, latitude) => {
@@ -122,7 +136,7 @@ function NearbyFiresScreen({ navigation }) {
     let totalDistance =
       Math.pow(latitudeDifference, 2) + Math.pow(longitudeDifference, 2);
     let finalDistance = Math.pow(totalDistance, 1 / 2);
-    if (finalDistance > range) {
+    if (finalDistance > parseInt(range)) {
       return false;
     } else {
       setDistance(finalDistance);
@@ -166,20 +180,11 @@ function NearbyFiresScreen({ navigation }) {
     let amendedFires = [];
     console.log("originalfires" + fire.length);
     for (let i = 0; i < fire.length; i++) {
-      console.log(
-        "state:" +
-          calculateDistance(
-            fire[i].geometry[0].coordinates[0],
-            fire[i].geometry[0].coordinates[1]
-          ) +
-          checkRelevancy(fire[i].geometry[0].date)
-      );
       if (
         calculateDistance(
           fire[i].geometry[0].coordinates[0],
           fire[i].geometry[0].coordinates[1]
-        ) &&
-        checkRelevancy(fire[i].geometry[0].date)
+        ) 
       ) {
         amendedFires.push(fire[i]);
         console.log("before fetch amendedfires" + amendedFires);
@@ -188,7 +193,6 @@ function NearbyFiresScreen({ navigation }) {
           .then((response) => response.json())
           .then((res) => {
             console.log(res);
-            let resultsTitle = `${res.events}, ${res.principalSubdivisionCode}`;
           })
           .catch((error) => {
             console.log(error);
@@ -211,6 +215,15 @@ function NearbyFiresScreen({ navigation }) {
               : Location.Accuracy.Low,
         });
         // console.log(location)
+        await fetch(
+          `https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`
+        )
+        .then((response) => response.json())
+        .then((res) => {
+          setData(checkRelevancy(res.events))
+          //filterArray(res);
+          //console.log(res.events)
+        });
         setLongitude(location.coords.longitude);
         setLatitude(location.coords.latitude);
       } else {
@@ -218,6 +231,9 @@ function NearbyFiresScreen({ navigation }) {
       }
     })();
   }, []);
+
+  // let forceUpdate = useForceUpdate();
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -235,17 +251,14 @@ function NearbyFiresScreen({ navigation }) {
                 paddingBottom: HP(22.5),
                 alignSelf: "center",
               }}
-              onValueChange={async (itemValue, itemIndex) => {
+              onValueChange={(itemValue) => {
                 setRange(parseInt(itemValue));
                 setStringRange(itemValue);
-                await fetch(
-                  `https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`
-                )
-                  .then((response) => response.json())
-                  .then((res) => {
-                    filterArray(res.events);
-                    //console.log(res.events)
-                  });
+                filterArray(data)
+                // setTimeout(filterArray(data), 1000);
+                setRange(parseInt(itemValue));
+                setStringRange(itemValue);
+                filterArray(data)
               }}
               itemStyle={{ color: "#fff" }}
             >
@@ -291,7 +304,11 @@ function NearbyFiresScreen({ navigation }) {
         <View style={{ paddingBottom: 10 }}></View>
         <TouchableOpacity
           activeOpacity={1}
-          onPress={() => navigation.navigate("Map Screen")}
+          onPress={() => {
+              navigation.navigate("Map Screen", {
+              selectedFires: data
+            })
+          }}
         >
           <View style={styles.button}>
             <Text style={styles.buttonText}>View Map</Text>
