@@ -103,7 +103,7 @@ export const CardHome = ({
 let apiKey = "f0aaf130ca6e4d849bda5e9780058332";
 
 function NearbyFiresScreen({ navigation }) {
-  const [fires, setFires] = useState();
+  const [fires, setFires] = useState([]);
   const [locationState, setGeocodedLocation] = useState();
   const [Longitude, setLongitude] = useState();
   const [Latitude, setLatitude] = useState();
@@ -129,22 +129,22 @@ function NearbyFiresScreen({ navigation }) {
     return relevantList
   };
 
-  let calculateDistance = (longitude, latitude) => {
-    //console.log("enters CalculateDistance")
-    let latitudeDifference = Math.abs((Latitude - latitude) * 69);
-    let longitudeDifference = Math.abs((Longitude - longitude) * 54.6);
-    let totalDistance =
-      Math.pow(latitudeDifference, 2) + Math.pow(longitudeDifference, 2);
-    let finalDistance = Math.pow(totalDistance, 1 / 2);
-    if (finalDistance > parseInt(range)) {
-      return false;
-    } else {
-      setDistance(finalDistance);
-      console.log(finalDistance);
-      // console.log("properly entered");
-      return true;
-    }
-  };
+  // let calculateDistance = (longitude, latitude) => {
+  //   //console.log("enters CalculateDistance")
+  //   let latitudeDifference = Math.abs((Latitude - latitude) * 69);
+  //   let longitudeDifference = Math.abs((Longitude - longitude) * 54.6);
+  //   let totalDistance =
+  //     Math.pow(latitudeDifference, 2) + Math.pow(longitudeDifference, 2);
+  //   let finalDistance = Math.pow(totalDistance, 1 / 2);
+  //   if (finalDistance > 1500) {
+  //     return false;
+  //   } else {
+  //     setDistance(finalDistance);
+  //     console.log(finalDistance);
+  //     // console.log("properly entered");
+  //     return true;
+  //   }
+  // };
 
   let retrieveDistance = (longitude, latitude) => {
     //console.log("enters CalculateDistance")
@@ -180,28 +180,28 @@ function NearbyFiresScreen({ navigation }) {
     let amendedFires = [];
     console.log("originalfires" + fire.length);
     for (let i = 0; i < fire.length; i++) {
-      if (
-        calculateDistance(
-          fire[i].geometry[0].coordinates[0],
-          fire[i].geometry[0].coordinates[1]
-        ) 
-      ) {
+     
+      if(retrieveDistance(
+        fire[i].geometry[0].coordinates[0],
+        fire[i].geometry[0].coordinates[1]
+      ) < 2000){
+        console.log(fire[i])
         amendedFires.push(fire[i]);
-        console.log("before fetch amendedfires" + amendedFires);
-        fetch(`
-      https://api.bigdatacloud.net/data/reverse-geocode?latitude=${fire[i].geometry[0].coordinates[0]}&longitude=${fire[i].geometry[0].coordinates[1]}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`)
-          .then((response) => response.json())
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
       }
+      //console.log("before fetch amendedfires" + amendedFires);
+      //   fetch(`
+      // https://api.bigdatacloud.net/data/reverse-geocode?latitude=${fire[i].geometry[0].coordinates[0]}&longitude=${fire[i].geometry[0].coordinates[1]}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`)
+      //     .then((response) => response.json())
+      //     .then((res) => {
+      //       console.log(res);
+      //     })
+      //     .catch((error) => {
+      //       console.log(error);
+      //     });
     }
     console.log("after fetch amendedfires: " + amendedFires);
     console.log("amended fires length is :" + amendedFires.length);
-    setFires(amendedFires);
+    return amendedFires
   };
 
   useEffect(() => {
@@ -220,8 +220,12 @@ function NearbyFiresScreen({ navigation }) {
         )
         .then((response) => response.json())
         .then((res) => {
-          setData(checkRelevancy(res.events))
-          //filterArray(res);
+          // setData(checkRelevancy(res.events))
+          // filterArray(res);
+         // setFires(res.events)
+         let result1 = checkRelevancy(res.events)
+         let result2 = filterArray(result1)
+          setFires(result2)
           //console.log(res.events)
         });
         setLongitude(location.coords.longitude);
@@ -243,7 +247,7 @@ function NearbyFiresScreen({ navigation }) {
             <Text style={styles.desc}>View nearby fires</Text>
           </View>
           <View style={styles.pickerContainer}>
-            <Picker
+            {/* <Picker
               selectedValue={stringRange}
               style={{
                 height: HP(5.9),
@@ -270,13 +274,15 @@ function NearbyFiresScreen({ navigation }) {
               <Picker.Item label="1000" value="1000" />
               <Picker.Item label="1500" value="1500" />
               <Picker.Item label="2000" value="2000" />
-            </Picker>
+            </Picker> */}
           </View>
         </View>
-        <FlatList
+        {/* <FlatList
           data={fires}
-          renderItem={({ item }) => (
+          renderItem={({ item }) => ( */}
+          {fires.map((item) => (
             <CardHome
+              key={item.id}
               title=""
               info={{
                 name: `${item.title} ${convertCoords(
@@ -299,8 +305,9 @@ function NearbyFiresScreen({ navigation }) {
               }}
               link={item.sources[0].url}
             />
-          )}
-        />
+            ))}
+          {/* )}
+        /> */}
         <View style={{ paddingBottom: 10 }}></View>
         <TouchableOpacity
           activeOpacity={1}
