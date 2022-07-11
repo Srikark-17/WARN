@@ -87,7 +87,7 @@ export const CardHome = ({
             <Text style={styles.cardAddress}>{info.source}</Text>
             {/* <Text style={styles.cardAddress}>{info.firecause}</Text>
             <Text style={styles.cardAddress}>{info.percentagecontained}</Text> */}
-            <Button transparent onPress={handleOpenBrowser}>
+            <Button transparent onPress={() => handleOpenBrowser()}>
               <Text style={{ color: "#FF5349" }}>View</Text>
             </Button>
             {info.rating && <Rating rating={info.rating} />}
@@ -243,7 +243,6 @@ function NearbyFiresScreen({ navigation }) {
                 )
                   .then((response) => response.json())
                   .then((res) => {
-                    setFires([])
                     filterArray(res.events);
                     //console.log(res.events)
                   });

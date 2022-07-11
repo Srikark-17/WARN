@@ -121,7 +121,8 @@ export default function MapScreen() {
               <View>
                 <View style={styles.bubble}>
                   <Text style={styles.name}>{report.title}</Text>
-                  <Button transparent onPress={handleOpenBrowser(report.sources[0].url)}>
+                  <Text style={styles.name}>{report.sources[0].url}</Text>
+                  <Button transparent onPress={() => handleOpenBrowser(report.sources[0].url)}>
                     <Text style={{ color: "#FF5349" }}>View</Text>
                   </Button>
                   {/* <Text>{item.sources[0].url}</Text> */}
