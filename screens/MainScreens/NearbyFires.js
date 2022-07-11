@@ -243,7 +243,7 @@ function NearbyFiresScreen({ navigation }) {
                 )
                   .then((response) => response.json())
                   .then((res) => {
-                    // setFires([])
+                    setFires([])
                     filterArray(res.events);
                     //console.log(res.events)
                   });

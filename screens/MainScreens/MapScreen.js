@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import MapView, { Callout, Marker } from "react-native-maps";
+import {Icon, Button } from "native-base";
+import * as WebBrowser from "expo-web-browser";
 import * as Location from "expo-location";
 import { StyleSheet, View, Dimensions, Text } from "react-native";
 import AnimatedLoader from "react-native-animated-loader";
 import { HP, WP } from "../../config/responsive";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function MapScreen() {
   const [longitude, setLongitude] = useState();
@@ -88,6 +91,10 @@ export default function MapScreen() {
     })();
   }, []);
 
+  let handleOpenBrowser = (link) => {
+    WebBrowser.openBrowserAsync(`${link}`);
+  };
+
   return latitude && latitude && fires ? (
     <View style={styles.container}>
       <MapView
@@ -114,8 +121,12 @@ export default function MapScreen() {
               <View>
                 <View style={styles.bubble}>
                   <Text style={styles.name}>{report.title}</Text>
-                  <Text>{report.sources.url}</Text>
+                  <Button transparent onPress={handleOpenBrowser(report.sources[0].url)}>
+                    <Text style={{ color: "#FF5349" }}>View</Text>
+                  </Button>
+                  {/* <Text>{item.sources[0].url}</Text> */}
                 </View>
+                
                 <View style={styles.arrowBorder} />
                 <View style={styles.arrow} />
               </View>
