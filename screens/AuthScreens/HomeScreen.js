@@ -34,6 +34,8 @@ function HomeScreen() {
   const [humidity, setHumidity] = useState();
   const [resultsTitle, setResultsTitle] = useState();
   const [levelInterpretation, setLevelInterpretation] = useState();
+  const [iconName, setIconName] = useState();
+  const [iconColor, setIconColor] = useState();
 
   let convertTime = (time, timezone) => {
     fetch(
@@ -136,7 +138,23 @@ function HomeScreen() {
           .then((response) => response.json())
           .then((res) => {
             var temperature = K2F(res.main.temp);
-            setTemperature(temperature + " °F");
+            if (temperature <= 32) {
+              setIconName("thermometer-0");
+              setIconColor("#7AD7FO");
+            } else if (temperature >= 33) {
+              setIconName("thermometer-1");
+              setIconColor("#B7E9F7");
+            } else if (temperature >= 54) {
+              setIconName("thermometer-2");
+              setIconColor("#FCAE1E");
+            } else if (temperature >= 55) {
+              setIconName("thermometer-3");
+              setIconColor("#FA8128");
+            } else if (temperature >= 91) {
+              setIconName("thermometer-4");
+              setIconColor("#FF5349D");
+            }
+            setTemperature(temperature);
             setPressure(Math.round(res.main.pressure * 0.0145038) + " psi");
             setWindDirection(D2D(res.wind.direction));
             setWindSpeed(M2I(res.wind.speed) + " mph");
@@ -169,6 +187,22 @@ function HomeScreen() {
     // convert temp
     const metricTemp = (temperature - 32) * 1.8;
     const roundedMetricTemp = Math.round(metricTemp);
+    if (roundedMetricTemp <= 0) {
+      setIconName("thermometer-0");
+      setIconColor("#7AD7FO");
+    } else if (roundedMetricTemp >= 1) {
+      setIconName("thermometer-1");
+      setIconColor("#B7E9F7");
+    } else if (roundedMetricTemp >= 12) {
+      setIconName("thermometer-2");
+      setIconColor("#FCAE1E");
+    } else if (roundedMetricTemp >= 13) {
+      setIconName("thermometer-3");
+      setIconColor("#FA8128");
+    } else if (roundedMetricTemp >= 33) {
+      setIconName("thermometer-4");
+      setIconColor("#FF5349D");
+    }
     setTemperature(roundedMetricTemp + " °C");
 
     // convert pressure
@@ -296,8 +330,8 @@ function HomeScreen() {
           </View>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Temperature</Text>
-            <Text style={styles.bicardText}>{temperature}</Text>
-            <FontAwesome size={40} name="thermometer-3" color="#fff" />
+            <Text style={styles.bicardText}>{temperature + " °F"}</Text>
+            <FontAwesome size={40} name={iconName} color={iconColor} />
           </View>
         </View>
         <View style={styles.bicardContainer}>
@@ -325,6 +359,17 @@ function HomeScreen() {
             <Text style={styles.bicardText}>{sunset} PM</Text>
             <Feather name="sunset" size={40} color="#FAC668" />
           </View>
+        </View>
+        <View style={styles.bicardContainer}>
+          <View
+            style={{
+              borderRadius: 12,
+              width: WP(41.03),
+              height: HP(12.14),
+              alignItems: "center",
+              justifyContent: "space-evenly",
+            }}
+          ></View>
         </View>
       </View>
     </ScrollView>

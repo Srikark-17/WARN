@@ -107,7 +107,7 @@ function NearbyFiresScreen({ navigation }) {
   const [locationState, setGeocodedLocation] = useState();
   const [Longitude, setLongitude] = useState();
   const [Latitude, setLatitude] = useState();
-  const [range, setRange] = useState();
+  const [range, setRange] = useState(1500);
   const [stringRange, setStringRange] = useState();
   const [distance, setDistance] = useState();
   const [state, setState] = useState();
@@ -116,17 +116,17 @@ function NearbyFiresScreen({ navigation }) {
   // function useForceUpdate() {
   //   let [value, setState] = useState(true);
   //   return () => setState(!value);
-  // }  
+  // }
 
   let checkRelevancy = (events) => {
-    let relevantList = []
+    let relevantList = [];
     for (let i = 0; i < events.length; i++) {
       let stringTime = JSON.stringify(events[i].geometry[0].date); // .geometry[0].date
-      if(stringTime.includes("2022")){
-        relevantList.push(events[i])
+      if (stringTime.includes("2022")) {
+        relevantList.push(events[i]);
       }
     }
-    return relevantList
+    return relevantList;
   };
 
   // let calculateDistance = (longitude, latitude) => {
@@ -180,12 +180,13 @@ function NearbyFiresScreen({ navigation }) {
     let amendedFires = [];
     console.log("originalfires" + fire.length);
     for (let i = 0; i < fire.length; i++) {
-     
-      if(retrieveDistance(
-        fire[i].geometry[0].coordinates[0],
-        fire[i].geometry[0].coordinates[1]
-      ) < 2000){
-        console.log(fire[i])
+      if (
+        retrieveDistance(
+          fire[i].geometry[0].coordinates[0],
+          fire[i].geometry[0].coordinates[1]
+        ) < 2000
+      ) {
+        console.log(fire[i]);
         amendedFires.push(fire[i]);
       }
       //console.log("before fetch amendedfires" + amendedFires);
@@ -201,7 +202,7 @@ function NearbyFiresScreen({ navigation }) {
     }
     console.log("after fetch amendedfires: " + amendedFires);
     console.log("amended fires length is :" + amendedFires.length);
-    return amendedFires
+    return amendedFires;
   };
 
   useEffect(() => {
@@ -218,16 +219,16 @@ function NearbyFiresScreen({ navigation }) {
         await fetch(
           `https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`
         )
-        .then((response) => response.json())
-        .then((res) => {
-          // setData(checkRelevancy(res.events))
-          // filterArray(res);
-         // setFires(res.events)
-         let result1 = checkRelevancy(res.events)
-         let result2 = filterArray(result1)
-          setFires(result2)
-          //console.log(res.events)
-        });
+          .then((response) => response.json())
+          .then((res) => {
+            // setData(checkRelevancy(res.events))
+            // filterArray(res);
+            // setFires(res.events)
+            let result1 = checkRelevancy(res.events);
+            let result2 = filterArray(result1);
+            setFires(result2);
+            //console.log(res.events)
+          });
         setLongitude(location.coords.longitude);
         setLatitude(location.coords.latitude);
       } else {
@@ -235,8 +236,6 @@ function NearbyFiresScreen({ navigation }) {
       }
     })();
   }, []);
-
-  // let forceUpdate = useForceUpdate();
 
   return (
     <View style={styles.container}>
@@ -280,41 +279,41 @@ function NearbyFiresScreen({ navigation }) {
         {/* <FlatList
           data={fires}
           renderItem={({ item }) => ( */}
-          {fires.map((item) => (
-            <CardHome
-              key={item.id}
-              title=""
-              info={{
-                name: `${item.title} ${convertCoords(
-                  item.geometry[0].coordinates[0],
-                  item.geometry[0].coordinates[1]
-                )}`, //Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States
-                time: `Distance away: ${retrieveDistance(
-                  item.geometry[0].coordinates[0],
-                  item.geometry[0].coordinates[1]
-                )} miles`,
-                address: `Type: ${item.categories[0].title}`, //Wildfire
-                tag: `${item.geometry[0].date.slice(
-                  0,
-                  10
-                )} ${item.geometry[0].date.slice(11, 16)}`,
-                source: `Source: ${item.sources[0].id}`,
-                status: `Status: Active`,
-                // firecause:`Fire-Cause: Unknown`,
-                // percentagecontained: `Percentage Contained: N/a`
-              }}
-              link={item.sources[0].url}
-            />
-            ))}
-          {/* )}
+        {fires.map((item) => (
+          <CardHome
+            key={item.id}
+            title=""
+            info={{
+              name: `${item.title} ${convertCoords(
+                item.geometry[0].coordinates[0],
+                item.geometry[0].coordinates[1]
+              )}`, //Location: 115 Bear Creek Road, Martinez, CA 94553 Martinez California United States
+              time: `Distance away: ${retrieveDistance(
+                item.geometry[0].coordinates[0],
+                item.geometry[0].coordinates[1]
+              )} miles`,
+              address: `Type: ${item.categories[0].title}`, //Wildfire
+              tag: `${item.geometry[0].date.slice(
+                0,
+                10
+              )} ${item.geometry[0].date.slice(11, 16)}`,
+              source: `Source: ${item.sources[0].id}`,
+              status: `Status: Active`,
+              // firecause:`Fire-Cause: Unknown`,
+              // percentagecontained: `Percentage Contained: N/a`
+            }}
+            link={item.sources[0].url}
+          />
+        ))}
+        {/* )}
         /> */}
         <View style={{ paddingBottom: 10 }}></View>
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
-              navigation.navigate("Map Screen", {
-              selectedFires: data
-            })
+            navigation.navigate("Map Screen", {
+              selectedFires: data,
+            });
           }}
         >
           <View style={styles.button}>
