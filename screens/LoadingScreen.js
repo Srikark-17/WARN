@@ -5,7 +5,7 @@ import { HP } from "../config/responsive";
 const LoadingScreen = () => {
   return (
     <Vie style={styles.container}>
-      <Text>Loading...</Text>
+      <Text>WARN</Text>
     </Vie>
   );
 };

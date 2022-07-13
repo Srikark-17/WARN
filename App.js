@@ -2,14 +2,9 @@ import React, { useState, useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import {
-  Entypo,
-  MaterialCommunityIcons,
-  FontAwesome5,
-} from "@expo/vector-icons";
+import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import NearbyFiresScreen from "./screens/MainScreens/NearbyFires";
 import NewsFeed from "./screens/MainScreens/NewsFeed";
-import NotificationsScreen from "./screens/MainScreens/NotificationsScreen";
 import HomeScreen from "./screens/AuthScreens/HomeScreen";
 import SplashScreen from "./screens/AuthScreens/SplashScreen";
 import LoginScreen from "./screens/AuthScreens/TestLoginScreen";
@@ -129,19 +124,6 @@ function MainTabs() {
             ),
           }}
         />
-        {/* <Tab.Screen
-          name="Notifications"
-          component={NotificationsScreen}
-          options={{
-            tabBarIcon: ({ focused }) => (
-              <Entypo
-                name="bell"
-                size={24}
-                color={focused ? tabcolor : inactiveColor}
-              />
-            ),
-          }}
-        /> */}
         <Tab.Screen
           name="Nearby Fires"
           component={FireScreenNavigator}

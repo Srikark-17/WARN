@@ -5,7 +5,6 @@ import {
   Text,
   StatusBar,
   ScrollView,
-  TouchableOpacity,
   RefreshControl,
 } from "react-native";
 import {
@@ -21,9 +20,6 @@ import { HP, WP } from "../../config/responsive";
 import * as Localization from "expo-localization";
 
 function HomeScreen() {
-  let apiKey = "f0aaf130ca6e4d849bda5e9780058332";
-  //console.log(Localization.isMetric);
-
   const [location, setLocation] = useState();
   const [temperature, setTemperature] = useState();
   const [windDirection, setWindDirection] = useState();
