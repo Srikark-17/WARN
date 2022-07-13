@@ -326,7 +326,7 @@ function HomeScreen() {
             <Text style={styles.bicardText}>
               {aqiLevel} - {levelInterpretation}
             </Text>
-            <Entypo name="air" size={40} color="#fff" />
+            <Entypo name="air" size={40} color="#54DCB4" />
           </View>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Temperature</Text>
@@ -338,21 +338,21 @@ function HomeScreen() {
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Air Pressure</Text>
             <Text style={styles.bicardText}>{pressure}</Text>
-            <Feather name="wind" size={40} color="#fff" />
+            <Feather name="wind" size={40} color="#65BADF" />
           </View>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Wind Speed</Text>
             <Text style={styles.bicardText}>
               {windSpeed} {windDirection}
             </Text>
-            <AntDesign name="arrowdown" size={40} color="#fff" />
+            <AntDesign name="arrowdown" size={40} color="#38CBBC" />
           </View>
         </View>
         <View style={styles.bicardContainer}>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Humidity</Text>
             <Text style={styles.bicardText}>{humidity} %</Text>
-            <Ionicons name="water" size={40} color="#d4f1f9" />
+            <Ionicons name="water" size={40} color="#D4F1F9" />
           </View>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Sunset</Text>
