@@ -5,9 +5,10 @@ import {
   View,
   StyleSheet,
   FlatList,
-  ActivityIndicator,
   Platform,
   InteractionManager,
+  RefreshControl,
+  ActivityIndicator
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Text, Icon, Button } from "native-base";
@@ -112,6 +113,7 @@ function NearbyFiresScreen({ navigation }) {
   const [distance, setDistance] = useState();
   const [state, setState] = useState();
   const [data, setData] = useState();
+  const [returnedFiresLength, setReturnedFiresLength] = useState();
 
   // function useForceUpdate() {
   //   let [value, setState] = useState(true);
@@ -175,6 +177,10 @@ function NearbyFiresScreen({ navigation }) {
       });
   };
 
+  const wait = (timeout) => {
+    return new Promise((resolve) => setTimeout(resolve, timeout));
+  };
+
   let filterArray = (fire) => {
     console.log("enters reverseGeocode");
     let amendedFires = [];
@@ -202,6 +208,7 @@ function NearbyFiresScreen({ navigation }) {
     }
     console.log("after fetch amendedfires: " + amendedFires);
     console.log("amended fires length is :" + amendedFires.length);
+    setReturnedFiresLength(amendedFires.length)
     return amendedFires;
   };
 
@@ -237,9 +244,48 @@ function NearbyFiresScreen({ navigation }) {
     })();
   }, []);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === "granted") {
+        let location = await Location.getCurrentPositionAsync({
+          accuracy:
+            Platform.OS === "ios"
+              ? Location.Accuracy.Lowest
+              : Location.Accuracy.Low,
+        });
+        // console.log(location)
+        await fetch(
+          `https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`
+        )
+          .then((response) => response.json())
+          .then((res) => {
+            // setData(checkRelevancy(res.events))
+            // filterArray(res);
+            // setFires(res.events)
+            let result1 = checkRelevancy(res.events);
+            let result2 = filterArray(result1);
+            setFires(result2);
+            //console.log(res.events)
+          });
+        setLongitude(location.coords.longitude);
+        setLatitude(location.coords.latitude);
+      } else {
+        <ActivityIndicator />;
+      }
+      setRefreshing(false)
+    //wait(1000).then(() => setRefreshing(false));
+  }, []);
+
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      >
         <View style={styles.headerContainer}>
           <View>
             <Text style={styles.heading}>Fires Nearby</Text>
@@ -305,6 +351,7 @@ function NearbyFiresScreen({ navigation }) {
             link={item.sources[0].url}
           />
         ))}
+        
         {/* )}
         /> */}
         <View style={{ paddingBottom: 10 }}></View>
@@ -320,6 +367,13 @@ function NearbyFiresScreen({ navigation }) {
             <Text style={styles.buttonText}>View Map</Text>
           </View>
         </TouchableOpacity>
+
+        {returnedFiresLength == 0? 
+          <View>
+            <Text style={styles.readHeading}>No Fires Found</Text>
+          </View>: 
+          <Text></Text>
+          }
       </ScrollView>
     </View>
   );
@@ -460,6 +514,14 @@ const styles = StyleSheet.create({
     fontSize: HP(3.79),
     fontWeight: "bold",
     color: "#fff",
+  },
+  readHeading: {
+    fontSize: HP(3.79),
+    fontWeight: "bold",
+    color: "#FF5349",
+    alignItems: 'center',
+    textAlign: 'center',
+    paddingTop: 150,
   },
   desc: {
     fontSize: HP(2.37),

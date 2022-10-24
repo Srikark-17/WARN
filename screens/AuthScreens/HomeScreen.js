@@ -6,6 +6,7 @@ import {
   StatusBar,
   ScrollView,
   RefreshControl,
+  ActivityIndicator
 } from "react-native";
 import {
   MaterialIcons,
@@ -313,7 +314,13 @@ function HomeScreen() {
               size={20}
               style={{ color: "#FF5934" }}
             />
-            <Text style={styles.locationText}>{resultsTitle}</Text>
+            {location ?
+              <Text style={styles.locationText}>{resultsTitle}</Text>: 
+              <View>
+                <Text style={{color: '#fff',fontWeight:"400"}}>       Please Enable Location Services</Text>
+                <Text onPress={() => Linking.openURL('app-settings:warn')} style={{color:'#007AFF'}}>       Open Settings</Text>
+              </View>
+            }
           </View>
         </View>
         <View style={styles.bicardContainer}>
