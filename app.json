@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "WARN",
-    "slug": "WARN",
-    "version": "1.0.0",
+    "name": "WARN App",
+    "slug": "warn-app",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -18,14 +18,20 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.WARN"
+      "bundleIdentifier": "com.joshisoft.warn",
+      "companyName": "JoshiSoft"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "android": {
-      "package": "com.WARN"
+      "package": "com.joshisoft.warn"
     },
-    "entryPoint": "node_modules/expo/AppEntry.js"
+    "entryPoint": "node_modules/expo/AppEntry.js",
+    "extra": {
+      "eas": {
+        "projectId": "8abe04d9-0319-42d6-b25e-a04282addec1"
+      }
+    }
   }
 }
