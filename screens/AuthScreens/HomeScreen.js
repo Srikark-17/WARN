@@ -6,7 +6,8 @@ import {
   StatusBar,
   ScrollView,
   RefreshControl,
-  ActivityIndicator
+  ActivityIndicator,
+  TouchableWithoutFeedback,
 } from "react-native";
 import {
   MaterialIcons,
@@ -19,6 +20,7 @@ import {
 import * as Location from "expo-location";
 import { HP, WP } from "../../config/responsive";
 import * as Localization from "expo-localization";
+import * as firebase from "firebase";
 
 function HomeScreen() {
   const [location, setLocation] = useState();
@@ -314,13 +316,23 @@ function HomeScreen() {
               size={20}
               style={{ color: "#FF5934" }}
             />
-            {location ?
-              <Text style={styles.locationText}>{resultsTitle}</Text>: 
+            {location ? (
+              <Text style={styles.locationText}>{resultsTitle}</Text>
+            ) : (
               <View>
-                <Text style={{color: '#fff',fontWeight:"400"}}>       Please Enable Location Services</Text>
-                <Text onPress={() => Linking.openURL('app-settings:warn')} style={{color:'#007AFF'}}>       Open Settings</Text>
+                <Text style={{ color: "#fff", fontWeight: "400" }}>
+                  {" "}
+                  Please Enable Location Services
+                </Text>
+                <Text
+                  onPress={() => Linking.openURL("app-settings:warn")}
+                  style={{ color: "#007AFF" }}
+                >
+                  {" "}
+                  Open Settings
+                </Text>
               </View>
-            }
+            )}
           </View>
         </View>
         <View style={styles.bicardContainer}>
@@ -372,8 +384,13 @@ function HomeScreen() {
               alignItems: "center",
               justifyContent: "space-evenly",
             }}
-          ></View>
+          />
         </View>
+        <TouchableWithoutFeedback onPress={() => firebase.auth().signOut()}>
+          <View style={styles.signOut}>
+            <Text style={styles.signOutText}>Sign Out</Text>
+          </View>
+        </TouchableWithoutFeedback>
       </View>
     </ScrollView>
   );
@@ -459,6 +476,21 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: HP(2.37),
     fontWeight: "700",
+  },
+  signOut: {
+    backgroundColor: "#FF5349",
+    borderRadius: 10,
+    width: WP(80),
+    height: HP(7.5),
+    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: HP(3),
+  },
+  signOutText: {
+    fontSize: HP(2),
+    color: "#ffff",
+    fontWeight: "bold",
   },
 });
 
