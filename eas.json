@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 2.5.1"
+    "version": ">= 2.5.1",
+    "promptToConfigurePushNotifications": false
   },
   "build": {
     "development": {
@@ -8,7 +9,7 @@
       "distribution": "internal",
       "ios": {
         "buildConfiguration": "Debug",
-		    "image": "latest"
+        "image": "latest"
       }
     },
     "preview": {

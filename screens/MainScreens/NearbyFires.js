@@ -221,6 +221,8 @@ function NearbyFiresScreen({ navigation }) {
             Platform.OS === "ios"
               ? Location.Accuracy.Lowest
               : Location.Accuracy.Low,
+        }).catch((e) => {
+          console.log(e)
         });
         // console.log(location)
         await fetch(
@@ -235,6 +237,8 @@ function NearbyFiresScreen({ navigation }) {
             let result2 = filterArray(result1);
             setFires(result2);
             //console.log(res.events)
+          }).catch((e) => {
+            console.log(e)
           });
         setLongitude(location.coords.longitude);
         setLatitude(location.coords.latitude);
@@ -269,6 +273,8 @@ function NearbyFiresScreen({ navigation }) {
             let result2 = filterArray(result1);
             setFires(result2);
             //console.log(res.events)
+          }).catch((e) => {
+            console.log(e)
           });
         setLongitude(location.coords.longitude);
         setLatitude(location.coords.latitude);

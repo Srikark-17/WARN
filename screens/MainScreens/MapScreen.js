@@ -91,6 +91,8 @@ export default function MapScreen({navigation}) {
           setFires(filterFires(res.events));
           console.log(res.events);
           console.log("exiting Use Effect");
+        }).catch((e) => {
+          console.log(e)
         });
     })();
   }, []);

@@ -8,6 +8,7 @@ import {
   RefreshControl,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  Linking
 } from "react-native";
 import {
   MaterialIcons,
@@ -23,7 +24,7 @@ import * as Localization from "expo-localization";
 import * as firebase from "firebase";
 
 function HomeScreen() {
-  const [location, setLocation] = useState();
+  const [location, setLocation] = useState()
   const [temperature, setTemperature] = useState();
   const [windDirection, setWindDirection] = useState();
   const [aqiLevel, setAQILevel] = useState();
@@ -56,8 +57,11 @@ function HomeScreen() {
           slicedString = realTime + slicedString.slice(2);
           console.log(slicedString);
         }
+        console.log("sliced string")
         console.log(slicedString);
         setSunset(slicedString);
+      }).catch((err) => {
+        console.log(err)
       });
   };
 
@@ -120,7 +124,10 @@ function HomeScreen() {
             Platform.OS === "ios"
               ? Location.Accuracy.Lowest
               : Location.Accuracy.Low,
+        }).catch((e) => {
+          console.log(e)
         });
+        if (location){
         setLocation(location);
         fetch(
           `http://api.openweathermap.org/data/2.5/air_pollution?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
@@ -130,6 +137,8 @@ function HomeScreen() {
             let aqiLevel = res.list[0].main.aqi;
             setAQILevel(aqiLevel);
             setLevelInterpretation(levelInterpreter(aqiLevel));
+          }).catch((e) => {
+            console.log(e)
           });
         fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
@@ -153,21 +162,25 @@ function HomeScreen() {
               setIconName("thermometer-4");
               setIconColor("#FF5349D");
             }
-            setTemperature(temperature);
+            setTemperature(temperature + " °F");
             setPressure(Math.round(res.main.pressure * 0.0145038) + " psi");
             setWindDirection(D2D(res.wind.direction));
             setWindSpeed(M2I(res.wind.speed) + " mph");
-            convertTime(res.sys.sunset, res.timezone);
+            // convertTime(res.sys.sunset, res.timezone);
             setHumidity(res.main.humidity);
+          }).catch((e) => {
+            console.log(e)
           });
         fetch(
           `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
         )
           .then((response) => response.json())
           .then((res) => {
-            let resultsTitle = `${res.localityInfo.administrative[3].name}, ${res.principalSubdivisionCode}`;
+            let resultsTitle = `${res.locality}, ${res.principalSubdivision}`;
             setResultsTitle(resultsTitle);
-          });
+          }).catch((e) => {
+            console.log(e)
+          })}
       } else {
         <ActivityIndicator />;
       }
@@ -257,6 +270,8 @@ function HomeScreen() {
           Platform.OS === "ios"
             ? Location.Accuracy.Lowest
             : Location.Accuracy.Low,
+      }).catch((e) => {
+        console.log(e)
       });
       setLocation(location);
       fetch(
@@ -267,6 +282,8 @@ function HomeScreen() {
           let aqiLevel = res.list[0].main.aqi;
           setAQILevel(aqiLevel);
           setLevelInterpretation(levelInterpreter(aqiLevel));
+        }).catch((e) => {
+          console.log(e)
         });
       fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
@@ -278,16 +295,22 @@ function HomeScreen() {
           setPressure(Math.round(res.main.pressure * 0.0145038) + " psi");
           setWindDirection(D2D(res.wind.direction));
           setWindSpeed(M2I(res.wind.speed) + " mph");
-          convertTime(res.sys.sunset, res.timezone);
+          console.log(res.sys.sunset)
+          console.log(res.timezone)
+          // convertTime(res.sys.sunset, res.timezone);
           setHumidity(res.main.humidity);
+        }).catch((e) => {
+          console.log(e)
         });
       fetch(
         `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
       )
         .then((response) => response.json())
         .then((res) => {
-          let resultsTitle = `${res.localityInfo.administrative[3].name}, ${res.principalSubdivisionCode}`;
+          let resultsTitle = `${res.locality}, ${res.principalSubdivision}`;
           setResultsTitle(resultsTitle);
+        }).catch((e) => {
+          console.log(e)
         });
     }
     wait(2000).then(() => setRefreshing(false));
@@ -345,7 +368,7 @@ function HomeScreen() {
           </View>
           <View style={styles.bicard}>
             <Text style={styles.bicardTitle}>Temperature</Text>
-            <Text style={styles.bicardText}>{temperature + " °F"}</Text>
+            <Text style={styles.bicardText}>{temperature + ""}</Text>
             <FontAwesome size={40} name={iconName} color={iconColor} />
           </View>
         </View>
