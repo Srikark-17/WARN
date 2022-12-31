@@ -19,7 +19,12 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.joshisoft.warn",
-      "companyName": "JoshiSoft"
+      "companyName": "JoshiSoft",
+      "infoPlist": {
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "The WARN app requires location services to retrieve local weather and wildfire conditions.",
+        "NSLocationWhenInUseUsageDescription": "The WARN app requires location services to retrieve local weather and wildfire conditions.",
+        "NSLocationAlwaysUsageDescription": "The WARN app requires location services to retrieve local weather and wildfire conditions."
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"

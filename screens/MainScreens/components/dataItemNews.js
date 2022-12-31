@@ -17,6 +17,10 @@ export class DataItem extends Component {
       WebBrowser.openBrowserAsync(`${url}`);
     }
 
+    handleSave = () => {
+
+    }
+
     render() {
         return(
           
@@ -36,6 +40,9 @@ export class DataItem extends Component {
                 <Button transparent onPress={this.handlePress} >
                   <Text style={{color: '#FF5349'}}>View</Text>
                 </Button>
+                {/* <Button transparent onPress={this.handleSave} >
+                  <Text style={{color: '#FF5349'}}>Save</Text>
+                </Button> */}
               </Right>
             </ListItem>
         );

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StatusBar,
   Text,
+  Alert,
 } from "react-native";
 import Screen from "../../components/Screen";
 import * as firebase from "firebase";
@@ -26,13 +27,13 @@ function RegisterScreen({ navigation }) {
           displayName: fullName,
         });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => Alert.alert(`${error}`));
     firebase.auth().onAuthStateChanged(function (user) {
       if (user) {
         console.log("user is signed in");
       } else {
         console.log("user is not signed in");
-        errorMessage = true;
+        //errorMessage = true;
       }
     });
   };

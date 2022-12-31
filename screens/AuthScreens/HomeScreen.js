@@ -8,7 +8,8 @@ import {
   RefreshControl,
   ActivityIndicator,
   TouchableWithoutFeedback,
-  Linking
+  Linking,
+  Alert
 } from "react-native";
 import {
   MaterialIcons,
@@ -412,6 +413,14 @@ function HomeScreen() {
         <TouchableWithoutFeedback onPress={() => firebase.auth().signOut()}>
           <View style={styles.signOut}>
             <Text style={styles.signOutText}>Sign Out</Text>
+          </View>
+        </TouchableWithoutFeedback>
+
+        <TouchableWithoutFeedback onPress={() => firebase.auth().currentUser.delete().catch((error) => {
+          Alert.alert(`${error}`)
+        })}>
+          <View style={styles.signOut}>
+            <Text style={styles.signOutText}>Delete Account</Text>
           </View>
         </TouchableWithoutFeedback>
       </View>
