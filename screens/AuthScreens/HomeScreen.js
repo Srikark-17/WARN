@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   Linking,
-  Alert
+  Alert,
 } from "react-native";
 import {
   MaterialIcons,
@@ -25,7 +25,7 @@ import * as Localization from "expo-localization";
 import * as firebase from "firebase";
 
 function HomeScreen() {
-  const [location, setLocation] = useState()
+  const [location, setLocation] = useState();
   const [temperature, setTemperature] = useState();
   const [windDirection, setWindDirection] = useState();
   const [aqiLevel, setAQILevel] = useState();
@@ -58,11 +58,12 @@ function HomeScreen() {
           slicedString = realTime + slicedString.slice(2);
           console.log(slicedString);
         }
-        console.log("sliced string")
+        console.log("sliced string");
         console.log(slicedString);
         setSunset(slicedString);
-      }).catch((err) => {
-        console.log(err)
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -126,62 +127,66 @@ function HomeScreen() {
               ? Location.Accuracy.Lowest
               : Location.Accuracy.Low,
         }).catch((e) => {
-          console.log(e)
+          console.log(e);
         });
-        if (location){
-        setLocation(location);
-        fetch(
-          `http://api.openweathermap.org/data/2.5/air_pollution?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
-        )
-          .then((response) => response.json())
-          .then((res) => {
-            let aqiLevel = res.list[0].main.aqi;
-            setAQILevel(aqiLevel);
-            setLevelInterpretation(levelInterpreter(aqiLevel));
-          }).catch((e) => {
-            console.log(e)
-          });
-        fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
-        )
-          .then((response) => response.json())
-          .then((res) => {
-            var temperature = K2F(res.main.temp);
-            if (temperature <= 32) {
-              setIconName("thermometer-0");
-              setIconColor("#7AD7FO");
-            } else if (temperature >= 33) {
-              setIconName("thermometer-1");
-              setIconColor("#B7E9F7");
-            } else if (temperature >= 54) {
-              setIconName("thermometer-2");
-              setIconColor("#FCAE1E");
-            } else if (temperature >= 55) {
-              setIconName("thermometer-3");
-              setIconColor("#FA8128");
-            } else if (temperature >= 91) {
-              setIconName("thermometer-4");
-              setIconColor("#FF5349D");
-            }
-            setTemperature(temperature + " °F");
-            setPressure(Math.round(res.main.pressure * 0.0145038) + " psi");
-            setWindDirection(D2D(res.wind.direction));
-            setWindSpeed(M2I(res.wind.speed) + " mph");
-            // convertTime(res.sys.sunset, res.timezone);
-            setHumidity(res.main.humidity);
-          }).catch((e) => {
-            console.log(e)
-          });
-        fetch(
-          `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
-        )
-          .then((response) => response.json())
-          .then((res) => {
-            let resultsTitle = `${res.locality}, ${res.principalSubdivision}`;
-            setResultsTitle(resultsTitle);
-          }).catch((e) => {
-            console.log(e)
-          })}
+        if (location) {
+          setLocation(location);
+          fetch(
+            `http://api.openweathermap.org/data/2.5/air_pollution?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
+          )
+            .then((response) => response.json())
+            .then((res) => {
+              let aqiLevel = res.list[0].main.aqi;
+              setAQILevel(aqiLevel);
+              setLevelInterpretation(levelInterpreter(aqiLevel));
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+          fetch(
+            `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
+          )
+            .then((response) => response.json())
+            .then((res) => {
+              var temperature = K2F(res.main.temp);
+              if (temperature <= 32) {
+                setIconName("thermometer-0");
+                setIconColor("#7AD7FO");
+              } else if (temperature >= 33) {
+                setIconName("thermometer-1");
+                setIconColor("#B7E9F7");
+              } else if (temperature >= 54) {
+                setIconName("thermometer-2");
+                setIconColor("#FCAE1E");
+              } else if (temperature >= 55) {
+                setIconName("thermometer-3");
+                setIconColor("#FA8128");
+              } else if (temperature >= 91) {
+                setIconName("thermometer-4");
+                setIconColor("#FF5349D");
+              }
+              setTemperature(temperature + " °F");
+              setPressure(Math.round(res.main.pressure * 0.0145038) + " psi");
+              setWindDirection(D2D(res.wind.direction));
+              setWindSpeed(M2I(res.wind.speed) + " mph");
+              // convertTime(res.sys.sunset, res.timezone);
+              setHumidity(res.main.humidity);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+          fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
+          )
+            .then((response) => response.json())
+            .then((res) => {
+              let resultsTitle = `${res.locality}, ${res.principalSubdivision}`;
+              setResultsTitle(resultsTitle);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
       } else {
         <ActivityIndicator />;
       }
@@ -272,7 +277,7 @@ function HomeScreen() {
             ? Location.Accuracy.Lowest
             : Location.Accuracy.Low,
       }).catch((e) => {
-        console.log(e)
+        console.log(e);
       });
       setLocation(location);
       fetch(
@@ -283,8 +288,9 @@ function HomeScreen() {
           let aqiLevel = res.list[0].main.aqi;
           setAQILevel(aqiLevel);
           setLevelInterpretation(levelInterpreter(aqiLevel));
-        }).catch((e) => {
-          console.log(e)
+        })
+        .catch((e) => {
+          console.log(e);
         });
       fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${location.coords.latitude}&lon=${location.coords.longitude}&appid=9ae4cff24c24dd5a01df964375ee6148`
@@ -296,12 +302,13 @@ function HomeScreen() {
           setPressure(Math.round(res.main.pressure * 0.0145038) + " psi");
           setWindDirection(D2D(res.wind.direction));
           setWindSpeed(M2I(res.wind.speed) + " mph");
-          console.log(res.sys.sunset)
-          console.log(res.timezone)
+          console.log(res.sys.sunset);
+          console.log(res.timezone);
           // convertTime(res.sys.sunset, res.timezone);
           setHumidity(res.main.humidity);
-        }).catch((e) => {
-          console.log(e)
+        })
+        .catch((e) => {
+          console.log(e);
         });
       fetch(
         `https://api.bigdatacloud.net/data/reverse-geocode?latitude=${location.coords.latitude}&longitude=${location.coords.longitude}&localityLanguage=en&key=bdc_89fda6dbbb724d5a87e4ca549ea669bf`
@@ -310,8 +317,9 @@ function HomeScreen() {
         .then((res) => {
           let resultsTitle = `${res.locality}, ${res.principalSubdivision}`;
           setResultsTitle(resultsTitle);
-        }).catch((e) => {
-          console.log(e)
+        })
+        .catch((e) => {
+          console.log(e);
         });
     }
     wait(2000).then(() => setRefreshing(false));
@@ -416,9 +424,16 @@ function HomeScreen() {
           </View>
         </TouchableWithoutFeedback>
 
-        <TouchableWithoutFeedback onPress={() => firebase.auth().currentUser.delete().catch((error) => {
-          Alert.alert(`${error}`)
-        })}>
+        <TouchableWithoutFeedback
+          onPress={() =>
+            firebase
+              .auth()
+              .currentUser.delete()
+              .catch((error) => {
+                Alert.alert(`${error}`);
+              })
+          }
+        >
           <View style={styles.signOut}>
             <Text style={styles.signOutText}>Delete Account</Text>
           </View>
@@ -508,21 +523,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: HP(2.37),
     fontWeight: "700",
-  },
-  signOut: {
-    backgroundColor: "#FF5349",
-    borderRadius: 10,
-    width: WP(80),
-    height: HP(7.5),
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    marginVertical: HP(3),
-  },
-  signOutText: {
-    fontSize: HP(2),
-    color: "#ffff",
-    fontWeight: "bold",
   },
 });
 

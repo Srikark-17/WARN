@@ -16,6 +16,8 @@ import * as firebase from "firebase";
 
 import "firebase/firestore";
 import { HP } from "./config/responsive";
+import AccountScreen from "./screens/MainScreens/AccountScreen";
+import EditInfoScreen from "./screens/MainScreens/EditInfoScreen";
 
 const ignoreWarns = [
   "Setting a timer for a long period of time",
@@ -145,6 +147,19 @@ function MainTabs() {
               <FontAwesome5
                 name="newspaper"
                 size={23}
+                color={focused ? tabcolor : inactiveColor}
+              />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Account"
+          component={AccountScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <MaterialCommunityIcons
+                name="account"
+                size={26}
                 color={focused ? tabcolor : inactiveColor}
               />
             ),
