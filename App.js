@@ -17,7 +17,7 @@ import * as firebase from "firebase";
 import "firebase/firestore";
 import { HP } from "./config/responsive";
 import AccountScreen from "./screens/MainScreens/AccountScreen";
-import EditInfoScreen from "./screens/MainScreens/EditInfoScreen";
+
 
 const ignoreWarns = [
   "Setting a timer for a long period of time",

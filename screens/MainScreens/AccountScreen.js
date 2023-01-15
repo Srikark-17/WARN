@@ -1,10 +1,38 @@
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-import React from "react";
+import { Alert, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import React, {useEffect, useState} from "react";
 import * as firebase from "firebase";
 import { WP, HP } from "../../config/responsive";
+import DialogInput from "react-native-dialog-input";
+import { AntDesign, MaterialCommunityIcons} from "@expo/vector-icons";
 
 const AccountScreen = () => {
-  <View style={styles.container}>
+  const [toggle, setToggle] = useState(false);
+  const [type, setType] = useState();
+  const [name, setName] = useState(firebase.auth().currentUser.displayName);
+  const [email, setEmail] = useState(firebase.auth().currentUser.email)
+
+  const handleClick = (inputText) => {
+    if(inputText.includes("@")){
+      setEmail(inputText)
+      firebase.auth().currentUser.updateProfile({
+        displayName: inputText
+      })
+      // function to upload to Firebase
+    } else if (inputText.includes(" ")){
+      setName(inputText)
+      firebase.auth().currentUser.updateEmail(`${inputText}`).then(() =>{
+        console.log(inputText)
+        // success
+      }).catch((err) => {
+        Alert.alert(`${err}`)
+      }) 
+      // function to upload to Firebase
+    } else {
+      Alert.alert("Your input does not follow proper input. Please try again.")
+    }
+  }
+  
+  return (<View style={styles.container}>
     <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
       <View style={styles.navigation}>
         <AntDesign name="left" size={27} color="black" />
@@ -36,7 +64,7 @@ const AccountScreen = () => {
     <View style={styles.editContainer}>
       <Text style={styles.containerHeading}>Email</Text>
       <View style={styles.innerEditContainer}>
-        <Text style={styles.value}>{firebase.auth().currentUser.email}</Text>
+        <Text style={styles.value}>{email}</Text>
         <TouchableWithoutFeedback
           onPress={() => {
             setToggle(true);
@@ -52,7 +80,7 @@ const AccountScreen = () => {
         <Text style={styles.signOutText}>Sign Out</Text>
       </View>
     </TouchableWithoutFeedback>
-  </View>;
+  </View>)
 };
 
 export default AccountScreen;
@@ -110,4 +138,7 @@ const styles = StyleSheet.create({
     color: "#ffff",
     fontWeight: "bold",
   },
+  value: {
+    color: '#fff'
+  }
 });
