@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import * as firebase from "firebase";
 import { WP, HP } from "../../config/responsive";
 import DialogInput from "react-native-dialog-input";
