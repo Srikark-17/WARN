@@ -1,38 +1,38 @@
-import { Alert, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-import React, {useEffect, useState} from "react";
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import React from "react";
 import * as firebase from "firebase";
 import { WP, HP } from "../../config/responsive";
 import DialogInput from "react-native-dialog-input";
-import { AntDesign, MaterialCommunityIcons} from "@expo/vector-icons";
 
 const AccountScreen = () => {
+  const [name, setName] = useState();
   const [toggle, setToggle] = useState(false);
+  const [email, setEmail] = useState();
   const [type, setType] = useState();
-  const [name, setName] = useState(firebase.auth().currentUser.displayName);
-  const [email, setEmail] = useState(firebase.auth().currentUser.email)
+
+  useEffect(() => {
+    setEmail(firebase().auth.currentUser.email);
+    setName(firebase().auth.currentUser.displayName);
+  }, [firebase().auth]);
 
   const handleClick = (inputText) => {
-    if(inputText.includes("@")){
-      setEmail(inputText)
-      firebase.auth().currentUser.updateProfile({
-        displayName: inputText
-      })
-      // function to upload to Firebase
-    } else if (inputText.includes(" ")){
-      setName(inputText)
-      firebase.auth().currentUser.updateEmail(`${inputText}`).then(() =>{
-        console.log(inputText)
-        // success
-      }).catch((err) => {
-        Alert.alert(`${err}`)
-      }) 
-      // function to upload to Firebase
-    } else {
-      Alert.alert("Your input does not follow proper input. Please try again.")
+    if (type == "name") {
+      auth.currentUser.updateProfile({
+        displayName: inputText,
+      });
+      setName(inputText);
+      setToggle(false);
     }
-  }
-  
-  return (<View style={styles.container}>
+    if (type == "email") {
+      auth.currentUser.updateProfile({
+        email: inputText,
+      });
+      setEmail(inputText);
+      setToggle(false);
+    }
+  };
+
+  <View style={styles.container}>
     <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
       <View style={styles.navigation}>
         <AntDesign name="left" size={27} color="black" />
@@ -80,7 +80,7 @@ const AccountScreen = () => {
         <Text style={styles.signOutText}>Sign Out</Text>
       </View>
     </TouchableWithoutFeedback>
-  </View>)
+  </View>;
 };
 
 export default AccountScreen;
@@ -138,7 +138,4 @@ const styles = StyleSheet.create({
     color: "#ffff",
     fontWeight: "bold",
   },
-  value: {
-    color: '#fff'
-  }
 });
