@@ -1,8 +1,9 @@
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import * as firebase from "firebase";
 import { WP, HP } from "../../config/responsive";
 import DialogInput from "react-native-dialog-input";
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
 
 const AccountScreen = () => {
   const [name, setName] = useState();
@@ -10,21 +11,23 @@ const AccountScreen = () => {
   const [email, setEmail] = useState();
   const [type, setType] = useState();
 
+  console.log(firebase.auth().currentUser);
+
   useEffect(() => {
-    setEmail(firebase().auth.currentUser.email);
-    setName(firebase().auth.currentUser.displayName);
-  }, [firebase().auth]);
+    setEmail(firebase.auth().currentUser.email);
+    setName(firebase.auth().currentUser.displayName);
+  }, []);
 
   const handleClick = (inputText) => {
     if (type == "name") {
-      auth.currentUser.updateProfile({
+      firebase.auth().currentUser.updateProfile({
         displayName: inputText,
       });
       setName(inputText);
       setToggle(false);
     }
     if (type == "email") {
-      auth.currentUser.updateProfile({
+      firebase.auth().currentUser.updateProfile({
         email: inputText,
       });
       setEmail(inputText);
@@ -32,55 +35,58 @@ const AccountScreen = () => {
     }
   };
 
-  <View style={styles.container}>
-    <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-      <View style={styles.navigation}>
-        <AntDesign name="left" size={27} color="black" />
-        <Text style={styles.heading}>Profile</Text>
+  console.log(name);
+  return (
+    <View style={styles.container}>
+      <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+        <View style={styles.navigation}>
+          <AntDesign name="left" size={27} color="black" />
+          <Text style={styles.heading}>Profile</Text>
+        </View>
+      </TouchableWithoutFeedback>
+      <DialogInput
+        isDialogVisible={toggle}
+        title={"Change in Account"}
+        message={`Type your ${type} in the box below`}
+        hintInput={"Type here..."}
+        submitInput={(inputText) => handleClick(inputText)}
+        closeDialog={() => setToggle(false)}
+      ></DialogInput>
+      <View style={styles.editContainer}>
+        <Text style={styles.containerHeading}>Name</Text>
+        <View style={styles.innerEditContainer}>
+          <Text style={styles.value}>{name}</Text>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setToggle(true);
+              setType("name");
+            }}
+          >
+            <MaterialCommunityIcons name="pencil" size={18} color="#333" />
+          </TouchableWithoutFeedback>
+        </View>
       </View>
-    </TouchableWithoutFeedback>
-    <DialogInput
-      isDialogVisible={toggle}
-      title={"Change in Account"}
-      message={`Type your ${type} in the box below`}
-      hintInput={"Type here..."}
-      submitInput={(inputText) => handleClick(inputText)}
-      closeDialog={() => setToggle(false)}
-    ></DialogInput>
-    <View style={styles.editContainer}>
-      <Text style={styles.containerHeading}>Name</Text>
-      <View style={styles.innerEditContainer}>
-        <Text style={styles.value}>{name}</Text>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            setToggle(true);
-            setType("name");
-          }}
-        >
-          <MaterialCommunityIcons name="pencil" size={18} color="#333" />
-        </TouchableWithoutFeedback>
+      <View style={styles.editContainer}>
+        <Text style={styles.containerHeading}>Email</Text>
+        <View style={styles.innerEditContainer}>
+          <Text style={styles.value}>{email}</Text>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              setToggle(true);
+              setType("email");
+            }}
+          >
+            <MaterialCommunityIcons name="pencil" size={18} color="#333" />
+          </TouchableWithoutFeedback>
+        </View>
       </View>
+      <TouchableWithoutFeedback onPress={() => firebase().auth().signOut()}>
+        <View style={styles.signOut}>
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </View>
+      </TouchableWithoutFeedback>
     </View>
-    <View style={styles.editContainer}>
-      <Text style={styles.containerHeading}>Email</Text>
-      <View style={styles.innerEditContainer}>
-        <Text style={styles.value}>{email}</Text>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            setToggle(true);
-            setType("email");
-          }}
-        >
-          <MaterialCommunityIcons name="pencil" size={18} color="#333" />
-        </TouchableWithoutFeedback>
-      </View>
-    </View>
-    <TouchableWithoutFeedback onPress={() => firebase.auth().signOut()}>
-      <View style={styles.signOut}>
-        <Text style={styles.signOutText}>Sign Out</Text>
-      </View>
-    </TouchableWithoutFeedback>
-  </View>;
+  );
 };
 
 export default AccountScreen;
@@ -137,5 +143,10 @@ const styles = StyleSheet.create({
     fontSize: HP(2),
     color: "#ffff",
     fontWeight: "bold",
+  },
+  value: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: HP(1.5),
   },
 });
