@@ -15,9 +15,9 @@ import { LogBox } from "react-native";
 import * as firebase from "firebase";
 
 import "firebase/firestore";
+import "firebase/database";
 import { HP } from "./config/responsive";
 import AccountScreen from "./screens/MainScreens/AccountScreen";
-
 
 const ignoreWarns = [
   "Setting a timer for a long period of time",

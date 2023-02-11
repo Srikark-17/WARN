@@ -5,6 +5,7 @@ import { Alert, View, ActivityIndicator, StyleSheet } from "react-native";
 import { DataItem } from "./components/dataItemNews";
 import Modal from "./components/modal";
 import { HP, WP } from "../../config/responsive";
+
 export default class ListThumbnailExample extends Component {
   constructor(props) {
     super(props);
@@ -60,6 +61,7 @@ export default class ListThumbnailExample extends Component {
               onClose={this.props.navigation.navigate("News Feed")}
               onPress={this.handleItemDataOnPress}
               data={item}
+              like={true}
             />
           );
         }}
@@ -71,7 +73,7 @@ export default class ListThumbnailExample extends Component {
         <Content style={styles.container}>
           <View style={styles.textContainer}>
             <Text style={styles.title}>News Feed</Text>
-            <Text style={styles.subtext}>Results for: wildfires</Text>
+            <Text style={styles.subtext}>Results for: wildfire</Text>
           </View>
           {view}
         </Content>

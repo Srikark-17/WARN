@@ -6,5 +6,6 @@ export default firebasekeys = {
   storageBucket: "warn-9b32b.appspot.com",
   messagingSenderId: "977519428724",
   appId: "1:977519428724:web:2847b86f3d3791ced5bd21",
-  measurementId: "G-KLYXT6HJZ9"
-}
+  measurementId: "G-KLYXT6HJZ9",
+  databaseURL: "https://warn-9b32b.firebaseio.com/",
+};

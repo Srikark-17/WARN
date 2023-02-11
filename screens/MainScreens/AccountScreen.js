@@ -1,22 +1,42 @@
-import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import * as firebase from "firebase";
 import { WP, HP } from "../../config/responsive";
 import DialogInput from "react-native-dialog-input";
+import { getArticles } from "./components/feedNews";
 import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import Modal from "./components/modal";
+import { List } from "native-base";
+import DataItem from "./components/dataItemNews";
 
-const AccountScreen = () => {
+const AccountScreen = ({ navigation }) => {
   const [name, setName] = useState();
   const [toggle, setToggle] = useState(false);
   const [email, setEmail] = useState();
   const [type, setType] = useState();
-
-  console.log(firebase.auth().currentUser);
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalArticleData, setModalArticleData] = useState({});
 
   useEffect(() => {
     setEmail(firebase.auth().currentUser.email);
     setName(firebase.auth().currentUser.displayName);
+    const dbRef = firebase.database().ref("users");
+    dbRef.child(firebase.auth().currentUser.uid).on("value", (snapshot) => {
+      setData(snapshot.val());
+    });
   }, []);
+  const handleItemDataOnPress = (articleData) => {
+    setModalVisible(true);
+    setModalArticleData(articleData);
+  };
 
   const handleClick = (inputText) => {
     if (type == "name") {
@@ -35,7 +55,6 @@ const AccountScreen = () => {
     }
   };
 
-  console.log(name);
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
@@ -80,6 +99,28 @@ const AccountScreen = () => {
           </TouchableWithoutFeedback>
         </View>
       </View>
+      <Text style={styles.subHeading}>Favorite News</Text>
+      {isLoading ? (
+        <View>
+          <ActivityIndicator animating={isLoading} />
+          <Text style={{ marginTop: 15 }}>Loading...</Text>
+        </View>
+      ) : (
+        <List
+          style={styles.list}
+          dataArray={data}
+          renderRow={(item) => {
+            return (
+              <DataItem
+                onClose={navigation.navigate("Account")}
+                onPress={() => handleItemDataOnPress()}
+                data={item}
+                like={false}
+              />
+            );
+          }}
+        />
+      )}
       <TouchableWithoutFeedback onPress={() => firebase().auth().signOut()}>
         <View style={styles.signOut}>
           <Text style={styles.signOutText}>Sign Out</Text>
@@ -111,6 +152,15 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginLeft: WP(1),
     color: "#fff",
+  },
+  subHeading: {
+    fontSize: HP(2.5),
+    fontWeight: "bold",
+    alignSelf: "flex-start",
+    marginLeft: WP(1),
+    color: "#fff",
+    marginLeft: WP(7),
+    marginTop: HP(3),
   },
   editContainer: {
     width: WP(100),
@@ -148,5 +198,12 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: HP(1.5),
+  },
+  list: {
+    // borderWidth: 1,
+    // borderColor: "white",
+    // borderStyle: "solid",
+    width: WP(90),
+    marginLeft: WP(6),
   },
 });
