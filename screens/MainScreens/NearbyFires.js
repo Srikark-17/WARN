@@ -8,7 +8,7 @@ import {
   Platform,
   InteractionManager,
   RefreshControl,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { Text, Icon, Button } from "native-base";
@@ -208,7 +208,7 @@ function NearbyFiresScreen({ navigation }) {
     }
     console.log("after fetch amendedfires: " + amendedFires);
     console.log("amended fires length is :" + amendedFires.length);
-    setReturnedFiresLength(amendedFires.length)
+    setReturnedFiresLength(amendedFires.length);
     return amendedFires;
   };
 
@@ -222,7 +222,7 @@ function NearbyFiresScreen({ navigation }) {
               ? Location.Accuracy.Lowest
               : Location.Accuracy.Low,
         }).catch((e) => {
-          console.log(e)
+          console.log(e);
         });
         // console.log(location)
         await fetch(
@@ -237,8 +237,9 @@ function NearbyFiresScreen({ navigation }) {
             let result2 = filterArray(result1);
             setFires(result2);
             //console.log(res.events)
-          }).catch((e) => {
-            console.log(e)
+          })
+          .catch((e) => {
+            console.log(e);
           });
         setLongitude(location.coords.longitude);
         setLatitude(location.coords.latitude);
@@ -253,44 +254,45 @@ function NearbyFiresScreen({ navigation }) {
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
     let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status === "granted") {
-        let location = await Location.getCurrentPositionAsync({
-          accuracy:
-            Platform.OS === "ios"
-              ? Location.Accuracy.Lowest
-              : Location.Accuracy.Low,
+    if (status === "granted") {
+      let location = await Location.getCurrentPositionAsync({
+        accuracy:
+          Platform.OS === "ios"
+            ? Location.Accuracy.Lowest
+            : Location.Accuracy.Low,
+      });
+      // console.log(location)
+      await fetch(
+        `https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`
+      )
+        .then((response) => response.json())
+        .then((res) => {
+          // setData(checkRelevancy(res.events))
+          // filterArray(res);
+          // setFires(res.events)
+          let result1 = checkRelevancy(res.events);
+          let result2 = filterArray(result1);
+          setFires(result2);
+          //console.log(res.events)
+        })
+        .catch((e) => {
+          console.log(e);
         });
-        // console.log(location)
-        await fetch(
-          `https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires`
-        )
-          .then((response) => response.json())
-          .then((res) => {
-            // setData(checkRelevancy(res.events))
-            // filterArray(res);
-            // setFires(res.events)
-            let result1 = checkRelevancy(res.events);
-            let result2 = filterArray(result1);
-            setFires(result2);
-            //console.log(res.events)
-          }).catch((e) => {
-            console.log(e)
-          });
-        setLongitude(location.coords.longitude);
-        setLatitude(location.coords.latitude);
-      } else {
-        <ActivityIndicator />;
-      }
-      setRefreshing(false)
+      setLongitude(location.coords.longitude);
+      setLatitude(location.coords.latitude);
+    } else {
+      <ActivityIndicator />;
+    }
+    setRefreshing(false);
     //wait(1000).then(() => setRefreshing(false));
   }, []);
 
   return (
     <View style={styles.container}>
       <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <View style={styles.headerContainer}>
           <View>
@@ -357,7 +359,7 @@ function NearbyFiresScreen({ navigation }) {
             link={item.sources[0].url}
           />
         ))}
-        
+
         {/* )}
         /> */}
         <View style={{ paddingBottom: 10 }}></View>
@@ -374,12 +376,13 @@ function NearbyFiresScreen({ navigation }) {
           </View>
         </TouchableOpacity>
 
-        {returnedFiresLength == 0? 
+        {returnedFiresLength == 0 ? (
           <View>
             <Text style={styles.readHeading}>No Fires Found</Text>
-          </View>: 
+          </View>
+        ) : (
           <Text></Text>
-          }
+        )}
       </ScrollView>
     </View>
   );
@@ -514,7 +517,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     paddingHorizontal: WP(7.7),
-    marginTop: HP(6.16),
+    marginTop: HP(10),
   },
   heading: {
     fontSize: HP(3.79),
@@ -525,8 +528,8 @@ const styles = StyleSheet.create({
     fontSize: HP(3.79),
     fontWeight: "bold",
     color: "#FF5349",
-    alignItems: 'center',
-    textAlign: 'center',
+    alignItems: "center",
+    textAlign: "center",
     paddingTop: 150,
   },
   desc: {

@@ -30,9 +30,14 @@ const AccountScreen = ({ navigation }) => {
     setName(firebase.auth().currentUser.displayName);
     const dbRef = firebase.database().ref("users");
     dbRef.child(firebase.auth().currentUser.uid).on("value", (snapshot) => {
-      setData(snapshot.val());
+      if (snapshot.exists()) {
+        setData(snapshot.val().favNews);
+        setIsLoading(false);
+      }
     });
   }, []);
+
+  console.log(data);
   const handleItemDataOnPress = (articleData) => {
     setModalVisible(true);
     setModalArticleData(articleData);
@@ -103,7 +108,6 @@ const AccountScreen = ({ navigation }) => {
       {isLoading ? (
         <View>
           <ActivityIndicator animating={isLoading} />
-          <Text style={{ marginTop: 15 }}>Loading...</Text>
         </View>
       ) : (
         <List
@@ -121,7 +125,7 @@ const AccountScreen = ({ navigation }) => {
           }}
         />
       )}
-      <TouchableWithoutFeedback onPress={() => firebase().auth().signOut()}>
+      <TouchableWithoutFeedback onPress={() => firebase.auth().signOut()}>
         <View style={styles.signOut}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </View>

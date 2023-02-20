@@ -34,16 +34,28 @@ export class DataItem extends Component {
     this.setState({
       isLiked: true,
     });
+
+    const dbRef = firebase.database().ref("users");
+    let sources = [];
+    dbRef.child(firebase.auth().currentUser.uid).on("value", (snapshot) => {
+      if (snapshot.exists()) {
+        sources = snapshot.val().favNews;
+      }
+    });
+    console.log(sources);
+    sources.push({
+      title: this.data.title,
+      description: this.data.description,
+      source: {
+        name: this.data.source.name,
+      },
+      urlToImage: this.data.urlToImage,
+    });
     firebase
       .database()
       .ref("users/" + firebase.auth().currentUser.uid)
       .set({
-        title: this.data.title,
-        description: this.data.description,
-        source: {
-          name: this.data.source.name,
-        },
-        urlToImage: this.data.urlToImage,
+        favNews: sources,
       });
   };
 
@@ -86,7 +98,7 @@ export class DataItem extends Component {
           <View style={styles.shareContainer}>
             {this.like ? (
               this.state.isLiked ? (
-                <TouchableWithoutFeedback onPress={this.handleLike}>
+                <TouchableWithoutFeedback>
                   <FontAwesome name="heart" size={18} color={heartColor} />
                 </TouchableWithoutFeedback>
               ) : (
