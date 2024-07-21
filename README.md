@@ -22,7 +22,6 @@ WARN is an AI-powered web-based application designed to detect and notify author
 
 ### Backend
 - **Node.js & Express.js**: For building a robust and scalable server-side application.
-- **Raspberry Pi**: For deploying the AI model at the edge, providing real-time detection capabilities.
 
 ### AI/ML
 - **Python**: For developing and training the machine learning models.
@@ -32,19 +31,21 @@ WARN is an AI-powered web-based application designed to detect and notify author
 - **Firebase**: For real-time database and user authentication.
 - **Firestore**: For storing alert data securely.
 - **Google Cloud Platform (GCP)**: For hosting and scaling the application.
-- **WebSockets**: For real-time communication between the client and server.
-- **Algolia**: For efficient search capabilities within the application.
-- **Docker**: For containerizing the application for easy deployment.
+
+## Video Demo
+
+Watch the video demo to see WARN in action: [YouTube Video Demo](https://youtu.be/YbWc6DD5FKI)
+
+[![Watch the video](https://img.youtube.com/vi/YbWc6DD5FKI/0.jpg)](https://youtu.be/YbWc6DD5FKI)
 
 ## Installation
 
 ### Prerequisites
 
-- Node.js
-- Python 3.x
+- React.js
+- React Native
 - Firebase account
 - Google Cloud account
-- Raspberry Pi (for edge deployment)
 
 ### Clone the Repository
 
